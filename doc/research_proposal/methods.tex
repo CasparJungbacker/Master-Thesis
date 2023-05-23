@@ -1,9 +1,25 @@
 \section{Methods}
 
+\subsection{OpenACC}
+Computationally expensive parts of DALES will be offloaded to the GPU using OpenACC. OpenACC provides a range of \emph{compiler directives}, which are instructions to the compiler on how to compile or optimize the code. These directives are placed above loops, telling the compiler that the calculation should be done on the GPU. An example of such a loop, decorated with an OpenACC directive, can be found in \autoref{lst:accloop}. This directive-based approach offers multiple benefits over the traditional, lower-level programming models such as CUDA and OpenCL :
+
+\begin{itemize}
+    \item Productivity: 
+\end{itemize}
+
+\begin{lstlisting}[language=Fortran, caption={Example of a Fortran loop offloaded to the GPU.}, label={lst:accloop}]
+!$acc parallel loop
+do k = 1, kmax
+    do j = 1, jmax
+        do i = 1, imax
+            c(i,j,k) = a(i,j,k) + b(i,j,k)
+        end do
+    end do
+end do
+\end{lstlisting}
+
 \subsection{The Poisson solver}
 
 \subsection{Profiling}
 
 \subsection{Correctness}
-
-\subsection{}
