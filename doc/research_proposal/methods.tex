@@ -1,7 +1,7 @@
 \section{Methodology}
 
 \subsection{OpenACC}
-Computationally expensive parts of DALES will be offloaded to the GPU using OpenACC. OpenACC provides a range of \emph{compiler directives}, which are instructions to the compiler on how to compile or optimize the code. These directives are placed above loops, telling the compiler that the calculation should be done on the GPU. An example of such a loop, decorated with an OpenACC directive, can be found in \autoref{lst:accloop}. This directive-based approach offers multiple benefits over the traditional, lower-level programming models such as CUDA and OpenCL \citep{Herdman2012}:
+Computationally expensive parts of DALES will be offloaded to the GPU using OpenACC. OpenACC provides a range of \emph{compiler directives}, which are instructions to the compiler on how to compile or optimize the code. These directives are placed above loops, telling the compiler that the calculation should be done on the GPU. An example of such a loop, decorated with an OpenACC directive, can be found in \autoref{lst:accloop}. This directive-based approach offers multiple benefits over the traditional, lower-level programming models such as CUDA and OpenCL \citep{}:
 
 \begin{itemize}
     \item Productivity: OpenACC requires minimal addition of lines of code to an existing codebase. This makes it possible for a programmer to accelerate large sections of a program in a relatively short amount of time. 
@@ -27,7 +27,7 @@ In DALES, an equation for the pressure is obtained by taking the divergence of t
     \frac{\partial^2 \pi}{\partial x_i^2} = \frac{\partial }{\partial x_i} \left( - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} + \frac{g}{\theta_0}\overline{\theta}_v\delta_{i3} + \mathcal{F}_i - \frac{\partial \tau_{ij}}{\partial x_j} \right) \label{eq:pressure}
 \end{equation}
 
-\noindent \autoref{eq:pressure} is a Poisson equation for $\pi$. DALES provides two methods to solve this equation: 1) using Fast Fourier Transforms (FFT's), 2) using iterative solvers. Among these, the FFT-based solver is the most efficient. DALES has the ability to use the highly optimized Fastest Fourier Transform in the West (FFTW) library 
+\noindent \autoref{eq:pressure} is a Poisson equation for $\pi$. DALES provides two methods to solve this equation: 1) using Fast Fourier Transforms (FFT's), 2) using iterative solvers. Among these, the FFT-based solver is the most efficient. DALES has the ability to use the highly optimized Fastest Fourier Transform in the West (FFTW) library \citep{FFTW97}. 
 
 \subsection{Profiling}
 To determine which parts of DALES would benefit the most from running on GPU's, a profile has been made 
