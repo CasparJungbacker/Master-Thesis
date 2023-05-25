@@ -1,14 +1,15 @@
 \section{Methodology}
 
 \subsection{OpenACC}
-Computationally expensive parts of DALES will be offloaded to the GPU using OpenACC. OpenACC provides a range of \emph{compiler directives}, which are instructions to the compiler on how to compile or optimize the code. These directives are placed above loops, telling the compiler that the calculation should be done on the GPU. An example of such a loop, decorated with an OpenACC directive, can be found in \autoref{lst:accloop}. This directive-based approach offers multiple benefits over the traditional, lower-level programming models such as CUDA and OpenCL \citep{}:
+Computationally expensive parts of DALES will be offloaded to the GPU using OpenACC. OpenACC provides a range of \emph{compiler directives}, which are instructions to the compiler on how to compile or optimize the code. These directives are placed above loops, telling the compiler that the calculation should be done on the GPU. An example of such a loop, decorated with an OpenACC directive, can be found in \autoref{lst:accloop}. This directive-based approach offers multiple benefits over the traditional, lower-level programming models such as CUDA and OpenCL \citep{herdmanAcceleratingHydrocodesOpenACC2012}:
 
 \begin{itemize}
     \item Productivity: OpenACC requires minimal addition of lines of code to an existing codebase. This makes it possible for a programmer to accelerate large sections of a program in a relatively short amount of time. 
     \item Single source code: CUDA and OpenCL require the programmer to rewrite existing code into ``\emph{compute kernels}'' that are executed on the GPU. If it desired that a program is still able to run on CPU's, two versions of the same program have to be maintained: one version for CPU's and one version for GPU's. Needless to say, this is more error-prone than a single source code. As OpenACC directives are essentially just comments in the code, the programmer can add them to the existing CPU code. The same code can then be compiled for execution on both GPU's and CPU's, and the OpenACC directives will simply be ignored for the latter.
 \end{itemize}
 
-\begin{lstlisting}[language=Fortran, caption={Example of a Fortran loop offloaded to the GPU.}, label={lst:accloop}]
+%\begin{lstlisting}[language=Fortran, caption={Example of a Fortran loop offloaded to the GPU.}, label={lst:accloop}]
+\begin{minted}{python}
 !$acc parallel loop
 do k = 1, kmax
     do j = 1, jmax
@@ -17,19 +18,22 @@ do k = 1, kmax
         end do
     end do
 end do
-\end{lstlisting}
+\end{minted}
+%\end{lstlisting}
 
 \subsection{Solving the Poisson equation}
 
-In DALES, an equation for the pressure is obtained by taking the divergence of the momentum equation:
+In DALES, a solution for the pressure $\pi$ is obtained by solving the following Poisson equation:
 
 \begin{equation}
     \frac{\partial^2 \pi}{\partial x_i^2} = \frac{\partial }{\partial x_i} \left( - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} + \frac{g}{\theta_0}\overline{\theta}_v\delta_{i3} + \mathcal{F}_i - \frac{\partial \tau_{ij}}{\partial x_j} \right) \label{eq:pressure}
 \end{equation}
 
-\noindent \autoref{eq:pressure} is a Poisson equation for $\pi$. DALES provides two methods to solve this equation: 1) using Fast Fourier Transforms (FFT's), 2) using iterative solvers. Among these, the FFT-based solver is the most efficient. DALES has the ability to use the highly optimized Fastest Fourier Transform in the West (FFTW) library \citep{FFTW97}. 
+ DALES provides two methods to solve this equation: 1) using Fast Fourier Transforms (FFT's), 2) using iterative solvers. Among these, the FFT-based solver is the most efficient. DALES has the ability to use the highly optimized Fastest Fourier Transform in the West (FFTW) library \citep{FFTW97}. FFTW is not capable of running on GPU's, however. NVIDIA provides a FFT library in their HPC SDK, which has a similiar interface as the FFTW library, making the porting straightforward. 
 
 \subsection{Profiling}
 To determine which parts of DALES would benefit the most from running on GPU's, a profile has been made 
 
 \subsection{Verification}
+Modifying source code brings the possibility of introducing bugs in the code. While OpenACC requires minimal rewriting of source code, some rewriting may be inevitable. Hence, the updated source code needs to be validated against the original, unmodified code to check whether the program logic has changed. To this end, one would usually assert whether the end result of the two programs are equal or not. This approach is not feasible for a simulation of a turbulent boundary layer, however, as weather-like simulations are subject to chaos. A small perturbation of some prognostic variable can lead to vastly different results in the end. One source of such a perturbation can be the rounding off done by the computer. Even when using the exact same initial conditions, the point-wise end results of two runs may still differ, while each of the solutions could still be considered correct. A better approach would be to look at averaged statistics of several variables. 
+
