@@ -1,6 +1,8 @@
 \documentclass[a4paper]{article}
 
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -13,17 +15,13 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage[a4paper,top=3cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
-%\usepackage{listings}
-%
-%\lstdefinestyle{custom}{
-%  belowcaptionskip=1\baselineskip,
-%  breaklines=true,
-%  xleftmargin=\parindent,
-%  keywordstyle=\bfseries
-%}
-%\lstset{style=custom}
-\usepackage{minted}
+\usepackage[outputdir=../..]{minted}
+
+\usemintedstyle{vs}
+
 \begin{document}
+
+\renewcommand{\listingautorefname}{Listing}
 
 \input{doc/research_proposal/introduction}\newpage
 \input{doc/research_proposal/related_work}\newpage
