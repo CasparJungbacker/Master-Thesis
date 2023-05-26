@@ -1,7 +1,7 @@
 \section{Methodology}
 
 \subsection{Profiling}
-When making an effort to accelerate a model like DALES, one should first figure out which parts of the code contribute the most to the wall clock time. This act is called profiling, and there are numerous tools available that serve this purpose. One tool in particular that is very well suited for GPU applications, is NVIDIA's Nsight Systems (NSys). NSys automatically tracks CPU-GPU interactions, such as data transfer, and GPU utilization. 
+When making an effort to accelerate a model like DALES, one should first figure out which parts of the code contribute the most to the wall clock time. This act is called profiling, and there are numerous tools available that serve this purpose. One tool in particular that is very well suited for GPU applications, is NVIDIA's Nsight Systems (NSys) \citep{nvidiaNVIDIANsightSystems}. NSys automatically tracks CPU-GPU interactions, such as data transfer, and GPU utilization. 
 
 \subsection{OpenACC}
 Computationally expensive parts of DALES will be offloaded to the GPU using OpenACC. OpenACC provides a range of \emph{compiler directives}, which are instructions to the compiler on how to compile or optimize the code. These directives are placed above loops, telling the compiler that the calculation should be done on the GPU. An example of such a loop, decorated with an OpenACC directive, can be found in \autoref{listing:accloop}. This directive-based approach offers multiple benefits over the traditional, lower-level programming models such as CUDA and OpenCL \citep{herdmanAcceleratingHydrocodesOpenACC2012}:
