@@ -166,6 +166,24 @@
   file = {/Users/caspar/Zotero/storage/KMETDULS/Refactoring and Optimizing WRF Model on Sunway Tai.pdf;/Users/caspar/Zotero/storage/453T3UG2/3337821.html}
 }
 
+@inproceedings{romeroDistributedmemorySimulationsTurbulent2022,
+  title = {Distributed-Memory Simulations of Turbulent Flows on Modern {{GPU}} Systems Using an Adaptive Pencil Decomposition Library},
+  booktitle = {Proceedings of the {{Platform}} for {{Advanced Scientific Computing Conference}}},
+  author = {Romero, Joshua and Costa, Pedro and Fatica, Massimiliano},
+  year = {2022},
+  month = jul,
+  series = {{{PASC}} '22},
+  pages = {1--11},
+  publisher = {{Association for Computing Machinery}},
+  address = {{New York, NY, USA}},
+  doi = {10.1145/3539781.3539797},
+  urldate = {2023-06-02},
+  abstract = {This paper presents a performance analysis of pencil domain decomposition methodologies for three-dimensional Computational Fluid Dynamics (CFD) codes for turbulence simulations, on several large GPU-accelerated clusters. The performance was assessed for the numerical solution of the Navier-Stokes equations in two codes which require the calculation of Fast-Fourier Transforms (FFT): a tri-periodic pseudo-spectral solver for isotropic turbulence, and a finite-difference solver for canonical turbulent flows, where the FFTs are used in its Poisson solver. Both codes use a newly developed transpose library that automatically determines the optimal domain decomposition and communication backend on each system. We compared the performance across systems with very different node topologies and available network bandwidth, to show how these characteristics impact decomposition selection for best performance. Additionally, we assessed the performance of several communication libraries available on these systems, such as Open-MPI, IBM Spectrum MPI, Cray MPI, the NVIDIA Collective Communication Library (NCCL), and NVSHMEM. Our results show that the optimal combination of communication backend and domain decomposition is highly system-dependent, and that the adaptive decomposition library is key in ensuring efficient resource usage with minimal user effort.},
+  isbn = {978-1-4503-9410-9},
+  keywords = {computational fluid dynamics,direct numerical simulation,GPU accelerated systems,parallel transpose},
+  file = {/Users/caspar/Zotero/storage/XENEL2NG/Romero et al. - 2022 - Distributed-memory simulations of turbulent flows .pdf}
+}
+
 @article{schalkwijkHighPerformanceSimulationsTurbulent2012,
   title = {High-{{Performance Simulations}} of {{Turbulent Clouds}} on a {{Desktop PC}}: {{Exploiting}} the {{GPU}}},
   shorttitle = {High-{{Performance Simulations}} of {{Turbulent Clouds}} on a {{Desktop PC}}},
