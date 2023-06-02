@@ -26,6 +26,7 @@
   pages = {1853--1862},
   issn = {0898-1221},
   doi = {10.1016/j.camwa.2018.07.034},
+  url = {https://www.sciencedirect.com/science/article/pii/S089812211830405X},
   urldate = {2023-05-25},
   abstract = {We present an efficient solver for massively-parallel direct numerical simulations of incompressible turbulent flows. The method uses a second-order, finite-volume pressure-correction scheme, where the pressure Poisson equation is solved with the method of eigenfunction expansions. This approach allows for very efficient FFT-based solvers in problems with different combinations of homogeneous pressure boundary conditions. Our algorithm explores all combinations of pressure boundary conditions valid for such a solver, in a single, general framework. The method is implemented in a 2D pencil-like domain decomposition, which enables efficient massively-parallel simulations. The implementation was validated against different canonical flows, and its computational performance was examined. Excellent strong scaling performance up to 104 cores is demonstrated for a domain with 109 spatial degrees of freedom, corresponding to a very small wall-clock time/time step. The resulting tool, CaNS, has been made freely available and open-source.},
   langid = {english},
@@ -43,6 +44,7 @@
   pages = {502--511},
   issn = {08981221},
   doi = {10.1016/j.camwa.2020.01.002},
+  url = {https://linkinghub.elsevier.com/retrieve/pii/S0898122120300092},
   urldate = {2023-05-26},
   langid = {english},
   file = {/Users/caspar/Zotero/storage/BP4P5UHX/Costa et al. - 2021 - GPU acceleration of CaNS for massively-parallel di.pdf}
@@ -97,6 +99,7 @@
   pages = {415--444},
   issn = {1991-9603},
   doi = {10.5194/gmd-3-415-2010},
+  url = {https://gmd.copernicus.org/articles/3/415/2010/},
   urldate = {2023-05-23},
   abstract = {Abstract. The current version of the Dutch Atmospheric Large-Eddy Simulation (DALES) is presented. DALES is a large-eddy simulation code designed for studies of the physics of the atmospheric boundary layer, including convective and stable boundary layers as well as cloudy boundary layers. In addition, DALES can be used for studies of more specific cases, such as flow over sloping or heterogeneous terrain, and dispersion of inert and chemically active species. This paper contains an extensive description of the physical and numerical formulation of the code, and gives an overview of its applications and accomplishments in recent years.},
   langid = {english},
@@ -115,6 +118,7 @@
   publisher = {{American Meteorological Society}},
   issn = {0022-4928, 1520-0469},
   doi = {10.1175/1520-0469(1989)046<1492:LESOTC>2.0.CO;2},
+  url = {https://journals.ametsoc.org/view/journals/atsc/46/11/1520-0469_1989_046_1492_lesotc_2_0_co_2.xml},
   urldate = {2023-05-26},
   abstract = {Abstract Large-eddy simulations of a free convective atmospheric boundary layer with an overlying capping inversion are considered. Attention is given to the dependence of the results upon the various factors influencing the simulation: the subgrid model, the domain size, and the mesh resolution. By providing artificial constraints upon the convection the results also provide extra insight into the underlying dynamics. The gross features of the boundary layer, such as the overall energy budget, are not sensitive to the details of the simulations but a number of important factors are revealed. It has been found that near the surface the subgrid diffusivity must be larger than is usually supposed, in order for the vertical velocity skewness to have the correct sign. This region of the flow has a significant subgrid-scale heat flux and it seems that the subgrid model requires improvement in such cases. A revised model which under statically unstable conditions allows the mixing-length of the subgrid-scale turbulence to depend on the flow stability is found to give improved results. The domain size and mesh spacings have a significant influence upon the results and need a setting which allows resolution of the main, freely occurring scales of motion. The entrainment at the capping inversion is remarkable in its insensitivity to all factors. Finally, the higher resolution simulations provide a detailed view of the flow structure of the convective boundary layer. Downdrafts cover a large fraction of the surface area, and near the surface the flow converges into smaller areas comprising long narrow regions of updrafts. The plumes which penetrate through the depth of the boundary layer to the inversion mainly occur over the inter-sections of these long narrow regions of updrafts.},
   chapter = {Journal of the Atmospheric Sciences},
@@ -130,6 +134,7 @@
   pages = {232--240},
   publisher = {{Elsevier}},
   doi = {10.1016/B978-0-12-382225-3.00201-2},
+  url = {https://linkinghub.elsevier.com/retrieve/pii/B9780123822253002012},
   urldate = {2023-05-26},
   isbn = {978-0-12-382225-3},
   langid = {english}
@@ -146,6 +151,7 @@
   pages = {528--564},
   issn = {1573-0484},
   doi = {10.1007/s11227-013-1015-7},
+  url = {https://doi.org/10.1007/s11227-013-1015-7},
   urldate = {2023-05-29},
   abstract = {The progress made in accelerating simulations of fluid flow using GPUs, and the challenges that remain, are surveyed. The review first provides an introduction to GPU computing and programming, and discusses various considerations for improved performance. Case studies comparing the performance of CPU- and GPU-based solvers for the Laplace and incompressible Navier\textendash Stokes equations are performed in order to demonstrate the potential improvement even with simple codes. Recent efforts to accelerate CFD simulations using GPUs are reviewed for laminar, turbulent, and reactive flow solvers. Also, GPU implementations of the lattice Boltzmann method are reviewed. Finally, recommendations for implementing CFD codes on GPUs are given and remaining challenges are discussed, such as the need to develop new strategies and redesign algorithms to enable GPU acceleration.},
   langid = {english},
@@ -153,16 +159,23 @@
   file = {/Users/caspar/Zotero/storage/324IWT3H/Niemeyer and Sung - 2014 - Recent progress and challenges in exploiting graph.pdf}
 }
 
+@misc{nvidiadeveloperNVSHMEM,
+  title = {{{NVSHMEM}}},
+  author = {{NVIDIA Developer}},
+  url = {https://docs.nvidia.com/nvshmem/api/index.html}
+}
+
 @misc{nvidiaNVIDIANsightSystems,
   title = {{{NVIDIA Nsight Systems}}},
   author = {{NVIDIA}},
+  url = {https://developer.nvidia.com/nsight-systems},
   urldate = {2023-05-25}
 }
 
 @misc{RefactoringOptimizingWRF,
   title = {Refactoring and {{Optimizing WRF Model}} on {{Sunway TaihuLight}} | {{Proceedings}} of the 48th {{International Conference}} on {{Parallel Processing}}},
+  url = {https://dl.acm.org/doi/10.1145/3337821.3337923},
   urldate = {2023-05-10},
-  howpublished = {https://dl.acm.org/doi/10.1145/3337821.3337923},
   file = {/Users/caspar/Zotero/storage/KMETDULS/Refactoring and Optimizing WRF Model on Sunway Tai.pdf;/Users/caspar/Zotero/storage/453T3UG2/3337821.html}
 }
 
@@ -177,6 +190,7 @@
   publisher = {{Association for Computing Machinery}},
   address = {{New York, NY, USA}},
   doi = {10.1145/3539781.3539797},
+  url = {https://dl.acm.org/doi/10.1145/3539781.3539797},
   urldate = {2023-06-02},
   abstract = {This paper presents a performance analysis of pencil domain decomposition methodologies for three-dimensional Computational Fluid Dynamics (CFD) codes for turbulence simulations, on several large GPU-accelerated clusters. The performance was assessed for the numerical solution of the Navier-Stokes equations in two codes which require the calculation of Fast-Fourier Transforms (FFT): a tri-periodic pseudo-spectral solver for isotropic turbulence, and a finite-difference solver for canonical turbulent flows, where the FFTs are used in its Poisson solver. Both codes use a newly developed transpose library that automatically determines the optimal domain decomposition and communication backend on each system. We compared the performance across systems with very different node topologies and available network bandwidth, to show how these characteristics impact decomposition selection for best performance. Additionally, we assessed the performance of several communication libraries available on these systems, such as Open-MPI, IBM Spectrum MPI, Cray MPI, the NVIDIA Collective Communication Library (NCCL), and NVSHMEM. Our results show that the optimal combination of communication backend and domain decomposition is highly system-dependent, and that the adaptive decomposition library is key in ensuring efficient resource usage with minimal user effort.},
   isbn = {978-1-4503-9410-9},
@@ -196,6 +210,7 @@
   pages = {307--314},
   issn = {1520-0477},
   doi = {10.1175/BAMS-D-11-00059.1},
+  url = {https://journals.ametsoc.org/doi/10.1175/BAMS-D-11-00059.1},
   urldate = {2023-05-22},
   abstract = {No abstract available.},
   langid = {english},
@@ -213,6 +228,7 @@
   pages = {123--137},
   issn = {0021-9991},
   doi = {10.1016/0021-9991(88)90102-7},
+  url = {https://www.sciencedirect.com/science/article/pii/0021999188901027},
   urldate = {2023-05-24},
   abstract = {This paper describes pre- and postprocessing algorithms used to incorporate the fast Fourier transform (FFT) into the solution of finite difference approximations to multi-dimensional Poisson's equation on a staggered grid where the boundary is located midway between two grid points. All frequently occurring boundary conditions (Neumann, Dirichlet, or cyclic) are considered including the combination of staggered Neumann boundary condition on one side with nonstaggered Dirichlet boundary condition on the other side. Experiences from implementing these algorithms in vectorized coding in Fortran subroutines are reported.},
   langid = {english},
@@ -228,7 +244,8 @@
   volume = {60},
   number = {10},
   pages = {1201--1219},
-  doi = {10.1175/1520-0469(2003)60<1201:ALESIS>2.0.CO;2}
+  doi = {10.1175/1520-0469(2003)60<1201:ALESIS>2.0.CO;2},
+  url = {https://journals.ametsoc.org/view/journals/atsc/60/10/1520-0469_2003_60_1201_alesis_2.0.co_2.xml}
 }
 
 @article{verzijlberghAtmosphericFlowsLarge2021,
@@ -241,6 +258,7 @@
   pages = {20--23},
   issn = {0531-7479, 1432-1092},
   doi = {10.1051/epn/2021502},
+  url = {https://www.europhysicsnews.org/10.1051/epn/2021502},
   urldate = {2023-05-31},
   abstract = {As we are transitioning to an energy system based on renewable sources, the atmosphere is becoming one of our primary energy sources. Understanding atmospheric flows through wind farms has become an issue of large economic and societal concern.},
   langid = {english},
