@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export SYST=$1
-BUILD_TYPE=$2
+export SYST=gnu-fast
+BUILD_TYPE=Debug
 
 DALES_DIR="$HOME/Developer/dales-openacc/"
 BUILD_DIR="$HOME/Developer/build-$SYST-$BUILD_TYPE/"
