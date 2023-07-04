@@ -1,6 +1,7 @@
 \documentclass[a4paper]{article}
-
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -13,10 +14,27 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage[a4paper,top=3cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+\usepackage[outputdir=../..]{minted}
+
+\usemintedstyle{vs}
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\listingautorefname}{Listing}
+
+\title{GPU acceleration of DALES with OpenACC \\ \Large{Research proposal}}
+\author{Caspar Jungbacker}
 
 \begin{document}
 
-\input{doc/research_proposal/methods}
-\input{doc/research_proposal/planning}
+\maketitle
+
+\input{doc/research_proposal/background}\newpage
+\input{doc/research_proposal/related_work}\newpage
+\input{doc/research_proposal/objectives}\newpage
+\input{doc/research_proposal/methods}\newpage
+\input{doc/research_proposal/planning}\newpage
+
+\newpage
+\bibliographystyle{apacite}
+\bibliography{doc/references}
 
 \end{document}

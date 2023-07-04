@@ -1,0 +1,21 @@
+\section{Objectives}
+The reviewed literature shows that GPUs can speed up CFD simulations considerably. This allows researchers to save time, perform more experiments and use finer or larger domains. The main objective of this thesis is to accelerate DALES by leveraging GPUs through a directive-based programming model so that DALES users experience these benefits as well. To successfully reach this goal, the following questions have to be answered:
+
+\begin{enumerate}
+    \item \textbf{What are the main computational bottlenecks in DALES?}
+    
+    Identifying computational bottlenecks will reveal which parts of DALES would benefit the most from GPU acceleration. 
+    
+    \item \textbf{How can the components of DALES that rely on external modules be offloaded to GPUs?}
+    
+    For example, the subroutine that solves the Poisson equation relies on the FFTW module. In order to get maximum performance, these modules should be able to run on GPUs as well. If this is not possible, replacement modules should be sought.
+    
+    \item \textbf{How can multiple GPUs be used?}
+
+    When more than one GPU is used, the need for communication between GPUs arises. The current communication back end of DALES needs to be tested with GPUs to find bottlenecks. Other back ends can be explored to improve performance. 
+    
+    \item \textbf{How does the performance of the GPU implementation of DALES compare to the CPU implementation?}
+    
+    Performance should be tested for a variety of cases, grid configurations, and the number of GPUs used.
+    
+\end{enumerate}
