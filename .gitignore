@@ -161,13 +161,13 @@ cython_debug/
 
 # DALES output files
 initd*
-**/output-gcc/**/*.nc
-**/output-gcc/**/*.001
-!**/output-gcc/**/lscale.inp.001
-!**/output-gcc/**/prof.inp.001
-!**/output-gcc/**/namoptions.001
-!**/output-gcc/**/profiles.001.nc
-!**/output-gcc/**/tmser.001.nc
+*.nc
+*.001
+!lscale.inp.001
+!prof.inp.001
+!namoptions.001
+!profiles.001.nc
+!tmser.001.nc
 
 
 # Latex related stuff
