@@ -1,8 +1,7 @@
 \documentclass[12pt]{tudelft-report}
 
 %% Set up the bibliography
-\usepackage{biblatex}
-\addbibresource{report.bib}
+\usepackage[natbibapa]{apacite}
 
 %% Additional packages and commands
 \usepackage{parskip}
@@ -58,7 +57,8 @@
 \setcounter{biburlucpenalty}{7000}
 
 %% Add bibliography
-\printbibliography[heading=bibintoc,title=References]
+\bibliographystyle{apacite}
+\bibliography{../references.bib}
 
 %% ----------------------------------------------------------------------
 %%    Appendix (Letters for chapters)
