@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=00:04:00
+#SBATCH --time=10:00:00
 #SBATCH --partition=gpu
 #SBATCH --ntasks=1
 #SBATCH --tasks-per-node=18
@@ -22,7 +22,7 @@ hpcx_load
 export OMPI_MCA_coll_hcoll_enable=0
 
 export DALES=/home/cjungbacker/dales/build/dp/src/dales4.4
-export CASE=/home/cjungbacker/dales/cases/bomex
+export CASE=/home/cjungbacker/runs/gpu/bomex-1024
 
 cp $CASE/{namoptions.001,lscale.inp.001,prof.inp.001} "$TMPDIR"
 cd "$TMPDIR"

@@ -96,5 +96,5 @@ dtav = 60
 ltend = .false.
 /
 &SOLVER
-solver_id=200
+solver_id=100
 /

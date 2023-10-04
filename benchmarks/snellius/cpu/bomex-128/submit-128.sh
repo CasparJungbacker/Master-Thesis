@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --time=00:30:00
 #SBATCH --partition=thin
-#SBATCH --ntasks=32
+#SBATCH --ntasks=128
 #SBATCH --mail-type=BEGIN,END
 #SBATCH --mail-user=c.a.a.jungbacker@student.tudelft.nl
 
