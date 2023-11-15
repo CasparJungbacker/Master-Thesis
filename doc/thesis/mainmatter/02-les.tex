@@ -1,0 +1,108 @@
+\chapter{Atmospheric Large Eddy Simulation}
+
+\section{Computational fluid dynamics}
+Under the assumption that a fluid is incompressible, the dynamics of a fluid are described by the famous Navier-Stokes equation \todo{convert to tensor notation for consistency?}:
+
+    \begin{equation}
+        \rho \left( \frac{\partial \mathbf{u}}{\partial t} + \mathbf{u} \cdot \nabla \mathbf{u} \right) = - \nabla p + \rho \mathbf{g} + \mu \nabla^2 \mathbf{u}
+        \label{eq:navier_stokes}
+    \end{equation}
+
+\noindent where $\mathbf{u}$ is the velocity vector, $\rho$ is the density, $p$ is the pressure, $\mathbf{g}$ is the body force vector and $\mu$ is the dynamic viscosity. Finding a solution for $\mathbf{u}(\mathbf{x},t)$ is most often done through numerical modeling. 
+
+As can be seen in ... \todo{add nice figure that shows whirls}, a fluid in motion exhibits, under the right conditions, circular patterns that range in size. In turbulence theory, these motions are called \emph{eddies} \citep{popeTurbulentFlows2000}. The larger eddies are the most unstable and break up into smaller eddies while conserving kinetic energy. When a small enough size is reached, eddies become stable and stop breaking up. Any remaining kinetic energy is dissipated through molecular viscosity. The scale of the largest eddies is similar to the scale of the flow itself, while the scale of the smallest eddies is estimated by:
+
+\begin{equation}
+    \eta = \left( \frac{\nu^3}{\epsilon} \right)^{1/4}
+    \label{eq:kolmogorov-length}
+\end{equation}
+
+where $\eta$ is the scale of the smallest eddies, also known as the Kolmogorov length scale, $\nu$ is the kinematic viscosity and $\epsilon$ is the rate of dissipation of kinetic energy. In atmospheric flows, a typical value for $\eta$ is in the order of $10^{-3}$ m \todo{find source}. 
+
+The objective of solving \autoref{eq:navier_stokes} such that eddies of all scales are represented imposes two requirements on the computational mesh. First, the mesh has to span a large enough area such that the largest scales can be captured. Second, the spacing between elements on the mesh must be at least as small as the Kolmogorov length scale of the flow. If both requirements are met, all turbulent motions can be resolved and no parameterizations are needed. This technique is called \acrfull{dns} \citep{popeTurbulentFlows2000}. The biggest limitation of DNS is that it is associated with extreme computational costs. ...
+
+\citet{smagorinskyGeneralCirculationExperiments1963} proposed the idea of resolving only the largest, most energetic eddies and modeling the dissipation of energy at the smaller scales. This technique is now known as \acrfull{les}. To arrive at the governing equations of \acrshort{les}, the velocity field $\mathbf{u}(\mathbf{x},t)$ is first decomposed into a resolved part $\overline{\mathbf{u}}(\mathbf{x},t)$ and an unresolved part $\mathbf{u}^\prime(\mathbf{x},t)$. The unresolved part of the velocity field is often referred to as the \emph{subgrid-scale} component, as it represents the turbulent motions that are too small to be represented on the computational grid. This decomposition is analogous to a filtering operation; the small-scale highly fluctuating motions are filtered out of the flow field. The filtered Navier-Stokes equations are:
+
+\begin{align}
+    &\frac{\partial \overline{u}_i}{\partial x_j} = 0 \label{eq:continuity_filtered}\\ 
+    &\frac{\partial \overline{u}_i}{\partial t} + \frac{\partial \overline{u_i u_j}}{\partial x_j} = - \frac{1}{\rho} \frac{\partial \overline{p}}{\partial x_i} + \nu \frac{\partial^2 \overline{u}_i}{\partial x_j} + f_i - \frac{\partial \tau_{ij}}{\partial x_j}.  \label{eq:momentum_filtered}
+\end{align}
+
+After the filtering operation, the momentum equation (\autoref{eq:momentum_filtered}) contains an extra term $\partial \tau_{ij} / \partial x_j$. This term is called the \emph{subgrid-scale stress tensor} and represents, as the name implies, the contribution of the unresolved scales to the resolved flow field. 
+
+
+NS equations have to be solved numerically
+
+Turbulence 
+
+Solving Turbulence
+
+DNS vs RANS vs LES
+
+\section{The future of numerical weather prediction}
+
+\section{DALES}
+
+\begin{align}
+    \frac{\partial \overline{u}_i}{\partial x_i} &= 0 \label{eq:mass_conservation} \\
+    \frac{\partial \overline{u}_i}{\partial t} = - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} - \frac{\partial \pi}{\partial x_i} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + \mathcal{F}_i - \frac{\partial \tau_{ij}}{\partial x_j} \label{eq:momentum}
+\end{align}
+
+
+
+\subsection{The Poisson equation and Fourier transforms} \label{sec:dales_poisson}
+
+\todo{Something something the momentum equation has two unknowns so use Chorin's projection method to split it.}
+
+In order to obtain an explicit equation for the pressure, the divergence of \autoref{eq:momentum} can be taken, which results in:
+
+\begin{equation}
+    \frac{\partial}{\partial x_i}\frac{\partial \overline{u}_i}{\partial t} = \frac{\partial}{\partial x_i} \left( - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} - \frac{\partial \pi}{\partial x_i} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + \mathcal{F}_i - \frac{\partial \tau_{ij}}{\partial x_j} \right) \label{eq:momentum_divergence}
+\end{equation}
+
+\noindent Because of the symmetry of second derivatives, the order of the derivatives on the left-hand side can be inverted:
+
+\begin{equation*}
+    \frac{\partial}{\partial x_i}\frac{\partial \overline{u}_i}{\partial t} = \frac{\partial}{\partial t}\frac{\partial \overline{u}_i}{\partial x_i}
+\end{equation*}
+
+\noindent After applying the equation for conservation of mass (\autoref{eq:mass_conservation}):
+
+\begin{equation}
+    \frac{\partial}{\partial t} \frac{\partial \overline{u}_i}{\partial x_i} = 0
+\end{equation}
+
+\noindent Hence, \autoref{eq:momentum_divergence} can be rewritten as follows:
+
+\begin{equation}
+    \frac{\partial^2 \pi}{\partial x_i^2} = \frac{\partial}{\partial x_i} \left( - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + \mathcal{F}_i - \frac{\partial \tau_{ij}}{\partial x_j} \right)
+    \label{eq:poisson_equation}
+\end{equation}
+
+\noindent Since the right-hand side of \autoref{eq:poisson_equation} is known, it is essentially an equation of the form $\nabla^2 \Phi = f$, also known as the Poisson equation. This equation can efficiently be solved by making use of Fourier transfers. The first step towards a numerical solution to the Poisson equation is to discretize the equation. DALES uses a second-order finite difference scheme:
+
+\begin{equation}
+    \frac{\Phi_{i-1,j,k} - 2 \Phi_{i,j,k} + \Phi_{i+1,j,k}}{\Delta x^2} + \frac{\Phi_{i,j-1,k} - 2 \Phi_{i,j,k} + \Phi_{i,j+1,k}}{\Delta y^2} + \frac{\Phi_{i,j,k-1} - 2 \Phi_{i,j,k} + \Phi_{i,j,k+1}}{\Delta z^2} = f_{i,j,k}
+    \label{eq:discretized_poisson_equation}
+\end{equation}
+
+\autoref{eq:discretized_poisson_equation} can be written as a matrix equation of the form $A \Phi = \mathbf{f}$, where $A$ has 7 non-zero components per row. Next, a Fourier transform is done in both horizontal directions, leading to the following equation: \todo{Add proof in appendix?}
+
+\begin{equation}
+    \left( \frac{\lambda_i}{\Delta x^2} + \frac{\lambda_j}{\Delta y^2} \right) \hat{\hat{\Phi}}_{i,j,k} + \frac{\hat{\hat{\Phi}}_{i,j,k-1} - 2 \hat{\hat{\Phi}}_{i,j,k} + \hat{\hat{\Phi}}_{i,j,k+1}}{\Delta z^2} = f_{i,j,k}
+    \label{eq:poisson_fourier_space}
+\end{equation}
+
+where $\lambda_i$ and $\lambda_j$ are known eigenvalues, and ... \todo{Add symbol} means that a Fourier transform has been applied two times to a variable. One can see that the number of unknowns has decreased from 7 in \autoref{eq:discretized_poisson_equation} to just 3 in \autoref{eq:poisson_fourier_space}. 
+
+\subsection{Parallelization}
+To speed up simulations, or enable simulations over large domains, \acrshort{dales} is parallelized with the \acrfull{mpi}. \acrshort{mpi} provides an interface to manage the communication of data between processors. 
+
+An \acrshort{mpi} run of \acrshort{dales} is started with a set number of \emph{tasks}, and each task is bound to a processor. In general, the number of tasks cannot exceed the number of available processors. The computational domain is then divided into as many sub-domains as there are \acrshort{mpi} tasks. 
+
+\begin{figure}[H]
+    \centering
+    \includesvg[width=0.8\linewidth]{../images/drawings/dales_decompositions.svg}
+    \caption{Possible domain decompositions in \acrshort{dales}. From left to right: $z$-aligned pencils, $y$-aligned slabs and $x$-aligned slabs. The colors indicate the sub-domains.}
+    \label{fig:dales_domain_decomposition}
+\end{figure}

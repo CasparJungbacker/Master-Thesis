@@ -1,0 +1,226 @@
+\chapter{Implementation}
+This chapter 
+
+\section{OpenACC}
+As discussed in \autoref{sec:programming_gpus}, there are numerous programming models available to make use of accelerators (\acrshort{gpu}s). For this work, the directive-based approach with \acrshort{acc} was chosen. 
+
+Why use OpenACC
+
+general syntax (directive, loop/structured block)
+
+What does the compiler do? -> generate device kernels
+
+\section{Offloading loops}
+The first step towards a GPU port of DALES was to offload computationally expensive parts of the code. These parts are generally made up of (nested) loops that perform some calculation on all grid points. This offloading was done by adding \emph{compute constructs} to the code. A compute construct instructs the compiler that the code it contains should be compiled for the GPU. OpenACC features three compute constructs: \texttt{kernels}, \texttt{parallel} and \texttt{serial}, which will be discussed in the following sections. 
+
+\subsection{The \texttt{kernels} construct}
+When a loop or structured block is annotated with a \texttt{kernels} construct, the compiler is given the freedom to parallelize the code by itself. To do so, the compiler first has to determine if the annotated code can be parallelized \emph{at all}. This means that the generated device kernels are guaranteed to produce correct results, but it may also lead to unnecessary serial execution of parallelizable code because the compiler made a conservative decision.
+
+In this work, the \texttt{kernels} construct was mainly used to offload sections that contained Fortran array syntax. Array syntax is a special syntax that allows for compact notation of operations on (multi-dimensional) arrays. For example, instead of constructing a (nested) loop to add two arrays to each other, one can simply write \texttt{C = A + B}. The \texttt{kernels} construct can be used to offload these sections of code. An example of a section of Fortran array syntax that is offloaded with the \texttt{kernels} construct can be found in \autoref{lst:acc_kernels}.
+
+\begin{lstlisting}[
+  language=Fortran,
+  caption={Fortran array syntax offloaded using the \acrshort{acc} \texttt{kernels} construct. Here, arrays \texttt{A} and \texttt{B} are added and the result is stored in array \texttt{C}. Note that the three arrays can have any rank, as long as the rank is the same between arrays.},
+  label={lst:acc_kernels}
+  ]
+!$acc kernels
+C = A + B
+!$acc end kernels
+\end{lstlisting}
+
+\subsection{The \texttt{parallel} construct}
+Similar to the \texttt{kernels} construct, the \texttt{parallel} construct also lets the compiler generate parallel device code. The difference between the two is that the \texttt{parallel} construct lets the programmer decide how a section of code should be parallelized, while the \texttt{kernels} construct transfers this responsibility to the compiler. 
+
+By default, code that is annotated with a \texttt{parallel} construct will be executed by all available threads on the device redundantly. Therefore, by itself, the \texttt{parallel} is not useful. To distribute loop iterations over the available device threads, the \texttt{loop} clause can be added to a \texttt{parallel} construct. An example of the usage of the \texttt{parallel loop} construct can be found in \autoref{lst:acc_parallel_loop}. In this example, the loop contains 1000 iterations. When the program encounters this loop, 1000 threads will be spawned on the device. Each thread will get a private copy of the loop index \texttt{i} and will do the calculation for this value of \texttt{i}. 
+
+It should be noted that for a loop to be parallelizable, all iterations should be independent from one another. Contrary to the \texttt{kernels} construct, the compiler will not check for such dependencies if the \texttt{parallel loop} construct is used. Dependencies between loop iterations can lead to incorrect results or performance bottlenecks if one does not take appropriate action. 
+
+\begin{lstlisting}[
+    language=Fortran,
+    caption={Example of a loop that is parallelized using the \texttt{parallel loop} constuct.},
+    label={lst:acc_parallel_loop}
+]
+!$acc parallel loop
+do i = 1, 1000
+  a(i) = b(i) + 2
+end do
+\end{lstlisting}
+
+\section{Optimizing data locality}
+In most computers, the host and device both have their own memory space. Therefore, if the device has to perform calculations on some data, this data has to be copied from the host memory to the device memory. With OpenACC, the programmer has the option to leave data management to the compiler or to manage it themselves explicitly. In most cases, letting the compiler decide when to move data will be detrimental to the performance of an application.
+
+Data movement by the compiler will be illustrated with \autoref{lst:two_loops_no_data_construct} as an example. Upon reaching the first loop, the array \texttt{a} is not present in device memory yet. Hence, the compiler adds an instruction right before the loop to copy array \texttt{a} from host to device memory. When the copy has finished, the loop is executed on the device. After the loop is done executing, \texttt{a} is copied back to the host again and the device memory is freed. Next, the program reaches the second loop. Once again, the compiler adds instructions to copy \texttt{a} to the device before the loop and copy it back to the host after the loop. One may notice that there is no need to perform any data movement in between these loops; data can be copied to the device before the start of the first loop, and only has to be copied back to the host after the second loop has finished executing. Since data transfers are a major bottleneck in device computing, optimizing the transfers manually is an essential task to improve performance. 
+
+OpenACC offers multiple directives to manage data transfers manually. The \texttt{enter data} directive has been used the most in DALES. This directive can be used with a \texttt{create} clause, which takes a list of variables as input and allocates device memory for these variables, or a \texttt{copyin} clause, which does the same but additionally initializes the device copies of the variables with the values that are in host memory. Data that is moved by the \texttt{enter data} directive stays on the device until the program has finished executing, or an \texttt{exit data} directive is encountered. The latter deallocates device memory after (optionally) copying the data back to the host. This method of data management is applied to the algorithm of \autoref{lst:two_loops_no_data_construct} in \autoref{lst:two_loops_with_data_construct}. In this example, array \texttt{a} is allocated before the first loop. Between the two loops, no data movement is done. After the second loop is done, \texttt{a} is copied back to the host memory and the device memory that was occupied is made available again.
+
+In \autoref{lst:two_loops_with_data_construct}, one can also notice the use of the \texttt{default} clause. This clause can be used on a compute construct and tells the compiler what the default assumption on the locality of the data accessed in a loop should be. By providing the value \texttt{present}, the compiler assumes that the data is already present on the device and no data movement is needed. If the data is not present, an error will be thrown when the program is executed. The \texttt{default(present)} clause was added to all compute constructs in \acrshort{dales} to ensure that all data resides on the device.
+
+\begin{lstlisting}[
+  language=Fortran,
+  caption={Example algorithm without explicit data management.},
+  label={lst:two_loops_no_data_construct}
+]
+!$acc parallel loop
+do i = 1, i1
+  a(i) = a(i) + 2
+end do
+
+!$acc parallel loop
+do i = 1, i1
+  a(i) = a(i) / 4
+end do
+\end{lstlisting}
+
+\begin{lstlisting}[
+  language=Fortran,
+  caption={Example algorithm with explicit data management by including \texttt{enter data} and \texttt{exit data} directives.},
+  label={lst:two_loops_with_data_construct}
+]
+!$acc enter data create(a)
+
+!$acc parallel loop default(present)
+do i = 1, i1
+  a(i) = a(i) + 2
+end do
+
+!$acc parallel loop default(present)
+do i = 1, i1
+  a(i) = a(i) / 4
+end do
+
+!$acc exit data copyout(a)
+\end{lstlisting}
+
+\section{The Poisson solver}
+As discussed in \autoref{sec:dales_poisson}, DALES uses a pressure correction method to ensure a divergence-free velocity field. In the current version of DALES, the Poisson equation can be solved in two ways: with Fast Fourier Transforms (FFTs) or an iterative solver. In this work, the solver based on \acrshort{fft}s has been extended to make use of \acrshort{gpu}s. 
+
+The Poisson solver consists of five steps:
+
+\begin{enumerate}
+  \item Evaluate the right-hand side of \autoref{eq:poisson_equation};
+  \item Perform a 2D FFT at every vertical level;
+  \item Solve a tridiagonal system;
+  \item Perform a 2D inverse FFT at every vertical level;
+  \item Correct the velocity fields with the calculated pressure gradients to make them divergence-free.
+\end{enumerate}
+
+Steps (1), (3) and (5) mainly consist of nested loops that have been parallelized using the \texttt{parallel loop} and \texttt{kernels} constructs. In DALES version 4.4, the \acrshort{fft}s of steps (2) and (4) can be evaluated either by using the FFTPACK library \citep{swarztrauberVectorizingFFTs1982}, which is included with the source code of DALES, or the more recent \acrfull{fftw} library \citep{frigoFFTWAdaptiveSoftware1998a}. Neither one of these libraries can utilize \acrshort{gpu}s, therefore a new library had to be implemented. Currently, there are multiple \acrshort{fft} libraries available that support execution on \acrshort{gpu}s. Nvidia offers cuFFT, which is designed for Nvidia GPUs \citep{nvidiaCuFFT}. cuFFT is written in C++/CUDA, but Fortran bindings are included. rocFFT is a similar library developed by AMD, for AMD \acrshort{gpu}s \citep{amdRocFFT2023}. Additionally, AMD offers the hipFFT library \citep{amdHipFFT2023}. hipFFT functions as a wrapper library around cuFFT and rocFFT, allowing for execution on both Nvidia GPUs and AMD GPUs. Another promising new library is VkFFT, developed by \citet{tolmachevVkFFTAPerformantCrossPlatform2023}. VkFFT supports multiple backends allowing for execution on all major vendors of data center GPUs (Nvidia, AMD, Intel). In addition, VkFFT supports discrete cosine transforms, which are useful for simulations with Dirichlet or Neumann boundary conditions \footnote{\acrshort{dales} version 4.4 does not support Dirichlet or Neumann boundary conditions. However, work is currently being done to include these in an updated version of \acrshort{dales} (see \citet{liquilungOpenBoundaryConditions2023})} \citep{schumannFastFourierTransforms1988}. For this work, the cuFFT library was chosen because of its Fortran bindings and ease of use with the Nvidia HPC SDK.
+
+A new Fortran module was added to \acrshort{dales} to handle the \acrshort{fft}s. This module was based on the existing \acrshort{fftw} implementation and consists of five components:
+
+\begin{enumerate}
+  \item Initialization;
+  \item Forward transforms;
+  \item Backward transforms;
+  \item Transpositions;
+  \item Clean up.
+\end{enumerate}
+
+In the initialization phase, the preparations for FFT execution are done. This includes allocating memory, setting up FFT plans, and calculating eigenvalues. FFT plans contain information about whether the transform is forward or backward, the layout of the input and output data and the data type (single or double precision). 
+
+The evaluation of the forward FFTs consists of the following sub-steps:
+
+\begin{enumerate}
+    \item 1D forward FFTs are done in the $x$-direction. This is done for every $y$-coordinate, at every vertical level. Therefore, if the number of elements in the $x$ and $y$-directions are $i_{\text{tot}}$ and $j_{\text{tot}}$ respectively, and there are $k_{\text{tot}}$ vertical levels, $j_{\text{tot}} \times k_{\text{tot}}$ 1D FFTs of length $i_{\text{tot}}$ are evaluated.
+    \item The domain is transposed such that the $y$ direction is contiguous in memory. In a multi-GPU scenario, this step requires GPUs to communicate with all other GPUs. A transpose operation also requires an intermediate buffer array. To save memory, the workspace for the FFTs is reused as a buffer.
+    \item $i_{\text{tot}} \times k_{\text{tot}}$ 1D FFTs are done in the y-direction.
+    \item The domain is transposed such that the $z$-directions is aligned in memory \todo{this one is different for 1 gpu vs multiple gpus}
+\end{enumerate}
+
+After the final step, the tridiagonal solver is applied to calculate the final Fourier coefficients. To convert the data back to physical coordinates, the reciprocal of the steps above are done:
+
+\begin{enumerate}
+    \item The domain is transposed from $z$-aligned to $y$-aligned.
+    \item 1D FFTs are done in the $y$-direction.
+    \item The domain is transposed from $y$-aligned to $x$-aligned.
+    \item 1D inverse FFTs are done in the $x$-direction.
+\end{enumerate}
+
+\section{Optimisations}
+
+\subsection{Improving loop structure}
+
+\subsection{Memory allocation}
+In DALES, most of the memory is allocated during the startup procedure and is deallocated only after the simulation has finished. Some subroutines, however, allocate and deallocate memory once they are called, which can be every time step. As memory allocations on the GPU are quite costly, this workflow can introduce a significant performance penalty. This was fixed by moving arrays from the subroutine scope to the module scope. The arrays are then allocated once during the startup procedure and are kept alive throughout the time loop. The implementation of this optimization is illustrated in Listing~\ref{lst:memory_allocation}.
+
+\begin{figure}[ht]
+  \centering
+  \captionof{lstlisting}{Improving memory allocation. On the left, the array \texttt{profile} belongs to the scope of the subroutine \texttt{calculate\_profile}. On the right, \texttt{profile} moved to the scope of the module and allocated in the subroutine \texttt{init\_profile}, which is called once in the startup procedure of the program.}
+  \label{lst:memory_allocation}
+  \begin{adjustbox}{valign=t, minipage=0.48\linewidth}
+    \centering
+    \begin{tabular}{c}
+      \begin{lstlisting}[language=Fortran]
+module statistics
+
+contains
+
+  subroutine calculate_profile
+    implicit none
+    real, allocatable :: profile(:)
+    allocate(profile(kmax))
+    !$acc enter data copyin(kmax)
+    ! Perform calculation on profile
+    !$acc exit data copyout(kmax)
+  end subroutine 
+end module
+      \end{lstlisting}
+    \end{tabular}
+  \end{adjustbox}
+  \hfill
+  \begin{adjustbox}{valign=t, minipage=0.48\linewidth}
+    \centering
+    \begin{tabular}{c}
+      \begin{lstlisting}[language=Fortran]
+module statistics
+
+real, allocatable :: profile(:)  
+
+contains
+  subroutine init_profile
+    implicit none
+    allocate(profile(kmax))
+    !$acc enter data copyin(kmax)
+  end subroutine
+
+  subroutine calculate_profile
+    implicit none
+    ! Perform calculation on profile
+  end subroutine 
+
+  subroutine exit_profile
+    implicit none
+    !$acc exit data copyout(kmax)
+    deallocate(profile)
+  end subroutine
+end module
+      \end{lstlisting}
+    \end{tabular}
+  \end{adjustbox}
+\end{figure}
+
+\subsection{Asynchronous kernels}
+OpenACC allows for asynchronous execution of GPU kernels. This means that when the CPU sends a task to the GPU, it does not wait until the GPU has finished executing this task. The CPU is allowed to continue running the program while the GPU is busy processing. New tasks can even be sent to the GPU while it is still occupied with the previous task. This is possible because the GPU manages tasks through \emph{queues}. When the CPU sends a task to the GPU, it is put in a queue. The GPU then executes the enqueued tasks in order. Tasks can be executed in parallel by placing them in different queues.
+
+Asynchronous kernel execution can significantly benefit performance. This performance increase can especially be noticed for relatively small kernels that, for example, only iterate over one or two dimensions. In these cases, the cost of sending the kernel to the GPU can be relatively high compared to the actual cost of executing the kernel. Most of the offloaded loops in DALES have been made asynchronous by adding an \texttt{async} clause to the \texttt{parallel loop} or \texttt{kernels} directives. 
+
+\newpage
+
+\section{Extension to multiple GPUs}
+\acrshort{dales} already features parallel execution on \acrshort{cpu}s via \acrfull{mpi}. When using multiple \acrshort{cpu}s, the computational domain is either decomposed into slices or pencils \todo{add nice figure here}. Each sub-domain is then assigned to a \acrshort{cpu}. \todo{maybe put this somewhere else?}
+
+With OpenACC, it is possible to utilize multiple \acrshort{gpu}s \citep{farberParallelProgrammingOpenACC2017}. However, OpenACC can only make use of devices that live on the same node. In practice, this means that one is limited to using only a few \acrshort{gpu}s (for example, the Snellius supercomputer has 4 \acrshort{gpu}s per node \citep{surfSnelliusHardwareFile}). Another option is to adapt the current \acrshort{mpi} parallelization, which was done in this work. In this approach, the computational domain is still decomposed and distributed across \acrshort{cpu}s (possibly on multiple nodes), but each process has access to a GPU to offload computations. 
+
+As mentioned before, data transfers from \acrshort{gpu} to \acrshort{cpu} are expensive. To circumvent the need for \acrshort{cpu}-\acrshort{gpu} data transfers when doing \acrshort{mpi} communications, special implementations of the \acrshort{mpi} standard have been developed, often referred to as \acrshort{gpu}-aware \acrshort{mpi} \citep{potluriEfficientInternodeMPI2013}. As the name suggests, a \acrshort{gpu}-aware \acrshort{mpi} implementation can handle data that is located in \acrshort{gpu} memory. When a call to the \acrshort{mpi} library is made, the \acrshort{gpu}-aware \acrshort{mpi} backend checks if the provided data is located in \acrshort{cpu} or \acrshort{gpu} memory. If the data is indeed located in \acrshort{gpu} memory, the backend will make sure that data is transferred directly from \acrshort{gpu} to \acrshort{gpu} and does not go through the \acrshort{cpu} first. \todo{a figure would be nice here}
+
+To make the location of the data in \acrshort{gpu} memory available to the \acrshort{mpi} backend, the \acrshort{acc} \texttt{host\_data} can be used. 
+
+\begin{lstlisting}[
+  language=Fortran,
+  caption={Providing a device pointer to an \acrshort{mpi} call with a \texttt{host\_data} directive.},
+  label={lst:mpi_device_pointer}
+]
+!$acc host_data use_device(array)
+call MPI_Allreduce(MPI_IN_PLACE, array, sz, MPI_REAL, MPI_SUM, comm, ierror)
+!$acc end host_data
+\end{lstlisting}

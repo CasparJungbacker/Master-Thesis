@@ -64,28 +64,28 @@
 %%    Setting up the fonts
 %% ----------------------------------------------------------------------
 
-\ifPDFTeX
+%\ifPDFTeX
     %% With pdfLaTeX, use Paletino as the main font and Roboto Slab as title fonts
     \RequirePackage[T1]{fontenc}  % Select T1 font encoding
     \RequirePackage{newpxtext}    % Palatino-like font...
-    \RequirePackage{newpxmath}    % ...with support for mathematics
+%    \RequirePackage{newpxmath}    % ...with support for mathematics
 
     \newcommand{\titlestyle}{\fontfamily{RobotoSlab-TLF}\fontseries{light}\selectfont}
     \newcommand{\largetitlestyle}{\fontfamily{RobotoSlab-TLF}\fontseries{thin}\selectfont}
-\else
-    %% If XeLaTeX or LuaLaTeX is set as the compiler, the TU Delft house style fonts are used (see https://www.tudelft.nl/huisstijl/bouwstenen/typografie).
-    \RequirePackage[no-math]{fontspec} % Advanced font selection
-
-    \RequirePackage{unicode-math}
-    \setmainfont[Path = fonts/libertinus/, ItalicFont=libertinusserif-italic.otf, BoldFont=libertinusserif-bold.otf, BoldItalicFont=libertinusserif-bolditalic.otf]{libertinusserif-regular.otf}
-    \setsansfont[Path = fonts/libertinus/, BoldFont=libertinussans-bold.otf, ItalicFont=libertinussans-italic.otf]{libertinussans-regular.otf}
-    \setmathfont[Path = fonts/libertinus/]{libertinusmath-regular.otf}
-    \setmonofont[Scale=MatchLowercase, Path=fonts/inconsolata/]{Inconsolata-Regular.ttf}
-    
-
-    \newfontfamily\titlestyle{Roboto Slab Light}
-    \newfontfamily\largetitlestyle{Roboto Slab Thin}
-\fi
+%\else
+%    %% If XeLaTeX or LuaLaTeX is set as the compiler, the TU Delft house style fonts are used (see https://www.tudelft.nl/huisstijl/bouwstenen/typografie).
+%    \RequirePackage[no-math]{fontspec} % Advanced font selection
+%
+%    \RequirePackage{unicode-math}
+%    \setmainfont[Path = fonts/libertinus/, ItalicFont=libertinusserif-italic.otf, BoldFont=libertinusserif-bold.otf, BoldItalicFont=libertinusserif-bolditalic.otf]{libertinusserif-regular.otf}
+%    \setsansfont[Path = fonts/libertinus/, BoldFont=libertinussans-bold.otf, ItalicFont=libertinussans-italic.otf]{libertinussans-regular.otf}
+%    \setmathfont[Path = fonts/libertinus/]{libertinusmath-regular.otf}
+%    \setmonofont[Scale=MatchLowercase, Path=fonts/inconsolata/]{Inconsolata-Regular.ttf}
+%    
+%
+%    \newfontfamily\titlestyle{Roboto Slab Light}
+%    \newfontfamily\largetitlestyle{Roboto Slab Thin}
+%\fi
 
 %% ----------------------------------------------------------------------
 %%    Formatting the titles and table of contents

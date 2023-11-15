@@ -1,12 +1,26 @@
-\documentclass[12pt]{tudelft-report}
+\documentclass[11pt]{tudelft-report}
 
 %% Set up the bibliography
 \usepackage[natbibapa]{apacite}
+\usepackage{todonotes}
+\usepackage[acronym]{glossaries}
 
 %% Additional packages and commands
 \usepackage{parskip}
+\usepackage{capt-of}
+\usepackage{adjustbox}
+\usepackage{pgfplots}
+\usepackage{svg}
+\usepgfplotslibrary{groupplots}
 \setlist{itemsep=-2pt} % Reducing white space in lists slightly
 \renewcommand{\deg}{\si{\degree}\xspace} % Use \deg easily, everywhere
+
+\usepackage{plex-serif, plex-sans}
+\usepackage[scale = 0.9]{plex-mono}
+\usepackage{fourier}
+
+\loadglsentries{acronyms.tex}
+\makeglossaries
 
 %% ----------------------------------------------------------------------
 %%    Begin of document + Frontmatter (Roman page numbering)
@@ -27,7 +41,7 @@
 
 \makecover
 
-\input{frontmatter/title-report}
+\input{frontmatter/title-thesis}
 \input{frontmatter/preface}
 \input{frontmatter/summary}
 
@@ -43,18 +57,19 @@
 
 \mainmatter
 
-\input{mainmatter/introduction}
-
-\input{mainmatter/chapter-2}
-\input{mainmatter/chapter-3}
-%\input{mainmatter/chapter-4} % Create file to add
-
-\input{mainmatter/conclusion}
+\input{mainmatter/01-introduction.tex}
+\input{mainmatter/02-les.tex}
+\input{mainmatter/03-gpgpu.tex}
+\input{mainmatter/04-implementation.tex}
+\input{mainmatter/05-methodology.tex}
+\input{mainmatter/06-results.tex}
+\input{mainmatter/07-discussion.tex}
+\input{mainmatter/08-conclusion.tex}
 
 %% Prevent urls running into margins in bibliography
-\setcounter{biburlnumpenalty}{7000}
-\setcounter{biburllcpenalty}{7000}
-\setcounter{biburlucpenalty}{7000}
+%\setcounter{biburlnumpenalty}{7000}
+%\setcounter{biburllcpenalty}{7000}
+%\setcounter{biburlucpenalty}{7000}
 
 %% Add bibliography
 \bibliographystyle{apacite}
@@ -66,8 +81,5 @@
 
 \appendix
 
-\input{appendix/appendix-a}
-\input{appendix/appendix-b}
-%\input{appendix/appendix-c} % Create file to add
 
 \end{document}
