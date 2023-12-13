@@ -1,10 +1,4 @@
 #!/bin/bash
-#SBATCH --array=1,2,4,8
-#SBATCH --partition=gpu
-#SBATCH --ntasks=%a
-#SBATCH --gpus=%a
-#SBATCH --gpus-per-task=1
-#SBATCH --output=output_%a.txt
 
 module load 2022
 module load foss/2022a
@@ -23,11 +17,11 @@ export OMPI_MCA_coll_hcoll_enable=0
 export DALES=/home/cjungbacker/dales/build/gpu/dp/src/dales4.4
 export PROF_INP=/home/cjungbacker/dales/cases/bomex/prof.inp.001
 export LSCALE_INP=/home/cjungbacker/dales/cases/bomex/lscale.inp.001
-export NAMOPTIONS=namoptions.00$((SLURM_ARRAY_TASK_ID))
+export NAMOPTIONS=namoptions.$EXPNR # Use --export option to define EXPNR
 
 cp $NAMOPTIONS $TMPDIR
-cp $PROF_INP $TMPDIR/prof.inp.00$((SLURM_ARRAY_TASK_ID))
-cp $LSCALE_INP $TMPDIR/lscale.inp.00$((SLURM_ARRAY_TASK_ID))
+cp $PROF_INP $TMPDIR/prof.inp.$EXPNR
+cp $LSCALE_INP $TMPDIR/lscale.inp.$EXPNR
 
 cd $TMPDIR
 
