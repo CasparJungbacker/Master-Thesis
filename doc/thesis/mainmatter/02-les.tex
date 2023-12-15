@@ -3,10 +3,10 @@
 \section{Computational fluid dynamics}
 Under the assumption that a fluid is incompressible, the dynamics of a fluid are described by the famous Navier-Stokes equation \todo{convert to tensor notation for consistency?}:
 
-    \begin{equation}
-        \rho \left( \frac{\partial \mathbf{u}}{\partial t} + \mathbf{u} \cdot \nabla \mathbf{u} \right) = - \nabla p + \rho \mathbf{g} + \mu \nabla^2 \mathbf{u}
+    \begin{align}
+        \rho \left( \frac{\partial u_i}{\partial t} + u_j \frac{\partial u_i}{\partial x_j} \right) = - \frac{\partial p}{\partial x_i} + \rho g_i + \mu \nabla^2 \mathbf{u}
         \label{eq:navier_stokes}
-    \end{equation}
+    \end{align}
 
 \noindent where $\mathbf{u}$ is the velocity vector, $\rho$ is the density, $p$ is the pressure, $\mathbf{g}$ is the body force vector and $\mu$ is the dynamic viscosity. Finding a solution for $\mathbf{u}(\mathbf{x},t)$ is most often done through numerical modeling. 
 
@@ -42,19 +42,49 @@ DNS vs RANS vs LES
 \section{The future of numerical weather prediction}
 
 \section{DALES}
+The \acrfull{dales} model is a large-eddy simulation model designed for high-resolution modeling of the atmosphere and its processes, like cloud formation and precipitation \citep{heusFormulationDutchAtmospheric2010,ouwerslootLargeEddySimulationComparison2017}. 
+
+\subsection{Prognostic equations}
+\acrshort{dales} uses six prognostic variables to define the state of the atmosphere: three velocity components $u$, $v$ and $w$, liquid water potential temperature $\theta_l$, total water specific humidity $q_t$ and the turbulence kinetic energy $e$. 
 
 \begin{align}
-    \frac{\partial \overline{u}_i}{\partial x_i} &= 0 \label{eq:mass_conservation} \\
-    \frac{\partial \overline{u}_i}{\partial t} = - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} - \frac{\partial \pi}{\partial x_i} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + \mathcal{F}_i - \frac{\partial \tau_{ij}}{\partial x_j} \label{eq:momentum}
+    \frac{\partial \overline{u}_i}{\partial t} &= - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} - \frac{\partial \pi}{\partial x_i} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + f_i - \frac{\partial \tau_{ij}}{\partial x_j} \label{eq:momentum_conservation}
 \end{align}
 
+where $u$ is the velocity vector, $\pi$ is a modified pressure \todo{find out what this means}, $\theta$ is the virtual potential temperature, .... Similarly, the momentum equation for a scalar $\varphi$, where $\varphi \in \{\theta_l, q_t\}$, is given by:
+
+\begin{equation}
+    \frac{\partial \overline{\varphi}}{\partial t} = - \frac{\partial \overline{u}_j \overline{\varphi}}{\partial x_j} - \frac{\partial R_{u_j,\varphi}}{\partial x_j} + S_\varphi,
+\end{equation}
+
+in which $R_{u_j,\varphi}$ is a sub-filter scale flux and $S_\varphi$ is a source term.
+
+The budget equation for turbulence kinetic energy $e$ is given by:
+
+\begin{equation}
+\begin{split}
+    \frac{\partial e^{1/2}}{\partial t} = &- \overline{u}_j \frac{\partial e^{1/2}}{\partial x_j} + \frac{1}{2e^{1/2}} \left( K_m \left( \frac{\partial \overline{u}_j}{\partial x_i} + \frac{\partial \overline{u}_i}{\partial x_j} \right) \frac{\partial \overline{u}_i}{\partial x_j} - K_h \frac{g}{\theta_0} \frac{\partial}{\partial z} \left( A \overline{\theta}_l + B \overline{q}_t\right) \right) \\ &+ \frac{\partial}{\partial x_j} \left( 2 K_m \frac{\partial e^{1/2}}{\partial x_j}\right) - \frac{c_{\varepsilon} e}{2 \lambda}
+\end{split}
+\end{equation}
 
 
-\subsection{The Poisson equation and Fourier transforms} \label{sec:dales_poisson}
+\subsection{Sub-grid scale model}
 
-\todo{Something something the momentum equation has two unknowns so use Chorin's projection method to split it.}
 
-In order to obtain an explicit equation for the pressure, the divergence of \autoref{eq:momentum} can be taken, which results in:
+\subsection{Mass conservation} \label{sec:dales_poisson}
+In \acrshort{dales}, the atmosphere is modelled as an incompressible flow, which results in the following expression for conservation of mass:
+
+\begin{equation}
+    \frac{\partial \overline{u}_i}{\partial x_i} = 0. \label{eq:mass_conservation}
+\end{equation}
+
+Note that \autoref{eq:mass_conservation} states that the divergence of the velocity field $u_i$ must be equal to zero. This condition can be enforced by using Chorin's projection method \citep{chorinNumericalSolutionNavierStokes1967}. Per Chorin's method, the time integration of the left-hand side of \autoref{eq:momentum_conservation} is split into two parts. First, an intermediate velocity field $\overline{u}^*_i |_{t=t_n + \Delta t}$ is calculated that is not divergence-free (i.e., does not enforce mass balance) by evaluating all right-hand terms of \autoref{eq:momentum_conservation}: 
+
+\begin{equation}
+     = - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + f_i - \frac{\partial \tau_{ij}}{\partial x_j} \label{eq:chorin_step1}
+\end{equation}
+
+In order to obtain an explicit equation for the pressure, the divergence of \autoref{eq:momentum_conservation} can be taken, which results in:
 
 \begin{equation}
     \frac{\partial}{\partial x_i}\frac{\partial \overline{u}_i}{\partial t} = \frac{\partial}{\partial x_i} \left( - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} - \frac{\partial \pi}{\partial x_i} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + \mathcal{F}_i - \frac{\partial \tau_{ij}}{\partial x_j} \right) \label{eq:momentum_divergence}
@@ -95,8 +125,11 @@ In order to obtain an explicit equation for the pressure, the divergence of \aut
 
 where $\lambda_i$ and $\lambda_j$ are known eigenvalues, and ... \todo{Add symbol} means that a Fourier transform has been applied two times to a variable. One can see that the number of unknowns has decreased from 7 in \autoref{eq:discretized_poisson_equation} to just 3 in \autoref{eq:poisson_fourier_space}. 
 
+\subsection{Discretization}
+Spatial operators are discretized on an Arakawa C-grid \citep{arakawaComputationalDesignBasic1977}. The components of the velocity vector are defined at cell faces, while pressure, 
+
 \subsection{Parallelization}
-To speed up simulations, or enable simulations over large domains, \acrshort{dales} is parallelized with the \acrfull{mpi}. \acrshort{mpi} provides an interface to manage the communication of data between processors. 
+To speed up simulations or enable simulations over large domains, \acrshort{dales} is parallelized with the \acrfull{mpi}. \acrshort{mpi} provides an interface to manage the communication of data between processors. 
 
 An \acrshort{mpi} run of \acrshort{dales} is started with a set number of \emph{tasks}, and each task is bound to a processor. In general, the number of tasks cannot exceed the number of available processors. The computational domain is then divided into as many sub-domains as there are \acrshort{mpi} tasks. 
 

@@ -1,14 +1,8 @@
 \chapter{Implementation}
-This chapter 
+In this chapter, the technical details of the implementation of \acrshort{acc} in \acrshort{dales} will be discussed. First, an explanation will be given on why \acrshort{acc} was chosen for \acrshort{dales}. Thereafter, it will be explained how \acrshort{acc} was used to offload computationally expensive parts of the code to the \acrshort{gpu}, where special attention is given to the Poisson solver. Finally, some further optimizations are covered, as well as the extension to multiple \acrshort{gpu}s.
 
 \section{OpenACC}
-As discussed in \autoref{sec:programming_gpus}, there are numerous programming models available to make use of accelerators (\acrshort{gpu}s). For this work, the directive-based approach with \acrshort{acc} was chosen. 
-
-Why use OpenACC
-
-general syntax (directive, loop/structured block)
-
-What does the compiler do? -> generate device kernels
+As discussed in \autoref{sec:programming_gpus}, there are numerous programming models available to make use of accelerators (\acrshort{gpu}s). For this work, the directive-based approach with \acrshort{acc} was chosen. This choice was based on several reasons \todo{find another word}. For once, \acrshort{dales} is already very rich in features and has an extensive code base. Therefore, a single-source solution is preferable to keep the code base manageable. Second, \acrshort{dales} is constantly being updated and extended by developers with various backgrounds, ranging from students to researchers. Often, these developers do not possess intimate knowledge of \acrshort{gpu} architecture and \acrshort{gpu} programming. Hence, \acrshort{acc} is a good choice because it removes the need for low-level optimization of device kernels. Finally, \acrshort{dales} deployed on various computer systems, ranging from modest desktop workstations to supercomputers like Snellius and Fugaku \citep{janssonCloudBotanyShallow2023}. In this regard, \acrshort{acc} is a good choice because it can be compiled for a variety of computing devices.
 
 \section{Offloading loops}
 The first step towards a GPU port of DALES was to offload computationally expensive parts of the code. These parts are generally made up of (nested) loops that perform some calculation on all grid points. This offloading was done by adding \emph{compute constructs} to the code. A compute construct instructs the compiler that the code it contains should be compiled for the GPU. OpenACC features three compute constructs: \texttt{kernels}, \texttt{parallel} and \texttt{serial}, which will be discussed in the following sections. 
@@ -46,7 +40,43 @@ do i = 1, 1000
 end do
 \end{lstlisting}
 
-\section{Optimizing data locality}
+\section{The Poisson solver}
+As discussed in \autoref{sec:dales_poisson}, DALES uses a pressure correction method to ensure a divergence-free velocity field. In the current version of DALES, the Poisson equation can be solved in two ways: with Fast Fourier Transforms (FFTs) or an iterative solver. In this work, the solver based on \acrshort{fft}s has been extended to make use of \acrshort{gpu}s.
+
+The Poisson solver consists of five steps:
+
+\begin{enumerate}
+  \item Evaluate the right-hand side of \autoref{eq:poisson_equation};
+  \item Perform a 2D FFT at every vertical level;
+  \item Solve a tridiagonal system;
+  \item Perform a 2D inverse FFT at every vertical level;
+  \item Correct the velocity fields with the calculated pressure gradients to make them divergence-free.
+\end{enumerate}
+
+Steps (1), (3) and (5) mainly consist of nested loops that have been parallelized using the \texttt{parallel loop} and \texttt{kernels} constructs. In DALES version 4.4, the \acrshort{fft}s of steps (2) and (4) can be evaluated either by using the FFTPACK library \citep{swarztrauberVectorizingFFTs1982}, which is included with the source code of DALES, or the more recent \acrfull{fftw} library \citep{frigoFFTWAdaptiveSoftware1998a}. Neither one of these libraries can utilize \acrshort{gpu}s, therefore a new library had to be implemented. Currently, there are multiple \acrshort{fft} libraries available that support execution on \acrshort{gpu}s. Nvidia offers cuFFT, which is designed for Nvidia GPUs \citep{nvidiaCuFFT}. cuFFT is written in C++/CUDA, but Fortran bindings are included. rocFFT is a similar library developed by AMD, for AMD \acrshort{gpu}s \citep{amdRocFFT2023}. Additionally, AMD offers the hipFFT library \citep{amdHipFFT2023}. hipFFT functions as a wrapper library around cuFFT and rocFFT, allowing for execution on both Nvidia GPUs and AMD GPUs. Another promising new library is VkFFT, developed by \citet{tolmachevVkFFTAPerformantCrossPlatform2023}. VkFFT supports multiple backends allowing for execution on all major vendors of data center GPUs (Nvidia, AMD, Intel). In addition, VkFFT supports discrete cosine transforms, which are useful for simulations with Dirichlet or Neumann boundary conditions \footnote{\acrshort{dales} version 4.4 does not support Dirichlet or Neumann boundary conditions. However, work is currently being done to include these in an updated version of \acrshort{dales} (see \citet{liquilungOpenBoundaryConditions2023})} \citep{schumannFastFourierTransforms1988}. For this work, the cuFFT library was chosen because of the availability of Fortran bindings and its tight integration within the NVIDIA HPC SDK.
+
+The evaluation of 2D Fourier transforms in a pencil decomposition is a non-trivial task. In this setting, each sub-domain has access to the full vertical direction, but only parts of the horizontal direction (see \autoref{fig:dales_domain_decomposition}). To be able to evaluate a Fourier transform in the horizontal direction, the sub-domains have to be transposed such that a whole horizontal direction is contained. This transposition is further complicated by the fact that communication between processes (\acrshort{gpu}s) needs to take place. The complete forward \acrshort{fft} algorithm is as follows:
+
+\begin{enumerate}
+  \item The domain is transposed from $z$-algined to $x$-aligned;
+  \item 1D Fourier transforms are evaluated in the $x$-direction;
+  \item The domain is transposed from $x$-aligned to $y$-aligned;
+  \item 1D Fourier transforms are evaluated in the $y$-direction;
+  \item The domain is transposed from $y$-aligned to $z$-aligned.
+\end{enumerate}
+
+After the final transposition, a tridiagonal system is solved for the Fourier coefficients of the pressure $\hat{\hat{p}}$. Then, to convert the Fourier coefficients back to pressure in physical space, the algorithm above is executed in reverse order. The full routine for solving the Poisson equation in a pencil decomposition is visualized in \autoref{fig:fft_and_transpose}.
+
+\begin{figure}[H]
+  \centering
+  \includesvg[width=\linewidth]{../images/drawings/poisson.svg}
+  \caption{Impression of transpositions required for a multi-dimensional FFT on a pencil-decomposed domain.}
+  \label{fig:fft_and_transpose}
+\end{figure}
+
+\section{Optimizations}
+
+\subsection{Optimizing data locality}
 In most computers, the host and device both have their own memory space. Therefore, if the device has to perform calculations on some data, this data has to be copied from the host memory to the device memory. With OpenACC, the programmer has the option to leave data management to the compiler or to manage it themselves explicitly. In most cases, letting the compiler decide when to move data will be detrimental to the performance of an application.
 
 Data movement by the compiler will be illustrated with \autoref{lst:two_loops_no_data_construct} as an example. Upon reaching the first loop, the array \texttt{a} is not present in device memory yet. Hence, the compiler adds an instruction right before the loop to copy array \texttt{a} from host to device memory. When the copy has finished, the loop is executed on the device. After the loop is done executing, \texttt{a} is copied back to the host again and the device memory is freed. Next, the program reaches the second loop. Once again, the compiler adds instructions to copy \texttt{a} to the device before the loop and copy it back to the host after the loop. One may notice that there is no need to perform any data movement in between these loops; data can be copied to the device before the start of the first loop, and only has to be copied back to the host after the second loop has finished executing. Since data transfers are a major bottleneck in device computing, optimizing the transfers manually is an essential task to improve performance. 
@@ -91,57 +121,59 @@ end do
 !$acc exit data copyout(a)
 \end{lstlisting}
 
-\section{The Poisson solver}
-As discussed in \autoref{sec:dales_poisson}, DALES uses a pressure correction method to ensure a divergence-free velocity field. In the current version of DALES, the Poisson equation can be solved in two ways: with Fast Fourier Transforms (FFTs) or an iterative solver. In this work, the solver based on \acrshort{fft}s has been extended to make use of \acrshort{gpu}s. 
+\subsection{Minimizing the impact of branch divergence}
+Accelerators like \acrshort{gpu}s function most efficiently when all threads execute in a \acrshort{simd} manner. That is, when all threads execute the same instruction, but on a different data element. There are some cases where the program does not follow this \acrshort{simd} model, obstructing the optimal use of \acrshort{gpu} resources. A well-known example of such a case is the if-statement that is nested in a loop. If the loop iterations are distributed over \acrshort{gpu} threads, threads may take different execution paths depending on the condition that is tested by the if-statement. This phenomenon is called \emph{branch divergence} \citep{hanReducingBranchDivergence2011}. Branch divergence can harm performance because each thread must execute all branches of the if-statement, regardless of which branch is applicable. 
 
-The Poisson solver consists of five steps:
+In \acrshort{dales}, branch divergence is usually the result of physics. One of these cases is the buoyancy-induced subfilter-scale \acrshort{tke} production. Its approximation is as follows:
 
-\begin{enumerate}
-  \item Evaluate the right-hand side of \autoref{eq:poisson_equation};
-  \item Perform a 2D FFT at every vertical level;
-  \item Solve a tridiagonal system;
-  \item Perform a 2D inverse FFT at every vertical level;
-  \item Correct the velocity fields with the calculated pressure gradients to make them divergence-free.
-\end{enumerate}
+\begin{equation}
+  \frac{g}{\theta_0}R_{w,\theta_v} = \frac{g}{\theta_0} \left( A R_{w,\theta_l} + B R_{w,q_t} \right). \label{eq:sfs_tke_buoyancy_approximation}
+\end{equation}
 
-Steps (1), (3) and (5) mainly consist of nested loops that have been parallelized using the \texttt{parallel loop} and \texttt{kernels} constructs. In DALES version 4.4, the \acrshort{fft}s of steps (2) and (4) can be evaluated either by using the FFTPACK library \citep{swarztrauberVectorizingFFTs1982}, which is included with the source code of DALES, or the more recent \acrfull{fftw} library \citep{frigoFFTWAdaptiveSoftware1998a}. Neither one of these libraries can utilize \acrshort{gpu}s, therefore a new library had to be implemented. Currently, there are multiple \acrshort{fft} libraries available that support execution on \acrshort{gpu}s. Nvidia offers cuFFT, which is designed for Nvidia GPUs \citep{nvidiaCuFFT}. cuFFT is written in C++/CUDA, but Fortran bindings are included. rocFFT is a similar library developed by AMD, for AMD \acrshort{gpu}s \citep{amdRocFFT2023}. Additionally, AMD offers the hipFFT library \citep{amdHipFFT2023}. hipFFT functions as a wrapper library around cuFFT and rocFFT, allowing for execution on both Nvidia GPUs and AMD GPUs. Another promising new library is VkFFT, developed by \citet{tolmachevVkFFTAPerformantCrossPlatform2023}. VkFFT supports multiple backends allowing for execution on all major vendors of data center GPUs (Nvidia, AMD, Intel). In addition, VkFFT supports discrete cosine transforms, which are useful for simulations with Dirichlet or Neumann boundary conditions \footnote{\acrshort{dales} version 4.4 does not support Dirichlet or Neumann boundary conditions. However, work is currently being done to include these in an updated version of \acrshort{dales} (see \citet{liquilungOpenBoundaryConditions2023})} \citep{schumannFastFourierTransforms1988}. For this work, the cuFFT library was chosen because of its Fortran bindings and ease of use with the Nvidia HPC SDK.
+In \autoref{eq:sfs_tke_buoyancy_approximation}, the expression for coefficients $A$ and $B$ depends on the thermodynamic state of a grid point. If a grid point does not contain cloud liquid water (i.e., $q_c=0$) the following formulation is used:
 
-A new Fortran module was added to \acrshort{dales} to handle the \acrshort{fft}s. This module was based on the existing \acrshort{fftw} implementation and consists of five components:
+\begin{equation}
+  \begin{split}
+    A &= A_{\text{dry}} = 1 + \frac{R_v}{R_d}\overline{q}_t, \\
+    B &= B_{\text{dry}} = \left( \frac{R_v}{R_d} - 1 \right) \theta_0.
+  \end{split}
+  \label{eq:dry_coefficients}
+\end{equation}
 
-\begin{enumerate}
-  \item Initialization;
-  \item Forward transforms;
-  \item Backward transforms;
-  \item Transpositions;
-  \item Clean up.
-\end{enumerate}
+If the grid point does contain cloud liquid water (i.e., $q_c>0$) however, the following formulation is used: 
 
-In the initialization phase, the preparations for FFT execution are done. This includes allocating memory, setting up FFT plans, and calculating eigenvalues. FFT plans contain information about whether the transform is forward or backward, the layout of the input and output data and the data type (single or double precision). 
+\begin{equation}
+  \begin{split}
+    A &= A_{\text{moist}} = \left( 1 - \overline{q}_t + \overline{q}_s \frac{R_v}{R_d} \left( 1 + \frac{L}{R_v T} \right) \right) \left(1 + \frac{L^2 \overline{q}_s}{c_{pd} R_v T^2} \right)^{-1}, \\
+    B &= B_{\text{moist}} = A_{\text{moist}} \frac{L}{c_{pd}} - \theta_0.
+  \end{split}
+  \label{eq:wet_coefficients}
+\end{equation}
 
-The evaluation of the forward FFTs consists of the following sub-steps:
+One may notice that the determination of the correct expressions naturally leads to an if-statement in a loop that iterates over all grid points, which can ultimately cause branch divergence. The associated performance penalty of branch divergence can be reduced by reducing the amount of work that has to be done in each path of the branch. For \autoref{eq:sfs_tke_buoyancy_approximation}, this can be done by replacing the local values of $A$ and $B$ with a horizontally averaged value. To this end, \Autoref{eq:dry_coefficients,eq:wet_coefficients} become:
 
-\begin{enumerate}
-    \item 1D forward FFTs are done in the $x$-direction. This is done for every $y$-coordinate, at every vertical level. Therefore, if the number of elements in the $x$ and $y$-directions are $i_{\text{tot}}$ and $j_{\text{tot}}$ respectively, and there are $k_{\text{tot}}$ vertical levels, $j_{\text{tot}} \times k_{\text{tot}}$ 1D FFTs of length $i_{\text{tot}}$ are evaluated.
-    \item The domain is transposed such that the $y$ direction is contiguous in memory. In a multi-GPU scenario, this step requires GPUs to communicate with all other GPUs. A transpose operation also requires an intermediate buffer array. To save memory, the workspace for the FFTs is reused as a buffer.
-    \item $i_{\text{tot}} \times k_{\text{tot}}$ 1D FFTs are done in the y-direction.
-    \item The domain is transposed such that the $z$-directions is aligned in memory \todo{this one is different for 1 gpu vs multiple gpus}
-\end{enumerate}
+\begin{equation}
+  \begin{split}
+    A_{\text{dry}} &= 1 + \frac{R_v}{R_d}\left< \overline{q}_t \right>, \\
+    B_{\text{dry}} &= \left( \frac{R_v}{R_d} - 1 \right) \left< \theta_0 \right>,
+  \end{split}
+  \label{eq:dry_coefficients_averaged}
+\end{equation}
 
-After the final step, the tridiagonal solver is applied to calculate the final Fourier coefficients. To convert the data back to physical coordinates, the reciprocal of the steps above are done:
+for the dry case, and
 
-\begin{enumerate}
-    \item The domain is transposed from $z$-aligned to $y$-aligned.
-    \item 1D FFTs are done in the $y$-direction.
-    \item The domain is transposed from $y$-aligned to $x$-aligned.
-    \item 1D inverse FFTs are done in the $x$-direction.
-\end{enumerate}
+\begin{equation}
+  \begin{split}
+    A_{\text{moist}} &= \left( 1 - \left< \overline{q}_t \right> + \left< \overline{q}_s \right> \frac{R_v}{R_d} \left( 1 + \frac{L}{R_v \left< T \right>} \right) \right) \left(1 + \frac{L^2 \left< \overline{q}_s \right>}{c_{pd} R_v \left< T \right>^2} \right)^{-1}, \\
+    B_{\text{moist}} &= A_{\text{moist}} \frac{L}{c_{pd}} - \left< \theta_0 \right>,
+  \end{split}
+  \label{eq:wet_coefficients_averaged}
+\end{equation}
 
-\section{Optimisations}
-
-\subsection{Improving loop structure}
+for the moist case. In \Autoref{eq:dry_coefficients_averaged,eq:wet_coefficients_averaged}, the $\left< \cdot \right>$ operator denotes a horizontally averaged value. This simplification is justified because the horizontal variability of $\overline{q}_t$, $\overline{q}_s$, $\overline{\theta}_0$ and $T$ is insignificant compared to the vertical variability \todo{add plot to illustrate}.
 
 \subsection{Memory allocation}
-In DALES, most of the memory is allocated during the startup procedure and is deallocated only after the simulation has finished. Some subroutines, however, allocate and deallocate memory once they are called, which can be every time step. As memory allocations on the GPU are quite costly, this workflow can introduce a significant performance penalty. This was fixed by moving arrays from the subroutine scope to the module scope. The arrays are then allocated once during the startup procedure and are kept alive throughout the time loop. The implementation of this optimization is illustrated in Listing~\ref{lst:memory_allocation}.
+In DALES, most of the memory required for storing variables is allocated during the startup procedure and is deallocated only after the simulation has finished. Some subroutines, however, allocate and deallocate memory once they are called, which can be every time step. As memory allocations on the GPU are quite costly, this workflow can introduce a significant performance penalty. This was fixed by moving arrays from the subroutine scope to the module scope. The arrays are then allocated once during the startup procedure and are kept alive throughout the time loop. The implementation of this optimization is illustrated in Listing~\ref{lst:memory_allocation}. 
 
 \begin{figure}[ht]
   \centering
@@ -203,8 +235,6 @@ end module
 OpenACC allows for asynchronous execution of GPU kernels. This means that when the CPU sends a task to the GPU, it does not wait until the GPU has finished executing this task. The CPU is allowed to continue running the program while the GPU is busy processing. New tasks can even be sent to the GPU while it is still occupied with the previous task. This is possible because the GPU manages tasks through \emph{queues}. When the CPU sends a task to the GPU, it is put in a queue. The GPU then executes the enqueued tasks in order. Tasks can be executed in parallel by placing them in different queues.
 
 Asynchronous kernel execution can significantly benefit performance. This performance increase can especially be noticed for relatively small kernels that, for example, only iterate over one or two dimensions. In these cases, the cost of sending the kernel to the GPU can be relatively high compared to the actual cost of executing the kernel. Most of the offloaded loops in DALES have been made asynchronous by adding an \texttt{async} clause to the \texttt{parallel loop} or \texttt{kernels} directives. 
-
-\newpage
 
 \section{Extension to multiple GPUs}
 \acrshort{dales} already features parallel execution on \acrshort{cpu}s via \acrfull{mpi}. When using multiple \acrshort{cpu}s, the computational domain is either decomposed into slices or pencils \todo{add nice figure here}. Each sub-domain is then assigned to a \acrshort{cpu}. \todo{maybe put this somewhere else?}
