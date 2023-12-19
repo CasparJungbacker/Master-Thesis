@@ -1,23 +1,26 @@
 &RUN
-iexpnr     =  004
+iexpnr     =  008
 lwarmstart =  .false.
 startfile  =  'initd001h00mx000y000.001'
-runtime    =  1000
+runtime    =  100
 trestart   =  -1
-ladaptive  = .true.
+ladaptive  = .false.
+dtmax = 1
 irandom    =  43
 randthl    =  0.1
 randqt     =  2.5e-5
 nsv        =  0
+nprocx = 1
+nprocy = 8
 /
 
 &DOMAIN
-itot       =  2048
+itot       =  1024
 jtot       =  2048
 kmax       =  80
 
 
-xsize      =  204800.
+xsize      =  102400.
 ysize      =  204800.
 
 xlat       =  15.
@@ -58,7 +61,7 @@ iadv_sv     =  2
 ldelta      = .false.
 /
 &NAMBUDGET 
-lbudget     = .true.
+lbudget     = .false.
 dtav        = 60.
 timeav      = 600.
 /
@@ -68,10 +71,10 @@ tcheck      = 0
 &NAMSAMPLING
 dtav        = 60
 timeav      = 600.
-lsampcl     = .true.
-lsampco     = .true.
-lsampup     = .true.
-lsampbuup   = .true.
+lsampcl     = .false.
+lsampco     = .false.
+lsampup     = .false.
+lsampbuup   = .false.
 /
 &NAMTIMESTAT
 ltimestat   = .false.
@@ -93,9 +96,11 @@ ldiracc     = .true.
 /
 &NAMSTATTEND
 dtav = 60
-ltend = .true.
+ltend = .false.
 /
 &SOLVER
 solver_id = 200
 /
-
+&NAMNETCDFSTATS
+lnetcdf=.false.
+/
