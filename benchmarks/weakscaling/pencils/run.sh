@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in 01 02 04 08 12 16
+for i in 01 02 04 08 16
 do
   let NODES=${i#0}/4
   if [[ ${NODES} -eq 0 ]]; then let NODES+=1; fi

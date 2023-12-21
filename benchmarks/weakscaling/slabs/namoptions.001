@@ -13,13 +13,13 @@ nsv        =  0
 /
 
 &DOMAIN
-itot       =  512
-jtot       =  512
+itot       =  1024
+jtot       =  1024
 kmax       =  80
 
 
-xsize      =  51200.
-ysize      =  51200.
+xsize      =  102400.
+ysize      =  102400.
 
 xlat       =  15.
 xlon       =  0.
