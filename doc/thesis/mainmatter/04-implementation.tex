@@ -2,7 +2,7 @@
 In this chapter, the technical details of the implementation of \acrshort{acc} in \acrshort{dales} will be discussed. First, an explanation will be given on why \acrshort{acc} was chosen for \acrshort{dales}. Thereafter, it will be explained how \acrshort{acc} was used to offload computationally expensive parts of the code to the \acrshort{gpu}, where special attention is given to the Poisson solver. Finally, some further optimizations are covered, as well as the extension to multiple \acrshort{gpu}s.
 
 \section{OpenACC}
-As discussed in \autoref{sec:programming_gpus}, there are numerous programming models available to make use of accelerators (\acrshort{gpu}s). For this work, the directive-based approach with \acrshort{acc} was chosen. This choice was based on several reasons \todo{find another word}. For once, \acrshort{dales} is already very rich in features and has an extensive code base. Therefore, a single-source solution is preferable to keep the code base manageable. Second, \acrshort{dales} is constantly being updated and extended by developers with various backgrounds, ranging from students to researchers. Often, these developers do not possess intimate knowledge of \acrshort{gpu} architecture and \acrshort{gpu} programming. Hence, \acrshort{acc} is a good choice because it removes the need for low-level optimization of device kernels. Finally, \acrshort{dales} deployed on various computer systems, ranging from modest desktop workstations to supercomputers like Snellius and Fugaku \citep{janssonCloudBotanyShallow2023}. In this regard, \acrshort{acc} is a good choice because it can be compiled for a variety of computing devices.
+As discussed in \autoref{sec:programming_gpus}, there are numerous programming models available to make use of accelerators (\acrshort{gpu}s). For this work, the directive-based approach with \acrshort{acc} was chosen. This choice was based on several observations. For once, \acrshort{dales} is already very rich in features and has an extensive code base. Therefore, a single-source solution is preferable to keep the code base manageable. Second, \acrshort{dales} is constantly being updated and extended by developers with various backgrounds, ranging from students to researchers. Often, these developers do not possess intimate knowledge of \acrshort{gpu} architecture and \acrshort{gpu} programming. Hence, \acrshort{acc} is a good choice because it removes the need for low-level optimization of device kernels. Finally, \acrshort{dales} deployed on various computer systems, ranging from modest desktop workstations to supercomputers like Snellius and Fugaku \citep{janssonCloudBotanyShallow2023}. In this regard, \acrshort{acc} is a good choice because it can be compiled for a variety of computing devices.
 
 \section{Offloading loops}
 The first step towards a GPU port of DALES was to offload computationally expensive parts of the code. These parts are generally made up of (nested) loops that perform some calculation on all grid points. This offloading was done by adding \emph{compute constructs} to the code. A compute construct instructs the compiler that the code it contains should be compiled for the GPU. OpenACC features three compute constructs: \texttt{kernels}, \texttt{parallel} and \texttt{serial}, which will be discussed in the following sections. 
@@ -121,61 +121,12 @@ end do
 !$acc exit data copyout(a)
 \end{lstlisting}
 
-\subsection{Minimizing the impact of branch divergence}
-Accelerators like \acrshort{gpu}s function most efficiently when all threads execute in a \acrshort{simd} manner. That is, when all threads execute the same instruction, but on a different data element. There are some cases where the program does not follow this \acrshort{simd} model, obstructing the optimal use of \acrshort{gpu} resources. A well-known example of such a case is the if-statement that is nested in a loop. If the loop iterations are distributed over \acrshort{gpu} threads, threads may take different execution paths depending on the condition that is tested by the if-statement. This phenomenon is called \emph{branch divergence} \citep{hanReducingBranchDivergence2011}. Branch divergence can harm performance because each thread must execute all branches of the if-statement, regardless of which branch is applicable. 
 
-In \acrshort{dales}, branch divergence is usually the result of physics. One of these cases is the buoyancy-induced subfilter-scale \acrshort{tke} production. Its approximation is as follows:
-
-\begin{equation}
-  \frac{g}{\theta_0}R_{w,\theta_v} = \frac{g}{\theta_0} \left( A R_{w,\theta_l} + B R_{w,q_t} \right). \label{eq:sfs_tke_buoyancy_approximation}
-\end{equation}
-
-In \autoref{eq:sfs_tke_buoyancy_approximation}, the expression for coefficients $A$ and $B$ depends on the thermodynamic state of a grid point. If a grid point does not contain cloud liquid water (i.e., $q_c=0$) the following formulation is used:
-
-\begin{equation}
-  \begin{split}
-    A &= A_{\text{dry}} = 1 + \frac{R_v}{R_d}\overline{q}_t, \\
-    B &= B_{\text{dry}} = \left( \frac{R_v}{R_d} - 1 \right) \theta_0.
-  \end{split}
-  \label{eq:dry_coefficients}
-\end{equation}
-
-If the grid point does contain cloud liquid water (i.e., $q_c>0$) however, the following formulation is used: 
-
-\begin{equation}
-  \begin{split}
-    A &= A_{\text{moist}} = \left( 1 - \overline{q}_t + \overline{q}_s \frac{R_v}{R_d} \left( 1 + \frac{L}{R_v T} \right) \right) \left(1 + \frac{L^2 \overline{q}_s}{c_{pd} R_v T^2} \right)^{-1}, \\
-    B &= B_{\text{moist}} = A_{\text{moist}} \frac{L}{c_{pd}} - \theta_0.
-  \end{split}
-  \label{eq:wet_coefficients}
-\end{equation}
-
-One may notice that the determination of the correct expressions naturally leads to an if-statement in a loop that iterates over all grid points, which can ultimately cause branch divergence. The associated performance penalty of branch divergence can be reduced by reducing the amount of work that has to be done in each path of the branch. For \autoref{eq:sfs_tke_buoyancy_approximation}, this can be done by replacing the local values of $A$ and $B$ with a horizontally averaged value. To this end, \Autoref{eq:dry_coefficients,eq:wet_coefficients} become:
-
-\begin{equation}
-  \begin{split}
-    A_{\text{dry}} &= 1 + \frac{R_v}{R_d}\left< \overline{q}_t \right>, \\
-    B_{\text{dry}} &= \left( \frac{R_v}{R_d} - 1 \right) \left< \theta_0 \right>,
-  \end{split}
-  \label{eq:dry_coefficients_averaged}
-\end{equation}
-
-for the dry case, and
-
-\begin{equation}
-  \begin{split}
-    A_{\text{moist}} &= \left( 1 - \left< \overline{q}_t \right> + \left< \overline{q}_s \right> \frac{R_v}{R_d} \left( 1 + \frac{L}{R_v \left< T \right>} \right) \right) \left(1 + \frac{L^2 \left< \overline{q}_s \right>}{c_{pd} R_v \left< T \right>^2} \right)^{-1}, \\
-    B_{\text{moist}} &= A_{\text{moist}} \frac{L}{c_{pd}} - \left< \theta_0 \right>,
-  \end{split}
-  \label{eq:wet_coefficients_averaged}
-\end{equation}
-
-for the moist case. In \Autoref{eq:dry_coefficients_averaged,eq:wet_coefficients_averaged}, the $\left< \cdot \right>$ operator denotes a horizontally averaged value. This simplification is justified because the horizontal variability of $\overline{q}_t$, $\overline{q}_s$, $\overline{\theta}_0$ and $T$ is insignificant compared to the vertical variability \todo{add plot to illustrate}.
 
 \subsection{Memory allocation}
 In DALES, most of the memory required for storing variables is allocated during the startup procedure and is deallocated only after the simulation has finished. Some subroutines, however, allocate and deallocate memory once they are called, which can be every time step. As memory allocations on the GPU are quite costly, this workflow can introduce a significant performance penalty. This was fixed by moving arrays from the subroutine scope to the module scope. The arrays are then allocated once during the startup procedure and are kept alive throughout the time loop. The implementation of this optimization is illustrated in Listing~\ref{lst:memory_allocation}. 
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \captionof{lstlisting}{Improving memory allocation. On the left, the array \texttt{profile} belongs to the scope of the subroutine \texttt{calculate\_profile}. On the right, \texttt{profile} moved to the scope of the module and allocated in the subroutine \texttt{init\_profile}, which is called once in the startup procedure of the program.}
   \label{lst:memory_allocation}
@@ -231,19 +182,75 @@ end module
   \end{adjustbox}
 \end{figure}
 
-\subsection{Asynchronous kernels}
-OpenACC allows for asynchronous execution of GPU kernels. This means that when the CPU sends a task to the GPU, it does not wait until the GPU has finished executing this task. The CPU is allowed to continue running the program while the GPU is busy processing. New tasks can even be sent to the GPU while it is still occupied with the previous task. This is possible because the GPU manages tasks through \emph{queues}. When the CPU sends a task to the GPU, it is put in a queue. The GPU then executes the enqueued tasks in order. Tasks can be executed in parallel by placing them in different queues.
+\subsection{Minimizing the impact of branch divergence}
+Accelerators like \acrshort{gpu}s function most efficiently when all threads execute in a \acrshort{simd} manner. That is, when all threads execute the same instruction, but on a different data element. There are some cases where the program does not follow this \acrshort{simd} model, obstructing the optimal use of \acrshort{gpu} resources. A well-known example of such a case is the if-statement that is nested in a loop. If the loop iterations are distributed over \acrshort{gpu} threads, threads may take different execution paths depending on the condition that is tested by the if-statement. This phenomenon is called \emph{branch divergence} \citep{hanReducingBranchDivergence2011}. Branch divergence can harm performance because each thread must execute all branches of the if-statement, regardless of which branch is applicable. 
 
-Asynchronous kernel execution can significantly benefit performance. This performance increase can especially be noticed for relatively small kernels that, for example, only iterate over one or two dimensions. In these cases, the cost of sending the kernel to the GPU can be relatively high compared to the actual cost of executing the kernel. Most of the offloaded loops in DALES have been made asynchronous by adding an \texttt{async} clause to the \texttt{parallel loop} or \texttt{kernels} directives. 
+In \acrshort{dales}, branch divergence is usually the result of physics. One of these cases is the buoyancy-induced subfilter-scale \acrshort{tke} production. Its approximation is as follows:
+
+\begin{equation}
+  \frac{g}{\theta_0}R_{w,\theta_v} = \frac{g}{\theta_0} \left( A R_{w,\theta_l} + B R_{w,q_t} \right). \label{eq:sfs_tke_buoyancy_approximation}
+\end{equation}
+
+In \autoref{eq:sfs_tke_buoyancy_approximation}, the expression for coefficients $A$ and $B$ depends on the thermodynamic state of a grid point. If a grid point does not contain cloud liquid water (i.e., $q_c=0$) the following formulation is used:
+
+\begin{equation}
+  \begin{split}
+    A &= A_{\text{dry}} = 1 + \frac{R_v}{R_d}\overline{q}_t, \\
+    B &= B_{\text{dry}} = \left( \frac{R_v}{R_d} - 1 \right) \theta_0.
+  \end{split}
+  \label{eq:dry_coefficients}
+\end{equation}
+
+If the grid point does contain cloud liquid water (i.e., $q_c>0$) however, the following formulation is used: 
+
+\begin{equation}
+  \begin{split}
+    A &= A_{\text{moist}} = \left( 1 - \overline{q}_t + \overline{q}_s \frac{R_v}{R_d} \left( 1 + \frac{L}{R_v T} \right) \right) \left(1 + \frac{L^2 \overline{q}_s}{c_{pd} R_v T^2} \right)^{-1}, \\
+    B &= B_{\text{moist}} = A_{\text{moist}} \frac{L}{c_{pd}} - \theta_0.
+  \end{split}
+  \label{eq:wet_coefficients}
+\end{equation}
+
+One may notice that the determination of the correct expressions naturally leads to an if-statement in a loop that iterates over all grid points, which can ultimately cause branch divergence. Branch divergence is very algorithm-specific, meaning that there is no general optimization that can be applied to all cases. For \autoref{eq:sfs_tke_buoyancy_approximation}, however, the cost of branch divergence can be reduced significantly by calculating $A$ and $B$ based on horizontally-averaged values of $\overline{q}_t$, $\overline{q}_s$, $\overline{\theta}_0$ and $T$. This way, \Autoref{eq:dry_coefficients,eq:wet_coefficients} change into:
+
+\begin{equation}
+  \begin{split}
+    A_{\text{dry}} &= 1 + \frac{R_v}{R_d}\left< \overline{q}_t \right>, \\
+    B_{\text{dry}} &= \left( \frac{R_v}{R_d} - 1 \right) \left< \theta_0 \right>,
+  \end{split}
+  \label{eq:dry_coefficients_averaged}
+\end{equation}
+
+for the dry case, and
+
+\begin{equation}
+  \begin{split}
+    A_{\text{moist}} &= \left( 1 - \left< \overline{q}_t \right> + \left< \overline{q}_s \right> \frac{R_v}{R_d} \left( 1 + \frac{L}{R_v \left< T \right>} \right) \right) \left(1 + \frac{L^2 \left< \overline{q}_s \right>}{c_{pd} R_v \left< T \right>^2} \right)^{-1}, \\
+    B_{\text{moist}} &= A_{\text{moist}} \frac{L}{c_{pd}} - \left< \theta_0 \right>,
+  \end{split}
+  \label{eq:wet_coefficients_averaged}
+\end{equation}
+
+for the moist case, where the $\left< \cdot \right>$ operator denotes a horizontally averaged value. This simplification is justified because the horizontal variability of $\overline{q}_t$, $\overline{q}_s$, $\overline{\theta}_0$ and $T$ is insignificant compared to the vertical variability, as can be seen in \Autoref{fig:qt_thl_vs_height}. With this optimization, the calculation of $A$ and $B$ is done in a 1D loop instead of a 3D loop. The remaining if-statement that locally checks which coefficient to use can be replaced by the Fortran \texttt{merge} intrinsic,  
+
+\begin{figure}
+  \centering
+  \includesvg{../images/qt_thl_vs_height.svg}
+  \caption{Mean vertical profiles of the total water specific humidity $q_t$ (left) and liquid water potential temperature $\theta_l$ (right). The shading around the mean profiles indicates the horizontal standard deviation.}
+  \label{fig:qt_thl_vs_height}
+\end{figure}
+
+\subsection{Asynchronous kernels}
+OpenACC allows for asynchronous execution of device kernels. This means that when the host sends a task to the device, it does not wait until the device has finished executing this task. The host is allowed to continue running the program while the device is busy processing. New tasks can even be sent to the device while it is still occupied with the previous task. This is possible because the device manages tasks through \emph{queues}. When the host sends a task to the device, it is put in a queue. The device then executes the enqueued tasks in order. Tasks can be executed in parallel by placing them in different queues.
+
+Asynchronous kernel execution can significantly benefit performance. This performance increase can especially be noticed for relatively small kernels that, for example, only iterate over one or two dimensions. In these cases, the cost of sending the kernel to the device can be relatively high compared to the actual cost of executing the kernel. Most of the offloaded loops in DALES have been made asynchronous by adding an \texttt{async} clause to the \texttt{parallel loop} or \texttt{kernels} directives. 
 
 \section{Extension to multiple GPUs}
-\acrshort{dales} already features parallel execution on \acrshort{cpu}s via \acrfull{mpi}. When using multiple \acrshort{cpu}s, the computational domain is either decomposed into slices or pencils \todo{add nice figure here}. Each sub-domain is then assigned to a \acrshort{cpu}. \todo{maybe put this somewhere else?}
+With OpenACC, it is possible to utilize multiple \acrshort{gpu}s \citep{farberParallelProgrammingOpenACC2017}. However, OpenACC can only make use of devices that live on the same node. In practice, this means that one is limited to using only a few \acrshort{gpu}s (for example, the Snellius supercomputer has 4 \acrshort{gpu}s per node \citep{surfSnelliusHardwareFile}). Another option is to adapt the current \acrshort{mpi} parallelization described in \autoref{sec:dales_mpi}, which was done in this work. In this approach, the computational domain is still decomposed and distributed across \acrshort{cpu}s (possibly on multiple nodes), but each process has access to a GPU to offload computations. 
 
-With OpenACC, it is possible to utilize multiple \acrshort{gpu}s \citep{farberParallelProgrammingOpenACC2017}. However, OpenACC can only make use of devices that live on the same node. In practice, this means that one is limited to using only a few \acrshort{gpu}s (for example, the Snellius supercomputer has 4 \acrshort{gpu}s per node \citep{surfSnelliusHardwareFile}). Another option is to adapt the current \acrshort{mpi} parallelization, which was done in this work. In this approach, the computational domain is still decomposed and distributed across \acrshort{cpu}s (possibly on multiple nodes), but each process has access to a GPU to offload computations. 
+As mentioned before, data transfers from \acrshort{gpu} to \acrshort{cpu} are expensive. To circumvent the need for \acrshort{cpu}-\acrshort{gpu} data transfers when doing \acrshort{mpi} communications, special implementations of the \acrshort{mpi} standard have been developed, often referred to as \acrshort{gpu}-aware \acrshort{mpi} \citep{potluriEfficientInternodeMPI2013}. As the name suggests, a \acrshort{gpu}-aware \acrshort{mpi} implementation can handle data that is located in \acrshort{gpu} memory. When a call to the \acrshort{mpi} library is made, the \acrshort{gpu}-aware \acrshort{mpi} backend checks if the provided data is located in \acrshort{cpu} or \acrshort{gpu} memory. If the data is indeed located in \acrshort{gpu} memory, the backend will make sure that data is transferred directly from \acrshort{gpu} to \acrshort{gpu} and does not go through the \acrshort{cpu} first. 
 
-As mentioned before, data transfers from \acrshort{gpu} to \acrshort{cpu} are expensive. To circumvent the need for \acrshort{cpu}-\acrshort{gpu} data transfers when doing \acrshort{mpi} communications, special implementations of the \acrshort{mpi} standard have been developed, often referred to as \acrshort{gpu}-aware \acrshort{mpi} \citep{potluriEfficientInternodeMPI2013}. As the name suggests, a \acrshort{gpu}-aware \acrshort{mpi} implementation can handle data that is located in \acrshort{gpu} memory. When a call to the \acrshort{mpi} library is made, the \acrshort{gpu}-aware \acrshort{mpi} backend checks if the provided data is located in \acrshort{cpu} or \acrshort{gpu} memory. If the data is indeed located in \acrshort{gpu} memory, the backend will make sure that data is transferred directly from \acrshort{gpu} to \acrshort{gpu} and does not go through the \acrshort{cpu} first. \todo{a figure would be nice here}
-
-To make the location of the data in \acrshort{gpu} memory available to the \acrshort{mpi} backend, the \acrshort{acc} \texttt{host\_data} can be used. 
+To make the location of the data in \acrshort{gpu} memory available to the \acrshort{mpi} backend, the \acrshort{acc} \texttt{host\_data} directive can be used in combination with the \texttt{use\_device} clause. This is illustrated in \autoref{lst:mpi_device_pointer}. In this example, the reference to \texttt{array} in the \texttt{MPI\_Allreduce} call will point to device memory.
 
 \begin{lstlisting}[
   language=Fortran,
