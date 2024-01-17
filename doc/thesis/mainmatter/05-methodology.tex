@@ -8,8 +8,14 @@ Modifying the source code of an application carries the risk of introducing bugs
 
 \section{Performance metrics}
 
-\noindent \textbf{Wall clock time} \\
-The time that it takes for a program to finish executing is an intuitive metric to assess performance. 
+\noindent \textbf{Wall clock time and speedup} \\
+Wall clock time is the total time it takes for an application to finish executing. In other words, wall clock time is the real-world time that passes while the application is running. When speaking of the \emph{speedup} of an application, what is usually meant is that the wall clock time of that application has reduced. Speedup is often defined as the performance of the improved application relative to the old application for a constant problem size. Mathematically, this is equal to:
+
+\begin{equation}
+    \text{Speedup} = \frac{t_{\text{old}}}{t_{\text{new}}},
+\end{equation}
+
+in which $t_{\text{old}}$ and $t_{\text{new}}$ are the wall clock time needed to solve the same problem by the old application and improved application respectively. In the context of \acrshort{dales}, a constant problem size means that the size and resolution of the computational grid stay constant and that the same physical schemes are used.
 
 \medskip
 
