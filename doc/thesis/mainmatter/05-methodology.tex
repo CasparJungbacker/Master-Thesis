@@ -45,3 +45,19 @@ A parallel program may still have sections that have to be executed serially whi
 
 \noindent \textbf{Energy consumption} \\
 In the age of climate change, energy consumption is an important consideration for HPC applications. \todo{mention how GPUs are more energy efficient than CPUs, refer back to section on GPU architecture} On the Snellius supercomputer, the energy consumption of a job can be measured using the Energy Aware Runtime (EAR) package. When enabled, EAR keeps track of multiple energy-related metrics such as average node power, consumed energy and gigaFLOPS per Watt \citep{corbalanEnergyOptimizationAnalysis2020}. Because EAR monitors power consumption at the node level, the contributions of both CPU and GPU are included in these metrics.
+
+\section{System configuration}
+Performance testing of \acrshort{dales} was done on systems of two scales: a high-end dekstop workstation, and the Snellius supercomputer. 
+\begin{table}[H]
+    \caption{}
+    \label{tab:node_types}
+    \begin{tabular}{l|c|c|c}
+     & \textbf{Desktop system} & \textbf{Snellius CPU node} & \textbf{Snellius GPU node} \\ \hline
+    \textbf{CPU} & Intel Core i9 11900K & AMD EPYC 7H12 & Intel Xeon Platinum 8360Y \\
+    \textbf{CPU clock speed} & \begin{tabular}[c]{@{}c@{}}3.50 GHz\\ (5.40 GHz Turbo)\end{tabular} & \begin{tabular}[c]{@{}c@{}}2.60 GHz\\ (3.30 GHz Turbo)\end{tabular} & \begin{tabular}[c]{@{}c@{}}2.40 GHz\\ (3.50 GHz Turbo)\end{tabular} \\
+    \textbf{CPU cores} & 8 & \begin{tabular}[c]{@{}c@{}}64 per socket\\ (2 sockets per node)\end{tabular} & \begin{tabular}[c]{@{}c@{}}36 per socket\\ (2 sockets per node)\end{tabular} \\
+    \textbf{Memory} & 64 GB & 256 GB & 512 GB \\
+    \textbf{GPU} & NVIDIA RTX 3090 & - & NVIDIA A100 SXM \\
+    \textbf{GPU memory} & 24 GB & - & 40 GB
+    \end{tabular}
+\end{table}
