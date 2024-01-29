@@ -1,23 +1,25 @@
 \chapter{Atmospheric Large Eddy Simulation}
 
-\section{Computational fluid dynamics}
-Under the assumption that a fluid is incompressible, the dynamics of a fluid are described by the famous Navier-Stokes equation \todo{convert to tensor notation for consistency?}:
+\section{Turbulent flows}
+Under the right conditions, a fluid (or gas) in motion exhibits circular patterns that vary in size. A flow that features such patterns is described as a \emph{turbulent flow}, and in turbulence theory, the circular patterns are called \emph{eddies} \citep{popeTurbulentFlows2000}. We, as mankind, are surrounded by these kinds of flows in our daily lives. Examples include the flow of water through pipes, airflow around a moving car, waterfalls and Earth's atmosphere. Because turbulent flows are so predominantly present in our living environment, they are studied intensively by the scientific community and the industry. With these insights, accurate computer models are developed that attempt to predict the effects of turbulence.
 
-    \begin{align}
-        \rho \left( \frac{\partial u_i}{\partial t} + u_j \frac{\partial u_i}{\partial x_j} \right) = - \frac{\partial p}{\partial x_i} + \rho g_i + \mu \nabla^2 \mathbf{u}
-        \label{eq:navier_stokes}
-    \end{align}
-
-\noindent where $\mathbf{u}$ is the velocity vector, $\rho$ is the density, $p$ is the pressure, $\mathbf{g}$ is the body force vector and $\mu$ is the dynamic viscosity. Finding a solution for $\mathbf{u}(\mathbf{x},t)$ is most often done through numerical modeling. 
-
-As can be seen in ... \todo{add nice figure that shows whirls}, a fluid in motion exhibits, under the right conditions, circular patterns that range in size. In turbulence theory, these motions are called \emph{eddies} \citep{popeTurbulentFlows2000}. The larger eddies are the most unstable and break up into smaller eddies while conserving kinetic energy. When a small enough size is reached, eddies become stable and stop breaking up. Any remaining kinetic energy is dissipated through molecular viscosity. The scale of the largest eddies is similar to the scale of the flow itself, while the scale of the smallest eddies is estimated by:
+To characterize turbulent flows, several scaling laws and non-dimensional numbers have been derived. The \emph{Reynolds number} $\text{Re}$ is defined as the ratio between inertial forces and viscous forces in a fluid: 
 
 \begin{equation}
-    \eta = \left( \frac{\nu^3}{\epsilon} \right)^{1/4}
+    \text{Re} = \frac{\text{Inertial forces}}{\text{Viscous forces}} = \frac{u \mathcal{L}}{\nu}
+\end{equation}
+
+in which $u$ is the flow speed, $\mathcal{L}$ is a characteristic length scale of the flow, usually determined by the geometry of the flow, and $\nu$ is the kinematic viscosity of the flow. In turbulent flows, the inertial forces dominate and the Reynolds number is therefore high ($>4000$ \citep{popeTurbulentFlows2000}). 
+
+In turbulent flows, the larger an eddy, the more unstable it is. Therefore, large eddies tend to break up into slightly smaller eddies. These smaller eddies are once again unstable and beak up into even smaller eddies. This phenomenon is repeated until the remaining eddies are small enough such that the viscous forces in the fluid are able to convert the remaining kinetic energy into heat. The length scale at which the conversion of kinetic energy into heat happens is called the \emph{Kolmogorov length scale}, and is given by:
+
+\begin{equation}
+    \eta = \left( \frac{\nu^3}{\varepsilon} \right)^{1/4}
     \label{eq:kolmogorov-length}
 \end{equation}
 
-where $\eta$ is the scale of the smallest eddies, also known as the Kolmogorov length scale, $\nu$ is the kinematic viscosity and $\epsilon$ is the rate of dissipation of kinetic energy. In atmospheric flows, a typical value for $\eta$ is in the order of $10^{-3}$ m \todo{find source}. 
+where $\varepsilon$ is the rate of dissipation of kinetic energy.
+
 
 The objective of solving \autoref{eq:navier_stokes} such that eddies of all scales are represented imposes two requirements on the computational mesh. First, the mesh has to span a large enough area such that the largest scales can be captured. Second, the spacing between elements on the mesh must be at least as small as the Kolmogorov length scale of the flow. If both requirements are met, all turbulent motions can be resolved and no parameterizations are needed. This technique is called \acrfull{dns} \citep{popeTurbulentFlows2000}. The biggest limitation of DNS is that it is associated with extreme computational costs. ...
 
