@@ -1,4 +1,5 @@
 \chapter{Atmospheric Large Eddy Simulation}
+This chapter focusses on the science of computational fluid dynamics. First, a general description of turbulent flows is given. Second, different techniques for performing computer simulations of turbulent flows are explained and discussed in the context of numerical weather and climate modeling. Finally, one specific numerical weather model, the \acrfull{dales} model, will be discussed in more detail.
 
 \section{Turbulent flows}
 Under the right conditions, a fluid (or gas) in motion exhibits circular patterns that vary in size. A flow that features such patterns is described as a \emph{turbulent flow}, and in turbulence theory, the circular patterns are called \emph{eddies} \citep{popeTurbulentFlows2000}. We, as mankind, are surrounded by these kinds of flows in our daily lives. Examples include the flow of water through pipes, airflow around a moving car, waterfalls and Earth's atmosphere. Because turbulent flows are so predominantly present in our living environment, they are studied intensively by the scientific community and the industry. With these insights, accurate computer models are developed that attempt to predict the effects of turbulence.
@@ -20,124 +21,182 @@ In turbulent flows, the larger an eddy, the more unstable it is. Therefore, larg
 
 where $\varepsilon$ is the rate of dissipation of kinetic energy.
 
-
-The objective of solving \autoref{eq:navier_stokes} such that eddies of all scales are represented imposes two requirements on the computational mesh. First, the mesh has to span a large enough area such that the largest scales can be captured. Second, the spacing between elements on the mesh must be at least as small as the Kolmogorov length scale of the flow. If both requirements are met, all turbulent motions can be resolved and no parameterizations are needed. This technique is called \acrfull{dns} \citep{popeTurbulentFlows2000}. The biggest limitation of DNS is that it is associated with extreme computational costs. ...
-
-\citet{smagorinskyGeneralCirculationExperiments1963} proposed the idea of resolving only the largest, most energetic eddies and modeling the dissipation of energy at the smaller scales. This technique is now known as \acrfull{les}. To arrive at the governing equations of \acrshort{les}, the velocity field $\mathbf{u}(\mathbf{x},t)$ is first decomposed into a resolved part $\overline{\mathbf{u}}(\mathbf{x},t)$ and an unresolved part $\mathbf{u}^\prime(\mathbf{x},t)$. The unresolved part of the velocity field is often referred to as the \emph{subgrid-scale} component, as it represents the turbulent motions that are too small to be represented on the computational grid. This decomposition is analogous to a filtering operation; the small-scale highly fluctuating motions are filtered out of the flow field. The filtered Navier-Stokes equations are:
+\section{Turbulence modeling}
+The motion of fluids is mathematically described by the famous Navier-Stokes equations, of which various forms exist. Here, the form that applies to \emph{incompressible} fluids is used. An incompressible fluid is a fluid whose density does not change as a result of pressure changes \todo{source}. Using Einstein's summation convention, the Navier-Stokes equations for an incompressible fluid are given by:
 
 \begin{align}
-    &\frac{\partial \overline{u}_i}{\partial x_j} = 0 \label{eq:continuity_filtered}\\ 
-    &\frac{\partial \overline{u}_i}{\partial t} + \frac{\partial \overline{u_i u_j}}{\partial x_j} = - \frac{1}{\rho} \frac{\partial \overline{p}}{\partial x_i} + \nu \frac{\partial^2 \overline{u}_i}{\partial x_j} + f_i - \frac{\partial \tau_{ij}}{\partial x_j}.  \label{eq:momentum_filtered}
+    &\frac{\partial u_i}{\partial x_i} = 0, \label{eq:ns_mass_conservation}\\
+    &\frac{\partial u_i}{\partial t} + u_j \frac{\partial u_i}{\partial x_j} = - \frac{1}{\rho} \frac{\partial p}{\partial x_i} + \nu \frac{\partial^2 u_i}{\partial x_j^2}+ g_i,
+    \label{eq:ns_momentum}
 \end{align}
 
-After the filtering operation, the momentum equation (\autoref{eq:momentum_filtered}) contains an extra term $\partial \tau_{ij} / \partial x_j$. This term is called the \emph{subgrid-scale stress tensor} and represents, as the name implies, the contribution of the unresolved scales to the resolved flow field. 
+where $u_i$ denotes the velocity ($i=1,2,3$, corresponding to $x$, $y$ and $z$ directions respectively), $\rho$ is the density, $p$ is the pressure, $g_i$ denotes the body forces and $\nu$ is the kinematic viscosity. If one desires to study the evolution of a flow field in time, one would have to find a solution to \Autoref{eq:ns_mass_conservation,eq:ns_momentum}. However, at the moment of writing, no analytical solution to the general form of these equations exists. To find an approximate solution to the Navier-Stokes equations, numerical methods are often used. 
 
+The objective of solving \Autoref{eq:ns_mass_conservation, eq:ns_momentum} such that eddies of all scales are represented imposes two requirements on the computational mesh. First, the mesh has to span a large enough area such that the largest scales can be captured. Second, the mesh spacing must be small enough to be able to represent the Kolmogorov scale. If both requirements are met, all turbulent motions can be resolved and no parameterizations are needed. This technique is called \acrfull{dns} \citep{popeTurbulentFlows2000}. While \acrshort{dns} is very accurate, it is computationally \emph{very} expensive. Even for moderate domain sizes, \acrshort{dns} is often unfeasible due to the resolution requirements.
 
-NS equations have to be solved numerically
+\citet{smagorinskyGeneralCirculationExperiments1963} proposed the idea of explicitly resolving only the largest, most energetic eddies and using a model for the smaller eddies. This idea was further worked out by \citet{lilly1967representation} and \citet{deardorffThreedimensionalNumericalStudy1974}. To arrive at the governing equations of \acrshort{les}, a filter is applied to \Autoref{eq:ns_mass_conservation,eq:ns_momentum}. This filter can be thought of as a low-pass filter; small-scale, high-frequency motions are filtered out and large-scale motions remain \citep{leonardEnergyCascadeLargeEddy1975}. After the filtering operation, the filtered Navier-Stokes equations are obtained:
 
-Turbulence 
+\begin{align}
+    &\frac{\partial \overline{u}_i}{\partial x_i} = 0, \label{eq:continuity_filtered}\\ 
+    &\frac{\partial \overline{u}_i}{\partial t} + \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} = - \frac{1}{\rho} \frac{\partial \overline{p}}{\partial x_i} + \nu \frac{\partial^2 \overline{u}_i}{\partial x_j^2} + f_i - \frac{\partial \tau_{ij}}{\partial x_j}.  \label{eq:momentum_filtered}
+\end{align}
 
-Solving Turbulence
+In \Autoref{eq:momentum_filtered}, it can be seen that the term $\partial \tau_{ij} / \partial x_j$ arises, which is called the \emph{subfilter-scale stress tensor}. The evaluation of $\tau_{ij}$ requires a model, called the \emph{subfilter-scale model}. Some examples of subfilter-scale models include the Smagorinsky model \citep{smagorinskyGeneralCirculationExperiments1963}, the Bardina model \citep{bardinaImprovedSubgridscaleModels1980} or the Vreman model \citep{vremanEddyviscositySubgridscaleModel2004}. These models are turbulent viscosity models, which assume that the subfilter-scale motions similarly dissipate kinetic energy as the viscous forces in the fluid. Because the small-scale turbulent motions are modeled in an \acrshort{les}, the required resolution of the computational mesh is significantly lower compared to \acrshort{dns}, making it a suitable technique for a wider variety of problems, specifically problems that require larger domain sizes. Still, a high enough resolution must be used such that enough of the energy-carrying eddies are resolved. For this reason, \acrshort{les} is not considered as computationally cheap.
 
-DNS vs RANS vs LES
+Instead of attempting to (partly) \emph{resolve} the small-scale turbulent motions, as done with \acrshort{dns} and \acrshort{les}, one could also choose to \emph{model} the effect of turbulence on the mean flow field. Models that follow this line of thought are referred to as \acrlong{rans} models \citep{popeTurbulentFlows2000}. The governing equations of a \acrshort{rans} model follow from applying the Reynolds averaging rules to the Navier-Stokes equations (\Autoref{eq:ns_mass_conservation,eq:ns_momentum}). To this end, the velocity field $u_i$ is decomposed into a mean part $\overline{u_i}$, and a part $u_i^\prime$ that represents fluctuations due to turbulence, such that:
 
-\section{The future of numerical weather prediction}
+\begin{equation}
+    u_i = \overline{u_i} + u_i^\prime.
+    \label{eq:reynolds_decomposition}
+\end{equation}
 
-\section{DALES}
+This act is called \emph{Reynolds decomposition}. This decomposition operation is applied to \Autoref{eq:ns_mass_conservation,eq:ns_momentum}, yielding:
+
+\begin{align}
+    &\frac{\partial \left( \overline{u_i} + u_i^\prime \right)}{\partial x_i} = 0, \label{eq:reynolds_mass}\\
+    &\frac{\partial \left( \overline{u_i} + u_i^\prime \right)}{\partial t} + \left( \overline{u_j} + u_j^\prime \right) \frac{\partial \left( \overline{u_i} + u_i^\prime \right)}{\partial x_j} = - \frac{1}{\left( \overline{\rho} + \rho^\prime \right)} \frac{\partial \left( \overline{p} + p^\prime \right)}{\partial x_i} + \nu \frac{\partial^2 \left( \overline{u_i} + u_i^\prime \right)}{\partial x_j^2} + \overline{g_i} + g_i^\prime,
+    \label{eq:reynolds_momentum}
+\end{align}
+
+Finally, all terms in \Autoref{eq:reynolds_mass,eq:reynolds_momentum} are averaged in time, yielding the \acrshort{rans} equations \citep[Chapter~4]{popeTurbulentFlows2000}:
+
+\begin{align}
+    &\frac{\partial \overline{u_i}}{\partial x_i} = 0, \label{eq:rans_mass}\\
+    &\frac{\partial \overline{u_i}}{\partial t} + \overline{u_j} \frac{\partial \overline{u_i}}{\partial x_j} = - \frac{1}{\overline{\rho}} \frac{\partial \overline{p}}{\partial x_i} + \nu \frac{\partial^2 \overline{u_i}}{\partial x_j^2} + \overline{g_i} + \frac{\partial \overline{u_i^\prime u_j^\prime}}{\partial x_i}. \label{eq:rans_momentum}
+\end{align}
+
+The term $\overline{u_i^\prime u_j^\prime}$ in \Autoref{eq:rans_momentum} is called the Reynolds stress. A \acrshort{rans} model only solves \Autoref{eq:rans_mass,eq:rans_momentum} for the mean quantities $\overline{u_i}$ and $\overline{p}$, meaning that the Reynolds stress term needs to be modeled. Often used models include turbulent viscosity models (similar to \acrshort{les}) or Reynolds stress models, which use transport equations to evaluate the Reynolds stress \citep{popeTurbulentFlows2000}. More recently, the use of machine learning methods has been explored for modeling the Reynolds stress \citep{bruntonMachineLearningFluid2020}. Because turbulence is not explicitly resolved by \acrshort{rans} models, the required resolution is the least out of the three simulation techniques. For this reason, \acrshort{rans} is computationally cheap but is also the least accurate. 
+
+Plaatje met dns vs les vs rans
+\section{Towards high-resolution weather and climate models}
+Due to limitations of computational capacity, global numerical weather and climate models often use grids with low horizontal resolution in combination with the \acrshort{rans} description, meaning that small-scale phenomena, such as cloud formation, have to be parameterized, which introduces significant uncertainties in weather forecasts and climate projections \citep{slingoUncertaintyWeatherClimate2011}. At higher resolutions (in the order of 1-2 kilometers), these small-scale processes are still not fully resolved, but their influence on the resolved flow field can be captured partly \citep{scharKilometerScaleClimateModels2020}. Therefore, global weather and climate models are continuously developed and updated to support increasing resolutions. One of the problems that arise at these high resolutions is that the aforementioned parameterizations do not perform well when convective processes are partly resolved, and therefore have to be adapted to this fact \citep{wyngaardNumericalModelingTerra2004}. The range of resolutions at which this problem persists is also referred to as the \emph{terra incognita}, or the \emph{grey zone} \citep{schalkwijkWeatherForecastingUsing2015,wyngaardNumericalModelingTerra2004}. Furthermore, \citet{scharKilometerScaleClimateModels2020} identify the exploitation of modern \acrlong{gpu} technology as another key challenge towards high-resolution weather and climate modeling. \acrshort{gpu} technology will be explained more thoroughly in \Autoref{chap:gpgpu}, but for now it suffices to say that a \acrshort{gpu} is a hardware device that can accelerate specific calculations of a weather or climate model. To allow a numerical weather or climate model to make use of this specialized hardware, significant changes to the source code are needed.
+
+On the other end of the resolution spectrum, the \acrshort{les} technique has been used to develop atmospheric models that explicitly resolve turbulent motions and do not require the aforementioned parameterizations, therefore also lacking the associated uncertainties \citep{schalkwijkWeatherForecastingUsing2015}. Hence, \acrshort{les} can potentially act as a replacement for \acrshort{rans}-based models for high-resolution atmospheric modeling. However, as discussed before, the computational burden associated with \acrshort{les} is quite high, which limits the application of \acrshort{les} over very large domain sizes. Again, \acrshort{gpu}s can help speed up calculations, making large-scale \acrshort{les} possible. The use of \acrshort{gpu}s in \acrshort{les} has been demonstrated by \citet{schalkwijkWeatherForecastingUsing2015}, who were able to do a weather forecast-like simulation over the entire Netherlands using an \acrshort{les} model.
+
+\section{\acrshort{dales}}
 The \acrfull{dales} model is a large-eddy simulation model designed for high-resolution modeling of the atmosphere and its processes, like cloud formation and precipitation \citep{heusFormulationDutchAtmospheric2010,ouwerslootLargeEddySimulationComparison2017}. 
 
 \subsection{Prognostic equations}
-\acrshort{dales} uses six prognostic variables to define the state of the atmosphere: three velocity components $u$, $v$ and $w$, liquid water potential temperature $\theta_l$, total water specific humidity $q_t$ and the turbulence kinetic energy $e$. 
+\acrshort{dales} uses five prognostic variables to define the state of the atmosphere: three velocity components $u$, $v$ and $w$, the liquid water potential temperature $\theta_l$ and the total water specific humidity $q_t$. 
+
+For the formulation of the prognostic equations for the three velocity components, \acrshort{dales} uses the Boussinesq approximation, meaning that fluctuations in the density of the air are ignored except when they are coupled to gravity \citep{spiegel1960boussinesq}. This leads to the following expression: 
 
 \begin{align}
     \frac{\partial \overline{u}_i}{\partial t} &= - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} - \frac{\partial \pi}{\partial x_i} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + f_i - \frac{\partial \tau_{ij}}{\partial x_j} \label{eq:momentum_conservation}
 \end{align}
 
-where $u$ is the velocity vector, $\pi$ is a modified pressure \todo{find out what this means}, $\theta$ is the virtual potential temperature, .... Similarly, the momentum equation for a scalar $\varphi$, where $\varphi \in \{\theta_l, q_t\}$, is given by:
+where $u_i$ is a velocity component, $\pi$ denotes the pressure, $\theta$ is the virtual potential temperature, $\delta$ is the Kronecker delta, $f_i$ is a body force and $\tau_{ij}$ is the subfilter-scale stress tensor. Similarly, the prognostic equation for a scalar $\varphi$, where $\varphi \in \{\theta_l, q_t\}$, is given by:
 
 \begin{equation}
     \frac{\partial \overline{\varphi}}{\partial t} = - \frac{\partial \overline{u}_j \overline{\varphi}}{\partial x_j} - \frac{\partial R_{u_j,\varphi}}{\partial x_j} + S_\varphi,
 \end{equation}
 
-in which $R_{u_j,\varphi}$ is a sub-filter scale flux and $S_\varphi$ is a source term.
+in which $R_{u_j,\varphi}$ is a sub-filter scale flux and $S_\varphi$ is a source term. Finally, the prognostic equation for the \emph{square root} of the turbulence kinetic energy $e$ is given by:
 
-The budget equation for turbulence kinetic energy $e$ is given by:
+\subsection{Subfilter-scale model}
+\acrshort{dales} uses an eddy-viscosity model to evaluate the subfilter-scale fluxes. Following this model, the subfilter-scale stress tensor in \autoref{eq:momentum_filtered} is given by:
 
 \begin{equation}
-\begin{split}
-    \frac{\partial e^{1/2}}{\partial t} = &- \overline{u}_j \frac{\partial e^{1/2}}{\partial x_j} + \frac{1}{2e^{1/2}} \left( K_m \left( \frac{\partial \overline{u}_j}{\partial x_i} + \frac{\partial \overline{u}_i}{\partial x_j} \right) \frac{\partial \overline{u}_i}{\partial x_j} - K_h \frac{g}{\theta_0} \frac{\partial}{\partial z} \left( A \overline{\theta}_l + B \overline{q}_t\right) \right) \\ &+ \frac{\partial}{\partial x_j} \left( 2 K_m \frac{\partial e^{1/2}}{\partial x_j}\right) - \frac{c_{\varepsilon} e}{2 \lambda}
-\end{split}
+    \tau_{ij} = - K_m \left( \frac{\partial \overline{u}_i}{\partial x_j} + \frac{\partial \overline{u}_j}{\partial x_i} \right),
 \end{equation}
 
+in which $K_m$ is the eddy viscosity for momentum. For scalars, the subfilter-scale flux $R_{u_j,\varphi}$ is given by:
 
-\subsection{Sub-grid scale model}
+\begin{equation}
+    R_{u_j,\varphi} = - K_h \frac{\partial \overline{\varphi}}{\partial x_j},
+\end{equation}
 
+where $K_h$ is the eddy diffusivity for thermodynamic scalars. $K_m$ and $K_h$ can be calculated in two ways: as a function of the turbulence kinetic energy $e$ as formulated by \citet{deardorffStratocumuluscappedMixedLayers1980} or using the Smagorinsky model. Following \citet{deardorffStratocumuluscappedMixedLayers1980}, $K_m$ and $K_h$ are modeled as:
+
+\begin{equation}
+    K_m = c_m \lambda e^{1/2}, \quad K_h = c_h \lambda e^{1/2},
+\end{equation}
+
+where $c_m$ and $c_h$ are constants and $\lambda$ is a length scale. This formulation introduces a new prognostic variable, namely the turbulence kinetic energy $e$. The prognostic equation for $e$ is given by:
+
+\begin{equation}
+    \frac{\partial e}{\partial t} = - \frac{\partial \overline{u}_j e}{\partial x_j} - \tau_{ij} \frac{\partial \overline{u}_i}{\partial x_j} + \frac{g}{\theta_0} R_{w,\theta_v} - \frac{\partial R_{u_j,e}}{\partial x_j} - \frac{1}{\rho_0} \frac{\partial R_{u_j,\pi}}{\partial x_j} - \varepsilon,
+    \label{eq:deardorff_tke}
+\end{equation}
+
+of which the first two terms can be calculated from the resolved velocity field. The terms containing subfilter-scale fluxes ($R_{u_j,\varphi}$) and the dissipation rate $\varepsilon$ have to be parameterized. Starting with the third term, which is the subfilter-scale \acrshort{tke} production due to buoyancy and is parameterized as:
+
+\begin{equation}
+    \frac{g}{\theta_0} R_{w,\theta_v} = \frac{g}{\theta_0} \left( A R_{w,\theta_l} + B R_{w,q_t}\right),
+    \label{eq:sfs_buoy}
+\end{equation}
+
+in which $A$ and $B$ are coefficients whose value depends on moisture and temperature. Next, the fourth and fifth terms of \Autoref{eq:deardorff_tke}, which represent the turbulent transport of \acrshort{tke}, are combined into a single term:
+
+\begin{equation}
+    - \frac{\partial}{\partial x_j} \left( R_{u_j,e} + \frac{1}{\rho_0} R_{u_j,\pi} \right) = \frac{\partial}{\partial x_j} \left( 2 K_m \frac{\partial e}{\partial x_j} \right).
+    \label{eq:sfs_turb}
+\end{equation}
+
+Finally, the dissipation rate $\varepsilon$ is modeled as:
+
+\begin{equation}
+    \varepsilon = \frac{c_{\varepsilon}e^{3/2}}{\lambda}, \quad c_\varepsilon = 0.19 + 0.51 \frac{\lambda}{\Delta},
+    \label{eq:sfs_diss}
+\end{equation}
+
+where $\Delta$ is the \acrshort{les} filter width. \Autoref{eq:deardorff_tke,eq:sfs_buoy,eq:sfs_turb,eq:sfs_diss} are combined into a prognostic equation for the \emph{square root} of $e$:
+
+\begin{equation}
+    \begin{split}
+        \frac{\partial e^{1/2}}{\partial t} = &- \overline{u}_j \frac{\partial e^{1/2}}{\partial x_j} + \frac{1}{2e^{1/2}} \left( K_m \left( \frac{\partial \overline{u}_j}{\partial x_i} + \frac{\partial \overline{u}_i}{\partial x_j} \right) \frac{\partial \overline{u}_i}{\partial x_j} - K_h \frac{g}{\theta_0} \frac{\partial}{\partial z} \left( A \overline{\theta}_l + B \overline{q}_t\right) \right) \\ &+ \frac{\partial}{\partial x_j} \left( 2 K_m \frac{\partial e^{1/2}}{\partial x_j}\right) - \frac{c_{\varepsilon} e}{2 \lambda}
+    \end{split}
+    \end{equation}
 
 \subsection{Mass conservation} \label{sec:dales_poisson}
-In \acrshort{dales}, the atmosphere is modelled as an incompressible flow, which results in the following expression for conservation of mass:
+In \acrshort{dales}, the atmosphere is modeled as an incompressible flow, which results in the following expression for conservation of mass:
 
 \begin{equation}
     \frac{\partial \overline{u}_i}{\partial x_i} = 0. \label{eq:mass_conservation}
 \end{equation}
 
-Note that \autoref{eq:mass_conservation} states that the divergence of the velocity field $u_i$ must be equal to zero. This condition can be enforced by using Chorin's projection method \citep{chorinNumericalSolutionNavierStokes1967}. Per Chorin's method, the time integration of the left-hand side of \autoref{eq:momentum_conservation} is split into two parts. First, an intermediate velocity field $\overline{u}^*_i |_{t=t_n + \Delta t}$ is calculated that is not divergence-free (i.e., does not enforce mass balance) by evaluating all right-hand terms of \autoref{eq:momentum_conservation}: 
+\autoref{eq:mass_conservation} states that the divergence of the velocity field $u_i$ must be equal to zero. This condition can be enforced by using Chorin's projection method \citep{chorinNumericalSolutionNavierStokes1967}. Per Chorin's method, the time integration of $\overline{u}_i$ is split into two parts. The first step consists of calculating an intermediate velocity field that is not divergence-free, by evaluating all right-hand terms of \autoref{eq:momentum_conservation}, except for the pressure gradient:
 
 \begin{equation}
-     = - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + f_i - \frac{\partial \tau_{ij}}{\partial x_j} \label{eq:chorin_step1}
+    \frac{\partial \overline{u}^*_i}{\partial t} = - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + f_i - \frac{\partial \tau_{ij}}{\partial x_j}, \label{eq:chorin_step1}
 \end{equation}
 
-In order to obtain an explicit equation for the pressure, the divergence of \autoref{eq:momentum_conservation} can be taken, which results in:
+where $\overline{u}^*_i$ denotes the velocity field that is not divergence-free. From \autoref{eq:chorin_step1}, it follows that:
 
 \begin{equation}
-    \frac{\partial}{\partial x_i}\frac{\partial \overline{u}_i}{\partial t} = \frac{\partial}{\partial x_i} \left( - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} - \frac{\partial \pi}{\partial x_i} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + \mathcal{F}_i - \frac{\partial \tau_{ij}}{\partial x_j} \right) \label{eq:momentum_divergence}
+    \frac{\partial \overline{u}_i}{\partial t} = \frac{\partial \overline{u}^*_i}{\partial t} - \frac{\partial \pi}{\partial x_i}. \label{eq:chorin_step2}
 \end{equation}
 
-\noindent Because of the symmetry of second derivatives, the order of the derivatives on the left-hand side can be inverted:
-
-\begin{equation*}
-    \frac{\partial}{\partial x_i}\frac{\partial \overline{u}_i}{\partial t} = \frac{\partial}{\partial t}\frac{\partial \overline{u}_i}{\partial x_i}
-\end{equation*}
-
-\noindent After applying the equation for conservation of mass (\autoref{eq:mass_conservation}):
+To obtain an explicit equation for the pressure $\pi$, the divergence of \autoref{eq:chorin_step2} can be taken. After rearranging terms, this leads to the following expression:
 
 \begin{equation}
-    \frac{\partial}{\partial t} \frac{\partial \overline{u}_i}{\partial x_i} = 0
+    \frac{\partial^2 \pi}{\partial x_i^2} = \frac{\partial}{\partial x_i} \frac{\partial \overline{u}_i^*}{\partial t}. \label{eq:poisson_equation}
 \end{equation}
 
-\noindent Hence, \autoref{eq:momentum_divergence} can be rewritten as follows:
-
-\begin{equation}
-    \frac{\partial^2 \pi}{\partial x_i^2} = \frac{\partial}{\partial x_i} \left( - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + \mathcal{F}_i - \frac{\partial \tau_{ij}}{\partial x_j} \right)
-    \label{eq:poisson_equation}
-\end{equation}
-
-\noindent Since the right-hand side of \autoref{eq:poisson_equation} is known, it is essentially an equation of the form $\nabla^2 \Phi = f$, also known as the Poisson equation. This equation can efficiently be solved by making use of Fourier transfers. The first step towards a numerical solution to the Poisson equation is to discretize the equation. DALES uses a second-order finite difference scheme:
-
-\begin{equation}
-    \frac{\Phi_{i-1,j,k} - 2 \Phi_{i,j,k} + \Phi_{i+1,j,k}}{\Delta x^2} + \frac{\Phi_{i,j-1,k} - 2 \Phi_{i,j,k} + \Phi_{i,j+1,k}}{\Delta y^2} + \frac{\Phi_{i,j,k-1} - 2 \Phi_{i,j,k} + \Phi_{i,j,k+1}}{\Delta z^2} = f_{i,j,k}
-    \label{eq:discretized_poisson_equation}
-\end{equation}
-
-\autoref{eq:discretized_poisson_equation} can be written as a matrix equation of the form $A \Phi = \mathbf{f}$, where $A$ has 7 non-zero components per row. Next, a Fourier transform is done in both horizontal directions, leading to the following equation: \todo{Add proof in appendix?}
-
-\begin{equation}
-    \left( \frac{\lambda_i}{\Delta x^2} + \frac{\lambda_j}{\Delta y^2} \right) \hat{\hat{\Phi}}_{i,j,k} + \frac{\hat{\hat{\Phi}}_{i,j,k-1} - 2 \hat{\hat{\Phi}}_{i,j,k} + \hat{\hat{\Phi}}_{i,j,k+1}}{\Delta z^2} = f_{i,j,k}
-    \label{eq:poisson_fourier_space}
-\end{equation}
-
-where $\lambda_i$ and $\lambda_j$ are known eigenvalues, and ... \todo{Add symbol} means that a Fourier transform has been applied two times to a variable. One can see that the number of unknowns has decreased from 7 in \autoref{eq:discretized_poisson_equation} to just 3 in \autoref{eq:poisson_fourier_space}. 
+Despite its simplicity at first sight, \Autoref{eq:poisson_equation} is often the most costly part of a \acrshort{cfd} simulation \todo{need source?}. \acrshort{dales} offers the option to solve this equation with the \acrfull{fft} algorithm, which can offer significantly better performance compared to iterative solvers that are often used \citep{hockneyFastDirectSolution1965}. After \Autoref{eq:poisson_equation} is solved, the velocity fields are corrected according to \Autoref{eq:chorin_step2}, which concludes the projection method.
 
 \subsection{Discretization}
-Spatial operators are discretized on an Arakawa C-grid \citep{arakawaComputationalDesignBasic1977}. The components of the velocity vector are defined at cell faces, while pressure, 
+For the discretization of the governing equations, \acrshort{dales} makes use of an Arakawa C-grid \citep{arakawaComputationalDesignBasic1977}. This means that the velocity components are defined at the edges of the grid cells, while pressure, turbulence kinetic energy and scalars are defined at the centers of the grid cells. \acrshort{dales} features several numerical schemes to evaluate advective terms, ranging from a simple but less accurate second-order central difference scheme to accurate fifth and sixth-order schemes. The $\kappa$ advection scheme, as described by \citet{hundsdorferPositiveFiniteDifferenceAdvection1995}, is also available. The latter scheme ensures that the advected quantity remains positive.
 
-\subsection{Parallelization}
-To speed up simulations or enable simulations over large domains, \acrshort{dales} is parallelized with the \acrfull{mpi}. \acrshort{mpi} provides an interface to manage the communication of data between processors. 
+For time integration of prognostic variables, \acrshort{dales} uses a third-order Runge-Kutta scheme. The maximum time step size $\Delta t$ for which numerical stability is guaranteed is determined by the \acrfull{cfl} and the diffusion number $d$:
 
-An \acrshort{mpi} run of \acrshort{dales} is started with a set number of \emph{tasks}, and each task is bound to a processor. In general, the number of tasks cannot exceed the number of available processors. The computational domain is then divided into as many sub-domains as there are \acrshort{mpi} tasks. 
+\begin{equation}
+    \text{CFL} = \max \left( \left| \frac{\overline{u}_i \Delta t}{\Delta x_i} \right| \right), \quad d = \max \left( \sum_{i=1}^{3} \frac{K_m \Delta t}{\Delta x_i^2} \right).
+\end{equation}
+
+For the \acrshort{cfl} and $d$ maximum values are prescribed, from which the maximum time step $\Delta t$ is determined.
+
+\subsection{Parallelization} \label{sec:dales_mpi}
+To speed up computations, \acrshort{dales} is parallelized using the \acrfull{mpi}. \acrshort{mpi} is a protocol and programming interface for managing data communication between processors. When multiple processors are used for running a \acrshort{dales} simulation, the computational domain is split up into sub-domains, and each sub-domain is assigned to a processor. \acrshort{mpi} is then used whenever a processor needs access to data that is located on a different sub-domain. 
 
 \begin{figure}[H]
     \centering
     \includesvg[width=0.8\linewidth]{../images/drawings/dales_decompositions.svg}
-    \caption{Possible domain decompositions in \acrshort{dales}. From left to right: $z$-aligned pencils, $y$-aligned slabs and $x$-aligned slabs. The colors indicate the sub-domains.}
+    \caption{Possible domain decompositions in \acrshort{dales}. The full computational domain is illustrated by the cube and sub-domains are indicated by the different colors. From left to right: $z$-aligned pencils, $y$-aligned slabs and $x$-aligned slabs.}
     \label{fig:dales_domain_decomposition}
 \end{figure}
+
+\newpage
+
+\subsection{Applications}
+\acrshort{dales} has been tested in a variety of model intercomparison studies. Examples include the \acrshort{bomex} case on shallow cumulus convection \citep{siebesmaLargeEddySimulation2003}, the \acrshort{gabls} case on stable boundary layers \citep{beareIntercomparisonLargeEddySimulations2006} and the \acrshort{astex} case on stratocumulus transition \citep{vanderdussenGASSEUCLIPSEModel2013}. \acrshort{dales} also features an interactive chemistry module, which has been used by \citet{vila-gueraudearellanoRoleBoundaryLayer2011} and \citet{ouwerslootQuantifyingTransportSubcloud2013} to study the behavior of atmospheric chemical reactants over the Amazon rainforest. \citet{debruineExplicitAerosolCloud2019} expanded \acrshort{dales} with an explicit aerosol scheme to study aerosol-cloud interactions. Furthermore, a Python interface has been developed for \acrshort{dales} by \citet{vandenoordPythonInterfaceDutch2020}. Using this interface, the model can be coupled to other (global) weather and climate models. This functionality has been exploited by \citet{janssonRegionalSuperparameterizationGlobal2019} to perform \emph{superparameterization} experiments; a \acrshort{dales} instance is nested in a global atmospheric model such that processes related to clouds and convection are solved explicitly.
