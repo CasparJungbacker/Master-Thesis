@@ -4,7 +4,7 @@ HERE = os.getcwd()
 PLOT_DIR = os.path.join(HERE, "doc", "images", "plots")
 
 def aggregate_grid_sizes(wildcards):
-	sysdir = os.path.join(HERE, "data", "benchmarks", "walltime", wildcards.system)
+	sysdir = os.path.join(HERE, "data", "benchmarks", "walltime", wildcards.system, wildcards.precision)
 	grid_sizes = [os.path.join(sysdir, _, "output_" +  wildcards.processor + ".txt") \
 					for _ in os.listdir(sysdir) if os.path.isdir(os.path.join(sysdir, _))]
 	return sorted(grid_sizes)
@@ -17,7 +17,8 @@ def aggregate_ensemble_members(wildcards):
 	return members
 
 wildcard_constraints:
-	system="[a-z]+"
+	system="[a-z]+",
+	precision="[a-z]+"
 
 rule all:
 	input:
@@ -29,9 +30,10 @@ rule all:
 
 rule walltimes:
 	input:
-		expand("data/walltimes/walltime_{system}_{processor}.csv", 
+		expand("data/benchmarks/walltime/{system}/doubleprecision/walltime_{system}_{processor}_doubleprecision.csv", 
 			   system=["snellius", "wiske"], 
-			   processor=["gpu", "single_cpu", "multi_cpu"])
+			   processor=["gpu", "single_cpu", "multi_cpu"]),
+		"data/benchmarks/walltime/wiske/singleprecision/walltime_wiske_gpu_singleprecision.csv"
 
 rule plots:
 	input:
@@ -43,7 +45,7 @@ rule aggregate_walltime:
 		script="scripts/utils/get_runtimes.py",
 		files=aggregate_grid_sizes
 	output:
-		"data/walltimes/walltime_{system}_{processor}.csv"
+		"data/benchmarks/walltime/{system}/{precision}/walltime_{system}_{processor}_{precision}.csv"
 	shell:
 		"python {input.script} -i {input.files} -o {output}"
 
@@ -59,9 +61,9 @@ rule plot_speedup:
 	input:
 		script="scripts/plots/plot_speedup.py",
 		mplrc="matplotlibrc",
-		timing_single_core="data/walltimes/walltime_{system}_single_cpu.csv",
-		timing_multi_core="data/walltimes/walltime_{system}_multi_cpu.csv",
-		timing_gpu="data/walltimes/walltime_{system}_gpu.csv"
+		timing_single_core="data/benchmarks/walltime/{system}/doubleprecision/walltime_{system}_single_cpu_doubleprecision.csv",
+		timing_multi_core="data/benchmarks/walltime/{system}/doubleprecision/walltime_{system}_multi_cpu_doubleprecision.csv",
+		timing_gpu="data/benchmarks/walltime/{system}/doubleprecision/walltime_{system}_gpu_doubleprecision.csv"
 	output:
 		"doc/images/plots/speedup_{system}.svg"
 	shell:
