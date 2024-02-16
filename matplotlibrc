@@ -1,2 +1,11 @@
 # Color cyling
-axes.prop_cycle: cycler( "color", [ "00A6D6", "009B77", "6F1D77", "A50034", "0C2340", "EC6842", "6CC24A", "00B8C8", "E03C31", "EF60A3", "FFB81C", "0076C2"])
+#axes.prop_cycle: cycler( "color", [ "00A6D6", "009B77", "6F1D77", "A50034", "0C2340", "EC6842", "6CC24A", "00B8C8", "E03C31", "EF60A3", "FFB81C", "0076C2"])
+axes.prop_cycle: cycler("color", ["4477AA", "66CCEE", "228833", "CCBB44", "EE6677", "AA3377", "BBBBBB"])
+
+# Fonts
+#text.usetex : True
+font.family : IBM Plex Serif
+
+font.size : 10
+
+savefig.bbox : tight
