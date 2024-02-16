@@ -467,3 +467,9 @@ TSWLatexianTemp*
 
 # xwatermark package
 *.xwm
+
+*.svg
+
+.snakemake/*
+.vscode/*
+.DS_Store
