@@ -1,4 +1,4 @@
- DALES 4.4 git: 1e8ed0-dirty
+ DALES 4.4 git: 423e44-dirty
  namoptions.001                                                                                                                                                                                                                                                  
 &RUN
  IEXPNR=1          ,
@@ -384,38 +384,6 @@
  WARNING: z0m and z0h not defined, set equal to z0
  WARNING: z0m and z0h not defined, set equal to z0
  WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
 &NAMSUBGRID
  LDELTA=F,
  LMASON=F,
@@ -537,6 +505,38 @@
   100.0   298.7  0.1687E-01   -8.8    0.0    1.0
    60.0   298.7  0.1692E-01   -8.8    0.0    1.0
    20.0   298.7  0.1697E-01   -8.8    0.0    1.0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
+ WARNING: z0m and z0h not defined, set equal to z0
   height   rhobf       rhobh
     0.0  0.86634263254328869E+00  0.86806901953251825E+00
  3180.0  0.86979540652174780E+00  0.87152179351097736E+00
@@ -922,520 +922,519 @@
  DTAV=  60.000000000000000     ,
  /
  =================================================================
-Time of Day: 151305.418    Time of Simulation:      1.00    dt:  1.000000000
+Time of Day: 202957.236    Time of Simulation:      1.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.72E-02  6.51E-05  2.17E-04   39  3.72E-02   80
 Cell Peclet number:  9.78E-03    1
 divmax, divtot =    1.01E-17  -4.07E-14       dt limited by initial step   
  =================================================================
-Time of Day: 151305.567    Time of Simulation:      2.00    dt:  1.000000000
+Time of Day: 202957.396    Time of Simulation:      2.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.72E-02  8.40E-05  2.83E-04   39  3.72E-02   80
 Cell Peclet number:  1.13E-02    1
 divmax, divtot =    9.95E-18  -1.97E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151305.725    Time of Simulation:      3.00    dt:  1.000000000
+Time of Day: 202957.548    Time of Simulation:      3.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.72E-02  1.02E-04  3.49E-04   39  3.72E-02   80
 Cell Peclet number:  1.27E-02    1
 divmax, divtot =    9.67E-18   1.23E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151305.873    Time of Simulation:      4.00    dt:  1.000000000
+Time of Day: 202957.699    Time of Simulation:      4.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.72E-02  1.20E-04  4.15E-04   39  3.72E-02   80
 Cell Peclet number:  1.41E-02    1
 divmax, divtot =    1.01E-17  -5.94E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151306.025    Time of Simulation:      5.00    dt:  1.000000000
+Time of Day: 202957.852    Time of Simulation:      5.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  1.37E-04  4.80E-04   39  3.73E-02   80
 Cell Peclet number:  1.54E-02    1
 divmax, divtot =    9.79E-18   1.30E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151306.188    Time of Simulation:      6.00    dt:  1.000000000
+Time of Day: 202958.004    Time of Simulation:      6.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  1.53E-04  5.45E-04   39  3.73E-02   80
 Cell Peclet number:  1.66E-02    1
 divmax, divtot =    9.53E-18   4.09E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151306.344    Time of Simulation:      7.00    dt:  1.000000000
+Time of Day: 202958.155    Time of Simulation:      7.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  1.69E-04  6.11E-04   76  3.73E-02   80
 Cell Peclet number:  1.77E-02    1
 divmax, divtot =    9.96E-18   3.32E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151306.493    Time of Simulation:      8.00    dt:  1.000000000
+Time of Day: 202958.307    Time of Simulation:      8.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  1.84E-04  6.82E-04   76  3.73E-02   80
 Cell Peclet number:  1.88E-02    1
 divmax, divtot =    1.02E-17   3.66E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151306.641    Time of Simulation:      9.00    dt:  1.000000000
+Time of Day: 202958.461    Time of Simulation:      9.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  1.99E-04  7.52E-04   76  3.73E-02   80
 Cell Peclet number:  1.98E-02    1
 divmax, divtot =    1.01E-17   5.78E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151306.790    Time of Simulation:     10.00    dt:  1.000000000
+Time of Day: 202958.612    Time of Simulation:     10.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  2.15E-04  8.23E-04   76  3.73E-02   80
 Cell Peclet number:  2.07E-02    1
 divmax, divtot =    1.02E-17   1.40E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151306.937    Time of Simulation:     11.00    dt:  1.000000000
+Time of Day: 202958.762    Time of Simulation:     11.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  2.34E-04  8.93E-04   76  3.73E-02   80
 Cell Peclet number:  2.16E-02    1
 divmax, divtot =    1.05E-17  -1.40E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151307.085    Time of Simulation:     12.00    dt:  1.000000000
+Time of Day: 202958.914    Time of Simulation:     12.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  2.52E-04  9.64E-04   75  3.74E-02   80
 Cell Peclet number:  2.24E-02    1
 divmax, divtot =    9.75E-18  -6.09E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151307.233    Time of Simulation:     13.00    dt:  1.000000000
+Time of Day: 202959.065    Time of Simulation:     13.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  2.71E-04  1.03E-03   69  3.74E-02   80
 Cell Peclet number:  2.31E-02    1
 divmax, divtot =    9.94E-18   7.66E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151307.387    Time of Simulation:     14.00    dt:  1.000000000
+Time of Day: 202959.219    Time of Simulation:     14.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  2.90E-04  1.11E-03   66  3.74E-02   80
 Cell Peclet number:  2.38E-02    1
 divmax, divtot =    9.71E-18   1.35E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151307.536    Time of Simulation:     15.00    dt:  1.000000000
+Time of Day: 202959.381    Time of Simulation:     15.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  3.08E-04  1.18E-03   66  3.74E-02   80
 Cell Peclet number:  2.44E-02    1
 divmax, divtot =    1.06E-17  -1.05E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151307.705    Time of Simulation:     16.00    dt:  1.000000000
+Time of Day: 202959.540    Time of Simulation:     16.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  3.27E-04  1.25E-03   65  3.74E-02   80
 Cell Peclet number:  2.50E-02    1
 divmax, divtot =    9.65E-18   1.70E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151307.854    Time of Simulation:     17.00    dt:  1.000000000
+Time of Day: 202959.697    Time of Simulation:     17.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  3.45E-04  1.33E-03   65  3.74E-02   80
 Cell Peclet number:  2.55E-02    1
 divmax, divtot =    9.68E-18   6.14E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151308.000    Time of Simulation:     18.00    dt:  1.000000000
+Time of Day: 202959.853    Time of Simulation:     18.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  3.63E-04  1.40E-03   65  3.74E-02   80
 Cell Peclet number:  2.60E-02    1
 divmax, divtot =    9.84E-18   1.35E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151308.150    Time of Simulation:     19.00    dt:  1.000000000
+Time of Day: 203000.005    Time of Simulation:     19.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  3.81E-04  1.47E-03   64  3.75E-02   80
 Cell Peclet number:  2.65E-02    1
 divmax, divtot =    9.44E-18   5.96E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151308.297    Time of Simulation:     20.00    dt:  1.000000000
+Time of Day: 203000.155    Time of Simulation:     20.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  3.99E-04  1.54E-03   64  3.75E-02   80
 Cell Peclet number:  2.69E-02    1
 divmax, divtot =    9.93E-18   4.57E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151308.446    Time of Simulation:     21.00    dt:  1.000000000
+Time of Day: 203000.306    Time of Simulation:     21.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  4.16E-04  1.62E-03   64  3.75E-02   80
 Cell Peclet number:  2.73E-02    1
 divmax, divtot =    1.10E-17   4.99E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151308.594    Time of Simulation:     22.00    dt:  1.000000000
+Time of Day: 203000.459    Time of Simulation:     22.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  4.34E-04  1.69E-03   63  3.75E-02   80
 Cell Peclet number:  2.76E-02    1
 divmax, divtot =    1.01E-17   8.16E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151308.750    Time of Simulation:     23.00    dt:  1.000000000
+Time of Day: 203000.610    Time of Simulation:     23.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  4.51E-04  1.76E-03   63  3.75E-02   80
 Cell Peclet number:  2.79E-02    1
 divmax, divtot =    9.82E-18  -3.72E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151308.908    Time of Simulation:     24.00    dt:  1.000000000
+Time of Day: 203000.763    Time of Simulation:     24.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  4.67E-04  1.83E-03   63  3.75E-02   80
 Cell Peclet number:  2.82E-02    1
 divmax, divtot =    1.03E-17  -2.46E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151309.059    Time of Simulation:     25.00    dt:  1.000000000
+Time of Day: 203000.914    Time of Simulation:     25.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  4.83E-04  1.90E-03   63  3.76E-02   80
 Cell Peclet number:  2.85E-02    1
 divmax, divtot =    9.52E-18   2.73E-13       dt limited by initial step   
  =================================================================
-Time of Day: 151309.206    Time of Simulation:     26.00    dt:  1.000000000
+Time of Day: 203001.066    Time of Simulation:     26.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  4.99E-04  1.97E-03   63  3.76E-02   80
 Cell Peclet number:  2.88E-02    1
 divmax, divtot =    1.02E-17  -3.08E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151309.355    Time of Simulation:     27.00    dt:  1.000000000
+Time of Day: 203001.217    Time of Simulation:     27.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  5.15E-04  2.04E-03   63  3.76E-02   80
 Cell Peclet number:  2.90E-02    1
 divmax, divtot =    1.03E-17   8.78E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151309.503    Time of Simulation:     28.00    dt:  1.000000000
+Time of Day: 203001.372    Time of Simulation:     28.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  5.30E-04  2.11E-03   63  3.76E-02   80
 Cell Peclet number:  2.92E-02    1
 divmax, divtot =    1.04E-17  -1.95E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151309.652    Time of Simulation:     29.00    dt:  1.000000000
+Time of Day: 203001.523    Time of Simulation:     29.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  5.45E-04  2.18E-03   63  3.76E-02   80
 Cell Peclet number:  2.95E-02    1
 divmax, divtot =    9.88E-18  -7.79E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151309.803    Time of Simulation:     30.00    dt:  1.000000000
+Time of Day: 203001.676    Time of Simulation:     30.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  5.63E-04  2.26E-03   63  3.76E-02   80
 Cell Peclet number:  2.96E-02    1
 divmax, divtot =    1.03E-17  -4.77E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151309.952    Time of Simulation:     31.00    dt:  1.000000000
+Time of Day: 203001.841    Time of Simulation:     31.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  5.82E-04  2.33E-03   63  3.77E-02   80
 Cell Peclet number:  2.98E-02    1
 divmax, divtot =    1.00E-17  -3.96E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151310.098    Time of Simulation:     32.00    dt:  1.000000000
+Time of Day: 203002.079    Time of Simulation:     32.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  6.00E-04  2.40E-03   63  3.77E-02   80
 Cell Peclet number:  3.00E-02    1
 divmax, divtot =    1.00E-17  -3.75E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151310.246    Time of Simulation:     33.00    dt:  1.000000000
+Time of Day: 203002.289    Time of Simulation:     33.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.77E-02  6.17E-04  2.48E-03   62  3.77E-02   80
 Cell Peclet number:  3.02E-02    1
 divmax, divtot =    1.00E-17   2.68E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151310.395    Time of Simulation:     34.00    dt:  1.000000000
+Time of Day: 203002.497    Time of Simulation:     34.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.77E-02  6.35E-04  2.55E-03   62  3.77E-02   80
 Cell Peclet number:  3.03E-02    1
 divmax, divtot =    9.76E-18  -8.48E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151310.544    Time of Simulation:     35.00    dt:  1.000000000
+Time of Day: 203002.725    Time of Simulation:     35.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.77E-02  6.53E-04  2.62E-03   62  3.78E-02   80
 Cell Peclet number:  3.04E-02    1
 divmax, divtot =    9.79E-18   3.08E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151310.691    Time of Simulation:     36.00    dt:  1.000000000
+Time of Day: 203002.946    Time of Simulation:     36.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.77E-02  6.71E-04  2.69E-03   62  3.78E-02   80
 Cell Peclet number:  3.06E-02    1
 divmax, divtot =    9.74E-18   1.26E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151310.839    Time of Simulation:     37.00    dt:  1.000000000
+Time of Day: 203003.152    Time of Simulation:     37.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.78E-02  6.88E-04  2.76E-03   62  3.78E-02   80
 Cell Peclet number:  3.07E-02    1
 divmax, divtot =    1.02E-17  -4.98E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151310.988    Time of Simulation:     38.00    dt:  1.000000000
+Time of Day: 203003.307    Time of Simulation:     38.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.78E-02  7.05E-04  2.83E-03   61  3.78E-02   80
 Cell Peclet number:  3.08E-02    1
 divmax, divtot =    9.93E-18  -1.68E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151311.134    Time of Simulation:     39.00    dt:  1.000000000
+Time of Day: 203003.458    Time of Simulation:     39.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.78E-02  7.22E-04  2.90E-03   61  3.79E-02   80
 Cell Peclet number:  3.09E-02    1
 divmax, divtot =    1.00E-17   3.27E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151311.281    Time of Simulation:     40.00    dt:  1.000000000
+Time of Day: 203003.609    Time of Simulation:     40.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.78E-02  7.38E-04  2.97E-03   61  3.79E-02   80
 Cell Peclet number:  3.10E-02    1
 divmax, divtot =    1.02E-17   1.67E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151311.429    Time of Simulation:     41.00    dt:  1.000000000
+Time of Day: 203003.759    Time of Simulation:     41.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.79E-02  7.53E-04  3.04E-03   61  3.79E-02   80
 Cell Peclet number:  3.11E-02    1
 divmax, divtot =    9.74E-18   6.92E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151311.578    Time of Simulation:     42.00    dt:  1.000000000
+Time of Day: 203003.911    Time of Simulation:     42.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.79E-02  7.68E-04  3.10E-03   61  3.79E-02   80
 Cell Peclet number:  3.12E-02    1
 divmax, divtot =    1.02E-17   5.87E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151311.725    Time of Simulation:     43.00    dt:  1.000000000
+Time of Day: 203004.062    Time of Simulation:     43.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.79E-02  7.83E-04  3.17E-03   60  3.80E-02   80
 Cell Peclet number:  3.13E-02    1
 divmax, divtot =    9.85E-18   8.04E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151311.915    Time of Simulation:     44.00    dt:  1.000000000
+Time of Day: 203004.213    Time of Simulation:     44.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.79E-02  7.96E-04  3.24E-03   71  3.80E-02   80
 Cell Peclet number:  3.14E-02    1
 divmax, divtot =    9.83E-18   7.24E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151312.125    Time of Simulation:     45.00    dt:  1.000000000
+Time of Day: 203004.364    Time of Simulation:     45.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.79E-02  8.09E-04  3.30E-03   71  3.80E-02   80
 Cell Peclet number:  3.15E-02    1
 divmax, divtot =    1.01E-17  -1.31E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151312.351    Time of Simulation:     46.00    dt:  1.000000000
+Time of Day: 203004.525    Time of Simulation:     46.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  8.21E-04  3.37E-03   71  3.80E-02   80
 Cell Peclet number:  3.15E-02    1
 divmax, divtot =    9.78E-18   8.61E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151312.564    Time of Simulation:     47.00    dt:  1.000000000
+Time of Day: 203004.719    Time of Simulation:     47.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  8.33E-04  3.44E-03   71  3.81E-02   80
 Cell Peclet number:  3.16E-02    1
 divmax, divtot =    1.00E-17   1.00E-10       dt limited by initial step   
  =================================================================
-Time of Day: 151312.767    Time of Simulation:     48.00    dt:  1.000000000
+Time of Day: 203004.882    Time of Simulation:     48.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  8.44E-04  3.50E-03   71  3.81E-02   80
 Cell Peclet number:  3.17E-02    1
 divmax, divtot =    1.01E-17   1.00E-10       dt limited by initial step   
  =================================================================
-Time of Day: 151312.915    Time of Simulation:     49.00    dt:  1.000000000
+Time of Day: 203005.035    Time of Simulation:     49.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  8.59E-04  3.59E-03   60  3.81E-02   80
 Cell Peclet number:  3.17E-02    1
 divmax, divtot =    1.00E-17   5.19E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151313.063    Time of Simulation:     50.00    dt:  1.000000000
+Time of Day: 203005.327    Time of Simulation:     50.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.81E-02  8.77E-04  3.68E-03   60  3.81E-02   80
 Cell Peclet number:  3.18E-02    1
 divmax, divtot =    1.01E-17   8.43E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151313.211    Time of Simulation:     51.00    dt:  1.000000000
+Time of Day: 203005.551    Time of Simulation:     51.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.81E-02  8.94E-04  3.78E-03   60  3.81E-02   80
 Cell Peclet number:  3.18E-02    1
 divmax, divtot =    1.03E-17   4.99E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151313.358    Time of Simulation:     52.00    dt:  1.000000000
+Time of Day: 203005.765    Time of Simulation:     52.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.81E-02  9.10E-04  3.87E-03   60  3.82E-02   80
 Cell Peclet number:  3.19E-02    1
 divmax, divtot =    9.95E-18  -1.63E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151313.506    Time of Simulation:     53.00    dt:  1.000000000
+Time of Day: 203005.920    Time of Simulation:     53.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.81E-02  9.27E-04  3.96E-03   60  3.82E-02   80
 Cell Peclet number:  3.19E-02    1
 divmax, divtot =    1.04E-17  -2.77E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151313.653    Time of Simulation:     54.00    dt:  1.000000000
+Time of Day: 203006.073    Time of Simulation:     54.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.81E-02  9.42E-04  4.06E-03   60  3.82E-02   80
 Cell Peclet number:  3.20E-02    1
 divmax, divtot =    1.03E-17  -2.94E-13       dt limited by initial step   
  =================================================================
-Time of Day: 151313.801    Time of Simulation:     55.00    dt:  1.000000000
+Time of Day: 203006.225    Time of Simulation:     55.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.81E-02  9.58E-04  4.15E-03   60  3.82E-02   80
 Cell Peclet number:  3.20E-02    1
 divmax, divtot =    1.00E-17  -7.51E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151313.953    Time of Simulation:     56.00    dt:  1.000000000
+Time of Day: 203006.381    Time of Simulation:     56.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.82E-02  9.73E-04  4.24E-03   60  3.82E-02   80
 Cell Peclet number:  3.21E-02    1
 divmax, divtot =    9.99E-18  -2.75E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151314.100    Time of Simulation:     57.00    dt:  1.000000000
+Time of Day: 203006.532    Time of Simulation:     57.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.82E-02  9.88E-04  4.34E-03   60  3.83E-02   80
 Cell Peclet number:  3.21E-02    1
 divmax, divtot =    1.01E-17  -5.61E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151314.247    Time of Simulation:     58.00    dt:  1.000000000
+Time of Day: 203006.684    Time of Simulation:     58.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.82E-02  1.00E-03  4.43E-03   60  3.83E-02   80
 Cell Peclet number:  3.22E-02    1
 divmax, divtot =    1.02E-17  -3.01E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151314.394    Time of Simulation:     59.00    dt:  1.000000000
+Time of Day: 203006.838    Time of Simulation:     59.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.82E-02  1.02E-03  4.52E-03   60  3.83E-02   80
 Cell Peclet number:  3.22E-02    1
 divmax, divtot =    1.03E-17  -6.68E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151314.546    Time of Simulation:     60.00    dt:  1.000000000
+Time of Day: 203006.995    Time of Simulation:     60.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.82E-02  1.03E-03  4.62E-03   60  3.83E-02   80
 Cell Peclet number:  3.22E-02    1
 divmax, divtot =    9.96E-18  -4.04E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151314.693    Time of Simulation:     61.00    dt:  1.000000000
+Time of Day: 203007.154    Time of Simulation:     61.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.82E-02  1.04E-03  4.71E-03   60  3.83E-02   80
 Cell Peclet number:  3.23E-02    1
 divmax, divtot =    1.02E-17  -8.36E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151314.842    Time of Simulation:     62.00    dt:  1.000000000
+Time of Day: 203007.312    Time of Simulation:     62.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.05E-03  4.80E-03   60  3.83E-02   80
 Cell Peclet number:  3.23E-02    1
 divmax, divtot =    9.44E-18  -1.28E-10       dt limited by initial step   
  =================================================================
-Time of Day: 151314.990    Time of Simulation:     63.00    dt:  1.000000000
+Time of Day: 203007.485    Time of Simulation:     63.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.07E-03  4.89E-03   60  3.83E-02   80
 Cell Peclet number:  3.23E-02    1
 divmax, divtot =    1.01E-17  -8.32E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151315.137    Time of Simulation:     64.00    dt:  1.000000000
+Time of Day: 203007.643    Time of Simulation:     64.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.08E-03  4.98E-03   60  3.84E-02   80
 Cell Peclet number:  3.23E-02    1
 divmax, divtot =    1.06E-17  -6.31E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151315.284    Time of Simulation:     65.00    dt:  1.000000000
+Time of Day: 203007.795    Time of Simulation:     65.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.09E-03  5.07E-03   60  3.84E-02   80
 Cell Peclet number:  3.24E-02    1
 divmax, divtot =    9.84E-18  -5.48E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151315.431    Time of Simulation:     66.00    dt:  1.000000000
+Time of Day: 203007.947    Time of Simulation:     66.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.10E-03  5.16E-03   60  3.84E-02   80
 Cell Peclet number:  3.24E-02    1
 divmax, divtot =    9.82E-18  -9.61E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151315.579    Time of Simulation:     67.00    dt:  1.000000000
+Time of Day: 203008.099    Time of Simulation:     67.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.11E-03  5.24E-03   60  3.84E-02   80
 Cell Peclet number:  3.24E-02    1
 divmax, divtot =    1.04E-17   3.31E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151315.727    Time of Simulation:     68.00    dt:  1.000000000
+Time of Day: 203008.250    Time of Simulation:     68.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.12E-03  5.33E-03   60  3.84E-02   80
 Cell Peclet number:  3.24E-02    1
 divmax, divtot =    9.88E-18  -6.80E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151315.877    Time of Simulation:     69.00    dt:  1.000000000
+Time of Day: 203008.403    Time of Simulation:     69.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.12E-03  5.42E-03   60  3.84E-02   80
 Cell Peclet number:  3.25E-02    1
 divmax, divtot =    1.03E-17  -1.14E-10       dt limited by initial step   
  =================================================================
-Time of Day: 151316.026    Time of Simulation:     70.00    dt:  1.000000000
+Time of Day: 203008.554    Time of Simulation:     70.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.13E-03  5.50E-03   60  3.84E-02   80
 Cell Peclet number:  3.25E-02    1
 divmax, divtot =    9.92E-18   2.34E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151316.174    Time of Simulation:     71.00    dt:  1.000000000
+Time of Day: 203008.705    Time of Simulation:     71.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.14E-03  5.59E-03   60  3.84E-02   80
 Cell Peclet number:  3.25E-02    1
 divmax, divtot =    9.82E-18  -6.86E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151316.332    Time of Simulation:     72.00    dt:  1.000000000
+Time of Day: 203008.856    Time of Simulation:     72.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.15E-03  5.67E-03   60  3.84E-02   80
 Cell Peclet number:  3.25E-02    1
 divmax, divtot =    9.94E-18  -7.50E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151316.482    Time of Simulation:     73.00    dt:  1.000000000
+Time of Day: 203009.007    Time of Simulation:     73.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.16E-03  5.75E-03   60  3.84E-02   80
 Cell Peclet number:  3.25E-02    1
 divmax, divtot =    1.01E-17  -1.21E-10       dt limited by initial step   
  =================================================================
-Time of Day: 151316.638    Time of Simulation:     74.00    dt:  1.000000000
+Time of Day: 203009.171    Time of Simulation:     74.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.17E-03  5.83E-03   60  3.84E-02   80
 Cell Peclet number:  3.26E-02    1
 divmax, divtot =    9.56E-18  -1.27E-10       dt limited by initial step   
  =================================================================
-Time of Day: 151316.795    Time of Simulation:     75.00    dt:  1.000000000
+Time of Day: 203009.321    Time of Simulation:     75.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.19E-03  5.91E-03   60  3.84E-02   80
 Cell Peclet number:  3.26E-02    1
 divmax, divtot =    1.00E-17   4.65E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151316.947    Time of Simulation:     76.00    dt:  1.000000000
+Time of Day: 203009.476    Time of Simulation:     76.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.21E-03  5.99E-03   60  3.84E-02   80
 Cell Peclet number:  3.26E-02    1
 divmax, divtot =    9.72E-18  -1.04E-10       dt limited by initial step   
  =================================================================
-Time of Day: 151317.096    Time of Simulation:     77.00    dt:  1.000000000
+Time of Day: 203009.627    Time of Simulation:     77.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.22E-03  6.07E-03   60  3.84E-02   80
 Cell Peclet number:  3.26E-02    1
 divmax, divtot =    1.07E-17   2.27E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151317.244    Time of Simulation:     78.00    dt:  1.000000000
+Time of Day: 203009.778    Time of Simulation:     78.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.24E-03  6.14E-03   60  3.84E-02   80
 Cell Peclet number:  3.26E-02    1
 divmax, divtot =    1.03E-17  -9.33E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151317.397    Time of Simulation:     79.00    dt:  1.000000000
+Time of Day: 203009.928    Time of Simulation:     79.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.25E-03  6.22E-03   60  3.84E-02   80
 Cell Peclet number:  3.26E-02    1
 divmax, divtot =    9.96E-18   7.73E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151317.545    Time of Simulation:     80.00    dt:  1.000000000
+Time of Day: 203010.081    Time of Simulation:     80.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.27E-03  6.29E-03   60  3.84E-02   80
 Cell Peclet number:  3.26E-02    1
 divmax, divtot =    1.04E-17   7.69E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151317.693    Time of Simulation:     81.00    dt:  1.000000000
+Time of Day: 203010.232    Time of Simulation:     81.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.28E-03  6.36E-03   60  3.84E-02   80
 Cell Peclet number:  3.26E-02    1
 divmax, divtot =    9.98E-18   6.47E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151317.840    Time of Simulation:     82.00    dt:  1.000000000
+Time of Day: 203010.386    Time of Simulation:     82.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.30E-03  6.43E-03   60  3.84E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    1.00E-17  -6.08E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151317.989    Time of Simulation:     83.00    dt:  1.000000000
+Time of Day: 203010.538    Time of Simulation:     83.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.31E-03  6.50E-03   60  3.84E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    9.70E-18  -2.74E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151318.136    Time of Simulation:     84.00    dt:  1.000000000
+Time of Day: 203010.689    Time of Simulation:     84.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.33E-03  6.57E-03   60  3.84E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    1.02E-17   1.76E-10       dt limited by initial step   
  =================================================================
-Time of Day: 151318.283    Time of Simulation:     85.00    dt:  1.000000000
+Time of Day: 203010.843    Time of Simulation:     85.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.34E-03  6.63E-03   60  3.84E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    9.83E-18   3.49E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151318.431    Time of Simulation:     86.00    dt:  1.000000000
+Time of Day: 203010.994    Time of Simulation:     86.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.35E-03  6.69E-03   60  3.83E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    9.74E-18  -9.06E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151318.578    Time of Simulation:     87.00    dt:  1.000000000
+Time of Day: 203011.145    Time of Simulation:     87.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.36E-03  6.76E-03   60  3.83E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    9.63E-18   2.81E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151318.725    Time of Simulation:     88.00    dt:  1.000000000
+Time of Day: 203011.296    Time of Simulation:     88.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.38E-03  6.82E-03   60  3.83E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    9.93E-18   2.07E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151318.874    Time of Simulation:     89.00    dt:  1.000000000
+Time of Day: 203011.449    Time of Simulation:     89.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.39E-03  6.87E-03   60  3.83E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    1.02E-17  -1.27E-10       dt limited by initial step   
  =================================================================
-Time of Day: 151319.021    Time of Simulation:     90.00    dt:  1.000000000
+Time of Day: 203011.598    Time of Simulation:     90.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.40E-03  6.93E-03   60  3.84E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    9.97E-18   5.21E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151319.169    Time of Simulation:     91.00    dt:  1.000000000
+Time of Day: 203011.757    Time of Simulation:     91.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.41E-03  6.98E-03   60  3.84E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    1.02E-17   5.29E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151319.316    Time of Simulation:     92.00    dt:  1.000000000
+Time of Day: 203011.915    Time of Simulation:     92.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.42E-03  7.04E-03   59  3.84E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    1.07E-17  -7.25E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151319.465    Time of Simulation:     93.00    dt:  1.000000000
+Time of Day: 203012.068    Time of Simulation:     93.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.43E-03  7.10E-03   59  3.84E-02   80
 Cell Peclet number:  3.27E-02    1
 divmax, divtot =    9.91E-18   8.68E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151319.613    Time of Simulation:     94.00    dt:  1.000000000
+Time of Day: 203012.220    Time of Simulation:     94.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.83E-02  1.44E-03  7.15E-03   59  3.85E-02   80
 Cell Peclet number:  3.28E-02    1
 divmax, divtot =    1.07E-17  -6.73E-14       dt limited by initial step   
  =================================================================
-Time of Day: 151319.759    Time of Simulation:     95.00    dt:  1.000000000
+Time of Day: 203012.376    Time of Simulation:     95.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.45E-03  7.20E-03   59  3.85E-02   80
 Cell Peclet number:  3.28E-02    1
 divmax, divtot =    1.01E-17   6.56E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151319.907    Time of Simulation:     96.00    dt:  1.000000000
+Time of Day: 203012.530    Time of Simulation:     96.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.46E-03  7.25E-03   59  3.85E-02   80
 Cell Peclet number:  3.28E-02    1
 divmax, divtot =    9.83E-18  -2.67E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151320.053    Time of Simulation:     97.00    dt:  1.000000000
+Time of Day: 203012.686    Time of Simulation:     97.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.46E-03  7.30E-03   59  3.85E-02   80
 Cell Peclet number:  3.28E-02    1
 divmax, divtot =    9.73E-18   5.72E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151320.202    Time of Simulation:     98.00    dt:  1.000000000
+Time of Day: 203012.839    Time of Simulation:     98.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.47E-03  7.35E-03   59  3.85E-02   80
 Cell Peclet number:  3.28E-02    1
 divmax, divtot =    1.05E-17   6.55E-12       dt limited by initial step   
  =================================================================
-Time of Day: 151320.349    Time of Simulation:     99.00    dt:  1.000000000
+Time of Day: 203012.998    Time of Simulation:     99.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.48E-03  7.39E-03   59  3.85E-02   80
 Cell Peclet number:  3.28E-02    1
 divmax, divtot =    1.07E-17   1.65E-11       dt limited by initial step   
  =================================================================
-Time of Day: 151320.498    Time of Simulation:    100.00    dt:  1.000000000
+Time of Day: 203013.155    Time of Simulation:    100.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.50E-03  7.44E-03   59  3.86E-02   80
 Cell Peclet number:  3.28E-02    1
 divmax, divtot =    9.75E-18  -1.85E-10       dt limited by initial step   
  Num time steps:          321
- Time loop wall time:   16.292309333999999     
- TOTAL wall time =    16.625550608000001     
+ Time loop wall time:   17.222394962999999     
+ TOTAL wall time =    18.279865674000000     
 
 JOB STATISTICS
 ==============
-Job ID: 4801424
+Job ID: 5246676
 Cluster: snellius
 User/Group: cjungbacker/cjungbacker
-State: RUNNING
+State: COMPLETED (exit code 0)
 Nodes: 1
 Cores per node: 128
-CPU Utilized: 00:00:00
-CPU Efficiency: 0.00% of 01:59:28 core-walltime
-Job Wall-clock time: 00:00:56
-Memory Utilized: 0.00 MB (estimated maximum)
-Memory Efficiency: 0.00% of 224.00 GB (1.75 GB/core)
-WARNING: Efficiency statistics may be misleading for RUNNING jobs.
+CPU Utilized: 00:41:22
+CPU Efficiency: 32.32% of 02:08:00 core-walltime
+Job Wall-clock time: 00:01:00
+Memory Utilized: 17.77 GB (estimated maximum)
+Memory Efficiency: 7.93% of 224.00 GB (1.75 GB/core)
