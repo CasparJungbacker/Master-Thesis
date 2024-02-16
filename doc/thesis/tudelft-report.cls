@@ -66,12 +66,14 @@
 
 %\ifPDFTeX
     %% With pdfLaTeX, use Paletino as the main font and Roboto Slab as title fonts
-    \RequirePackage[T1]{fontenc}  % Select T1 font encoding
-    \RequirePackage{newpxtext}    % Palatino-like font...
-%    \RequirePackage{newpxmath}    % ...with support for mathematics
+\RequirePackage[T1]{fontenc}  % Select T1 font encoding
+\RequirePackage{fourier}
+\RequirePackage[TT={Scale=MatchLowercase}]{plex-otf}
 
-    \newcommand{\titlestyle}{\fontfamily{RobotoSlab-TLF}\fontseries{light}\selectfont}
-    \newcommand{\largetitlestyle}{\fontfamily{RobotoSlab-TLF}\fontseries{thin}\selectfont}
+\newcommand{\titlestyle}{\PlexSemiBoldRM}
+\newcommand{\largetitlestyle}{\PlexThinRM}
+
+
 %\else
 %    %% If XeLaTeX or LuaLaTeX is set as the compiler, the TU Delft house style fonts are used (see https://www.tudelft.nl/huisstijl/bouwstenen/typografie).
 %    \RequirePackage[no-math]{fontspec} % Advanced font selection
