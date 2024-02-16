@@ -21,9 +21,10 @@ wildcard_constraints:
 
 rule all:
 	input:
-		expand(os.path.join(PLOT_DIR, "speedup_{system}.svg"), system=["snellius", "wiske"]),
+		"doc/images/plots/speedup_snellius.svg",
+		"doc/images/plots/speedup_wiske.svg",
 		"doc/images/plots/strong_scaling.svg",
-		"doc/images/plots/verify_profiles.svg"
+		"doc/images/plots/verify_profiles.svg",
 		"doc/images/plots/weak_scaling.svg"
 
 rule walltimes:
@@ -57,6 +58,7 @@ rule generate_ensemble:
 rule plot_speedup:
 	input:
 		script="scripts/plots/plot_speedup.py",
+		mplrc="matplotlibrc",
 		timing_single_core="data/walltimes/walltime_{system}_single_cpu.csv",
 		timing_multi_core="data/walltimes/walltime_{system}_multi_cpu.csv",
 		timing_gpu="data/walltimes/walltime_{system}_gpu.csv"
@@ -74,6 +76,7 @@ rule plot_speedup:
 rule plot_strong_scaling:
 	input:
 		script="scripts/plots/plot_strong_scaling.py",
+		mplrc="matplotlibrc",
 		run_output=expand("data/benchmarks/strongscaling/output_{ngpus}.txt",
 			ngpus=glob_wildcards("data/benchmarks/strongscaling/output_{ngpus}.txt").ngpus)
 	output:
@@ -84,6 +87,7 @@ rule plot_strong_scaling:
 rule plot_verification:
 	input:
 		script="scripts/plots/plot_verification.py",
+		mplrc="matplotlibrc",
 		profiles_cpu="data/ensembles/profiles.cpu.nc",
 		profiles_gpu="data/ensembles/profiles.gpu.nc"
 	output:
@@ -94,6 +98,7 @@ rule plot_verification:
 rule plot_weak_scaling:
 	input:
 		script="scripts/plots/plot_weak_scaling.py",
+		mplrc="matplotlibrc",
 		output_pencils=expand("data/benchmarks/weakscaling/pencils/output_{ngpus}.txt",
 			ngpus=glob_wildcards("data/benchmarks/weakscaling/pencils/output_{ngpus}.txt").ngpus),
 		output_slabs=expand("data/benchmarks/weakscaling/slabs/output_{ngpus}.txt",
