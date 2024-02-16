@@ -473,3 +473,6 @@ TSWLatexianTemp*
 .snakemake/*
 .vscode/*
 .DS_Store
+data/walltimes/*.csv
+report.pdf
+*.ist
