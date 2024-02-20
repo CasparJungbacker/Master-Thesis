@@ -131,3 +131,12 @@ rule plot_single_vs_double:
 			-o {output}
 		"""
 	
+rule plot_gpu_top500:
+	input:
+		script="scripts/plots/plot_top500.py",
+		mplrc="matplotlibrc",
+		data="data/TOP500_history.csv"
+	output:
+		"doc/images/plots/gpu_in_top500.svg"
+	shell:
+		"python {input.script} -i {input.data} -o {output}"

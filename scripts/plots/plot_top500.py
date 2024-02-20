@@ -26,10 +26,10 @@ def count_accelerators(df):
 
 
 def plot_timeseries(df, figname):
-    fig, ax = plt.subplots()
-    ax.plot(df.index, df["Year"])
+    fig, ax = plt.subplots(figsize=(4, 3))
+    ax.plot(df.index, df["Year"], color='black')
     ax.set_xlabel("Year")
-    ax.set_ylabel("Number of systems in TOP500 with accelerators")
+    ax.set_ylabel("Number of systems in TOP500 \nwith accelerators")
     fig.savefig(figname)
 
 
