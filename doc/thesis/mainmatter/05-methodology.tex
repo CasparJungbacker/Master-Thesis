@@ -90,6 +90,34 @@ Not related to \acrshortpl{gpu} but curious nonetheless is that a single desktop
     \caption{Speedup for different horizontal grid sizes on Snellius.}
     \label{fig:speedup_snellius}
 \end{figure}
+
+\section{Scaling}
+Strong and weak scaling tests were performed exclusively on Snellius, as the desktop system only features a single \acrshort{gpu}. For strong scaling, a horizontal grid size of 1024 $\times$ 1024 points was used, which nearly fully utilized the available 40Gb of memory of a single NVIDIA A100 \acrshort{gpu}. Then, while keeping the domain size constant, the number of \acrshortpl{gpu} was doubled for each subsequent simulation until a maximum of 64 \acrshortpl{gpu} was reached. The task of choosing a suitable domain decomposition was left to \acrshort{mpi}, leading to a slab decomposition along the $y$-direction in all cases. The wall-clock time of the time loop itself (i.e., excluding the start-up phase of the model) was measured during the first 100 time steps and averaged. \autoref{fig:strong_scaling} shows the average wall-clock time per timestep as a function of the number of \acrshortpl{gpu} used. 
+
+To measure weak scaling performance, a horizontal domain size of 1024 $\times$ 1024 grid points with a grid spacing of 100 m in both directions was used per \acrshort{gpu}. Next, the number of \acrshortpl{gpu} was doubled per simulation, therefore also doubling the total domain size. The domain was extended alternating in the $x$ and $y$ direction. Again, the wall-clock time of the time loop was averaged over the first 100 times steps. Both a slab decomposition along the $y$-direction and a pencil decomposition of the domain were tested. In \Autoref{fig:weak_scaling}, the ratio of the wall-clock time measured for multi-\acrshort{gpu} runs to the single-\acrshort{gpu} run is plotted. A wall-clock time ratio greater than one indicates a slowdown. In the ideal case, indicated by the horizontal black line, the runtime would not increase with the number of \acrshortpl{gpu} as the workload per \acrshort{gpu} stays constant. In reality, however, inter-\acrshort{gpu} communication introduces a performance penalty that can grow quite significant. From \Autoref{fig:weak_scaling}, it can be seen that this performance penalty is dependent on the number of \acrshortpl{gpu} used. This is expected, as the amount of data that has to be communicated also increases with the number of \acrshort{gpu}. Finally, the pencil decomposition showed strikingly worse performance than the slab decomposition, which also worsened with the number of \acrshortpl{gpu}. This could be explained by the fact that in the setting of a slab decomposition, each \acrshort{gpu} contains the full $x$ and $z$ directions of the domain, thus requiring two less collective inter-\acrshort{gpu} communications in the pressure solver.
+
+\Autoref{fig:speedup_per_module} provides further evidence towards the hypothesis that communications hinder performance in multi-\acrshort{gpu} simulations. Here, the speedup for different computationally expensive modules of \acrshort{dales} is plotted as measured in the strong scaling test with 4 \acrshort{gpu}. It can be seen that the advection, thermodynamics and subgrid modules experienced a speedup that was close to the ideal value of 4. The Poisson equation solver that contains the global transpose operations as described in \Autoref{sec:poisson_solver} and therefore heavily relies on communication between \acrshortpl{gpu} showed a \emph{slowdown} compared to the single-\acrshort{gpu} case. The bar labeled ``Other'' contains, among other things, the routines that manage the exchange of data at the boundaries of the \acrshort{mpi} sub-domains. Again, the absence of inter-\acrshort{gpu} communication in a single-\acrshort{gpu} simulation explains why a sub-optimal speedup was observed for this category.
+
+\begin{figure}[h!]
+    \centering
+    \includesvg{../images/plots/strong_scaling.svg}
+    \caption{Strong scaling on Snellius for a horizontal domain size of 1024 $\times$ 1024 grid points.}
+    \label{fig:strong_scaling}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includesvg{../images/plots/speedup_per_module.svg}
+    \caption{Speedup of the computationally most expensive modules of \acrshort{dales} when using 4 \acrshortpl{gpu} on a horizontal domain of 1024 $\times$ 1024 grid points.}
+    \label{fig:speedup_per_module}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includesvg{../images/plots/weak_scaling.svg}
+    \caption{Weak scaling on Snellius for a horizontal domain size of 1024 $\times$ 1024 grid points per \acrshort{gpu}}
+    \label{fig:weak_scaling}
+\end{figure}
 \section{Single precision calculations}
 \acrshort{dales} offers the option to store the prognostic variables as single-precision floating point numbers \citep{janssonCloudBotanyShallow2023}. As a single-precision floating point number consists of half as many bits as a double-precision floating point number (the default precision in \acrshort{dales}), it can be read from and written to memory much quicker, offering possibly a very significant performance enhancement for a memory bandwidth-bound application like \acrshort{dales}. Moreover, \acrshortpl{gpu}, specifically \acrshortpl{gpu} that are produced for the consumer market, often contain significantly more cores for single-precision calculations than for double-precision calculations. For example, the NVIDIA RTX 3090 \acrshort{gpu} present in the tested desktop system (\autoref{tab:node_types}) features just two double-precision cores per \acrshort{sm} for a total of 164 cores, versus 128 single-precision cores per \acrshort{sm} for a total of 10,496 cores \citep{nvidiaIntroductionNVIDIAAmpere2021}. Therefore, switching from double-precision calculations to single-precision calculations should, in theory, lead to a 64-fold speedup on the RTX 3090. 
 
