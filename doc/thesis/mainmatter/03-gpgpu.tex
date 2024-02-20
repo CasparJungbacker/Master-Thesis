@@ -1,11 +1,5 @@
-\chapter{General Purpose Graphics Processing Units}
-
-\section{GPU architecture}
-Graphics Processing Units (GPUs) were originally invented to accelerate computations revolving around 3D computer graphics. At the beginning of the 2000s, GPUs were discovered to offer enormous performance benefits over Central Processing Units (CPUs) when performing floating-point arithmetics. 
-
-The hardware architecture of GPUs is fundamentally different from CPUs. CPUs are designed for sequential tasks, meaning that one instruction will be carried out after the other. Modern CPUs often consist of multiple \emph{cores}, from which the term \emph{multicore processor} arises \citep{hennessyComputerArchitectureQuantitative2012}. The cores in a multicore processor can all execute different instructions independently from each other. For example, one core might be occupied with the processing of a text document, while at the same time, another core might be busy rendering a video. Each core can fetch new instructions by itself and does not have to wait until the other cores have finished their current task. CPUs can be classified as Multiple Instruction Stream - Multiple Data Stream (MIMD) systems according to Flynn's taxonomy \citep{flynnVeryHighspeedComputing1966}. A modern high-end CPU can have in the order of tens of cores.
-
-GPUs, on the other hand, are Single Instruction Stream - Multiple Data Stream (SIMD) systems. A SIMD system performs a single instruction on multiple data elements simultaneously. An example of such an operation is a vector addition; the instruction \emph{add} is performed on every pair of elements of the two vectors.
+\chapter{Graphics Processing Units} \label{chap:gpgpu}
+This chapter starts with an introduction to the technology behind \acrfullpl{gpu} and how this compares to \acrfullpl{cpu}. Next, different methods of \acrshort{gpu} programming are presented. Third, some examples of how \acrshortpl{gpu} are applied to accelerate \acrshort{cfd} applications are given. Finally, some trends in the field of \acrshort{gpu} computing are discussed.
 
 \begin{figure}[H]
     \centering
