@@ -65,6 +65,31 @@ Performance testing of \acrshort{dales} was done on systems of two scales: a hig
     \textbf{GPU memory} & 24 GB & - & 40 GB
     \end{tabular}
 \end{table}
+
+\section{Speedup} \label{sec:speedup}
+Wall-clock time and speedup of the \acrshort{gpu}-accelerated \acrshort{dales} were measured on both the desktop system and the Snellius supercomputer. This was done for multiple horizontal grid configurations, starting from 128 $\times$ 128 grid points up to 1024 $\times$ 512 on the desktop system and 1024 $\times$ 1024 grid points on Snellius. Each run was limited to 100 time steps, and only the wall-clock time of the time loop itself (i.e., excluding the startup phase of the model) was measured.
+
+\autoref{fig:speedup_desktop} shows the wall-clock time and speedup as measured on the desktop system. Speedup was calculated according to \Autoref{eq:speedup}, where $t_{old}$ denotes the \acrshort{cpu} run and $t_{new}$ denotes the \acrshort{gpu} run, and was only considered for the multi-\acrshort{cpu} case. Speedup was found to increase with domain size until the maximum domain size of 1024 $\times$ 512 grid points was reached. This trend indicates that the overhead related to \acrshort{gpu} execution (sending data, sending instructions) is relatively large for small problem sizes, but decreases with problem size.
+
+As discussed in \Autoref{sec:system_configuration}, on Snellius, a single \acrshort{gpu} was compared to a full \acrshort{cpu} node, which hosts two 64-core \acrshortpl{cpu} (\Autoref{tab:node_types}). Hence, in this case ``speedup'' can also be interpreted as ``cost savings''. Similar to the desktop system, speedup increased with domain size. The absolute value of the speedup was lower compared to the desktop system, however, as the Snellius \acrshort{cpu} node features more cores in total. For the smallest two problem sizes, the \acrshort{cpu} node was faster than the \acrshort{gpu}.
+
+Comparing \Autoref{fig:speedup_desktop} to \Autoref{fig:speedup_snellius}, it can be seen that the A100 \acrshort{gpu} in the Snellius system only marginally outperformed the RTX 3090 \acrshort{gpu}. This is an interesting observation, as the A100 offers more than 17 times the performance in double-precision calculations compared to the RTX 3090 \citep{nvidiaNVIDIAA100Tensor2020,nvidiaNVIDIAAmpereGA1022021}. This indicates that the main factor preventing speedup is not the amount of cores in a \acrshort{gpu}. \citet{janssonCloudBotanyShallow2023} mention that \acrshort{dales} was found to be limited by memory bandwidth. In other words, \acrshort{dales} performs relatively few arithmetic operations to the amount of data it has to read from and write to memory. 
+
+Not related to \acrshortpl{gpu} but curious nonetheless is that a single desktop \acrshort{cpu} significantly outperformed a single \acrshort{cpu} of a Snellius \acrshort{cpu} node. This can be explained by the fact that the Core i9 processor in the desktop system has a higher turbo clock speed. \acrshort{cpu} clock speed denotes how many instructions a \acrshort{cpu} can process in a second \todo{source}. In the context of scientific computing, a higher clock speed generally leads to more computations per second but also increases power usage and heat generation by the \acrshort{cpu}, which is why the turbo clock speed cannot be sustained for long periods. Overheating is generally not a problem when only a single core of the \acrshort{cpu} is performing at the turbo clock speed, however, from which the desktop \acrshort{cpu} can benefit in this test.
+
+\begin{figure}[h!]
+    \centering
+    \includesvg{../images/plots/speedup_wiske.svg}
+    \caption{Speedup for different horizontal grid sizes on the desktop system (\Autoref{tab:node_types}).}
+    \label{fig:speedup_desktop}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includesvg{../images/plots/speedup_snellius.svg}
+    \caption{Speedup for different horizontal grid sizes on Snellius.}
+    \label{fig:speedup_snellius}
+\end{figure}
 \section{Single precision calculations}
 \acrshort{dales} offers the option to store the prognostic variables as single-precision floating point numbers \citep{janssonCloudBotanyShallow2023}. As a single-precision floating point number consists of half as many bits as a double-precision floating point number (the default precision in \acrshort{dales}), it can be read from and written to memory much quicker, offering possibly a very significant performance enhancement for a memory bandwidth-bound application like \acrshort{dales}. Moreover, \acrshortpl{gpu}, specifically \acrshortpl{gpu} that are produced for the consumer market, often contain significantly more cores for single-precision calculations than for double-precision calculations. For example, the NVIDIA RTX 3090 \acrshort{gpu} present in the tested desktop system (\autoref{tab:node_types}) features just two double-precision cores per \acrshort{sm} for a total of 164 cores, versus 128 single-precision cores per \acrshort{sm} for a total of 10,496 cores \citep{nvidiaIntroductionNVIDIAAmpere2021}. Therefore, switching from double-precision calculations to single-precision calculations should, in theory, lead to a 64-fold speedup on the RTX 3090. 
 
