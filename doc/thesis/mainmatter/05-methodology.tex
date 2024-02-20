@@ -49,10 +49,11 @@ A parallel application may still have sections that have to be executed serially
 
 \noindent Now, for the same parallel fraction as above ($f=0.99$), using 512 processors would result in a speedup of 506.89. This is a much more promising number than the upper bound of 83.3 obtained from \autoref{eq:amdahls_law}. The performance of a parallel application with regards to Gustafson's law is called \emph{weak scaling}. Weak scaling performance is a useful metric to assess whether an application can efficiently tackle larger problem sizes for which more computational resources are needed.
 
-\section{System configuration}
-Performance testing of \acrshort{dales} was done on systems of two scales: a high-end dekstop workstation, and the Snellius supercomputer. 
+\section{System configuration} \label{sec:system_configuration}
+Performance testing of \acrshort{dales} was done on systems of two scales: a high-end desktop workstation, and the Snellius supercomputer. The specifications of all tested systems can be found in \Autoref{tab:node_types}. On Snellius, instead of comparing a single \acrshort{gpu} to a (multicore) \acrshort{cpu}, a more fair comparison is to compare one \acrshort{gpu} to a full \acrshort{cpu} node which contains two (multicore) \acrshortpl{cpu}. The reason for this is that on supercomputers like Snellius, accounting of the used resources happens through \acrfullpl{sbu}. When a proposal for a certain project is granted computational resources, an amount of \acrshortpl{sbu} is obtained. As computing resources are being used, \acrshortpl{sbu} are subtracted from the granted budget depending on the type and amount of systems and the run time of the application. On Snellius, one \acrshort{gpu} costs the same amount of \acrshortpl{sbu} per hour as a full \acrshort{cpu} node.
+
 \begin{table}[H]
-    \caption{}
+    \caption{Specification of the computer systems used for performance testing of the \acrshort{cpu} and \acrshort{gpu} versions of \acrshort{dales}.}
     \label{tab:node_types}
     \begin{tabular}{l|c|c|c}
      & \textbf{Desktop system} & \textbf{Snellius CPU node} & \textbf{Snellius GPU node} \\ \hline
