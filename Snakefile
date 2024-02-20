@@ -26,7 +26,7 @@ rule all:
 		"doc/images/plots/speedup_wiske.svg",
 		"doc/images/plots/strong_scaling.svg",
 		"doc/images/plots/verify_profiles.svg",
-		"doc/images/plots/weak_scaling.svg"
+		"doc/images/plots/single_vs_double_precision.svg",
 
 rule walltimes:
 	input:
@@ -112,6 +112,22 @@ rule plot_weak_scaling:
 		python {input.script} \
 			-p {input.output_pencils} \
 			-s {input.output_slabs} \
+			-o {output}
+		"""
+	
+rule plot_single_vs_double:
+	input:
+		script="scripts/plots/plot_single_vs_double_precision.py",
+		mplrc="matplotlibrc",
+		single="data/benchmarks/walltime/wiske/singleprecision/walltime_wiske_gpu_singleprecision.csv",
+		double="data/benchmarks/walltime/wiske/doubleprecision/walltime_wiske_gpu_doubleprecision.csv"
+	output:
+		"doc/images/plots/single_vs_double_precision.svg"
+	shell:
+		"""
+		python {input.script} \
+			-s {input.single} \
+			-d {input.double} \
 			-o {output}
 		"""
 	
