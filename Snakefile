@@ -26,7 +26,10 @@ rule all:
 		"doc/images/plots/speedup_wiske.svg",
 		"doc/images/plots/strong_scaling.svg",
 		"doc/images/plots/verify_profiles.svg",
+		"doc/images/plots/weak_scaling.svg",
 		"doc/images/plots/single_vs_double_precision.svg",
+		"doc/images/plots/gpu_in_top500.svg",
+		"doc/images/plots/speedup_per_module.svg"
 
 rule walltimes:
 	input:
@@ -114,7 +117,7 @@ rule plot_weak_scaling:
 			-s {input.output_slabs} \
 			-o {output}
 		"""
-	
+
 rule plot_single_vs_double:
 	input:
 		script="scripts/plots/plot_single_vs_double_precision.py",
@@ -138,5 +141,15 @@ rule plot_gpu_top500:
 		data="data/TOP500_history.csv"
 	output:
 		"doc/images/plots/gpu_in_top500.svg"
+	shell:
+		"python {input.script} -i {input.data} -o {output}"
+
+rule plot_speedup_per_module:
+	input:
+		script="scripts/plots/plot_speedup_per_module.py",
+		mplrc="matplotlibrc",
+		data="data/benchmarks/communication/comm_times.csv",
+	output:
+		"doc/images/plots/speedup_per_module.svg"
 	shell:
 		"python {input.script} -i {input.data} -o {output}"
