@@ -1,1 +1,22 @@
-\chapter{Conclusion and Recommendations}
+\chapter{Conclusion and Recommendations} \label{chap:conclusion_rec}
+Conclusions:
+\begin{itemize}
+    \item The dynamical core and moist thermodynamics of DALES have been GPU-accelerated by using OpenACC. While there is still a lot of offloading to do, the work done for this thesis forms a solid base for the future.
+    \item On a high-end desktop system, the GPU version of dales is significantly faster than the CPU version. On Snellius, where the GPU was compared to two CPUs (both costing the same amount of SBUs per hour), the GPU is still faster, but the difference is smaller than on the desktop. 
+    \item Strong scaling tests show that adding GPUs speeds up the simulation, but communication in the Poisson solver leads to diminishing returns.
+    \item Weak scaling tests show that multiple GPUs can be used relatively efficiently for large domain simulations. However, as the GPU is not that much faster than the CPU node on Snellius, the CPU is likely cheaper for very large domain sizes.
+    \item The performance of \acrshort{dales} on GPUs is likely limited by memory bandwidth. 
+    \item Single precision for the prognostic fields does not yield a significant speedup, because calculations are still done in double precision. The speedup that does occur is thus the effect of savings in memory bandwidth.
+\end{itemize}
+
+Recommendations:
+\begin{itemize}
+    \item For future simulations on the GPU, try to maximize the memory usage of a single GPU before using more GPUs. This ensures maximum efficiency.
+    \item More components of DALES need to be offloaded for more useful cases(microphysics, radiation, output). It would also be interesting to see how the model performs with more grid points in the $z$-direction (botany?) and more model physics. Likely, the speedup would increase because these modules do not require as much communication between GPUs (if at all).
+    \item Single precision needs work to fully optimize GPU capabilities. 
+    \item Investigate possibilities of running on AMD platforms. The GCC compiler can already compile OpenACC for AMD GPUs, and the Cray compiler (on LUMI) can do so as well. This step would require a new FFT library, however, as cuFFT only works on NVIDIA. The VkFFT library is a good candidate, as it supports all GPU vendors, and features cosine transforms (for open boundary conditions). VkFFT is also used in GROMACS, so it should be relatively stable.
+    \item OpenACC can also target multicore CPUs. We should try this and see if it is more efficient than plain MPI. FFT library (FFTW) requires special care, as it would also need to work in shared memory configurations. Maybe VkFFT is also useful here.
+    \item Scalability to more GPUs, order of hundreds or thousands. Do we need an adaptive pencil library? 
+    \item Kernel tuning for better performance. 
+    \item Optimize for the "memory-boundness" of DALES. On GPUs, it is often faster to repeat a calculation in some places, than it is to calculate once and store in memory. There are lots of places in DALES where we can use this strategy.
+\end{itemize}

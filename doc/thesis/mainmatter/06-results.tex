@@ -1,1 +1,43 @@
 \chapter{Results}
+
+\section{Speedup}
+
+Algemeen:
+- Speedup neemt toe met problem size
+- 
+
+Wiske:
+- 8 CPU niet 8x sneller dan 1 cpu, misschien vanwege niet halen turbo clock speed
+- Speedup lijkt af te vlakken, memory bandwidth?
+
+
+
+\begin{figure}[h!]
+    \centering
+    \includesvg{../images/plots/speedup_snellius.svg}
+    \caption{Speedup for different horizontal grid sizes on Snellius.}
+    \label{fig:speedup_snellius}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includesvg{../images/plots/speedup_wiske.svg}
+    \caption{Speedup for different horizontal grid sizes on the desktop system (\Autoref{tab:node_types}).}
+    \label{fig:speedup_desktop}
+\end{figure}
+
+\section{Scaling analysis}
+
+\begin{figure}
+    \centering
+    \includesvg{../images/strong_scaling_gpu.svg}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includesvg{../images/weak_scaling_nodes.svg}
+\end{figure}
+
+\section{Validation}
+
+\section{Energy usage}

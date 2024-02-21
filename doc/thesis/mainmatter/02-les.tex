@@ -1,4 +1,4 @@
-\chapter{Atmospheric Large Eddy Simulation}
+\chapter{Atmospheric Large Eddy Simulation} \label{chap:les}
 This chapter focusses on the science of computational fluid dynamics. First, a general description of turbulent flows is given. Second, different techniques for performing computer simulations of turbulent flows are explained and discussed in the context of numerical weather and climate modeling. Finally, one specific numerical weather model, the \acrfull{dales} model, will be discussed in more detail.
 
 \section{Turbulent flows}
@@ -8,6 +8,7 @@ To characterize turbulent flows, several scaling laws and non-dimensional number
 
 \begin{equation}
     \text{Re} = \frac{\text{Inertial forces}}{\text{Viscous forces}} = \frac{u \mathcal{L}}{\nu}
+    \label{eq:reynolds_number}
 \end{equation}
 
 in which $u$ is the flow speed, $\mathcal{L}$ is a characteristic length scale of the flow, usually determined by the geometry of the flow, and $\nu$ is the kinematic viscosity of the flow. In turbulent flows, the inertial forces dominate and the Reynolds number is therefore high ($>4000$ \citep{popeTurbulentFlows2000}). 
@@ -22,7 +23,7 @@ In turbulent flows, the larger an eddy, the more unstable it is. Therefore, larg
 where $\varepsilon$ is the rate of dissipation of kinetic energy.
 
 \section{Turbulence modeling}
-The motion of fluids is mathematically described by the famous Navier-Stokes equations, of which various forms exist. Here, the form that applies to \emph{incompressible} fluids is used. An incompressible fluid is a fluid whose density does not change as a result of pressure changes \todo{source}. Using Einstein's summation convention, the Navier-Stokes equations for an incompressible fluid are given by:
+The motion of fluids is mathematically described by the famous Navier-Stokes equations, of which various forms exist. Here, the form that applies to \emph{incompressible} fluids is used. An incompressible fluid is a fluid whose density does not change as a result of pressure changes \citep{popeTurbulentFlows2000}. Using Einstein's summation convention, the Navier-Stokes equations for an incompressible fluid are given by:
 
 \begin{align}
     &\frac{\partial u_i}{\partial x_i} = 0, \label{eq:ns_mass_conservation}\\
@@ -65,9 +66,16 @@ Finally, all terms in \Autoref{eq:reynolds_mass,eq:reynolds_momentum} are averag
     &\frac{\partial \overline{u_i}}{\partial t} + \overline{u_j} \frac{\partial \overline{u_i}}{\partial x_j} = - \frac{1}{\overline{\rho}} \frac{\partial \overline{p}}{\partial x_i} + \nu \frac{\partial^2 \overline{u_i}}{\partial x_j^2} + \overline{g_i} + \frac{\partial \overline{u_i^\prime u_j^\prime}}{\partial x_i}. \label{eq:rans_momentum}
 \end{align}
 
-The term $\overline{u_i^\prime u_j^\prime}$ in \Autoref{eq:rans_momentum} is called the Reynolds stress. A \acrshort{rans} model only solves \Autoref{eq:rans_mass,eq:rans_momentum} for the mean quantities $\overline{u_i}$ and $\overline{p}$, meaning that the Reynolds stress term needs to be modeled. Often used models include turbulent viscosity models (similar to \acrshort{les}) or Reynolds stress models, which use transport equations to evaluate the Reynolds stress \citep{popeTurbulentFlows2000}. More recently, the use of machine learning methods has been explored for modeling the Reynolds stress \citep{bruntonMachineLearningFluid2020}. Because turbulence is not explicitly resolved by \acrshort{rans} models, the required resolution is the least out of the three simulation techniques. For this reason, \acrshort{rans} is computationally cheap but is also the least accurate. 
+The term $\overline{u_i^\prime u_j^\prime}$ in \Autoref{eq:rans_momentum} is called the Reynolds stress. A \acrshort{rans} model only solves \Autoref{eq:rans_mass,eq:rans_momentum} for the mean quantities $\overline{u_i}$ and $\overline{p}$, meaning that the Reynolds stress term needs to be modeled. Often used models include turbulent viscosity models (similar to \acrshort{les}) or Reynolds stress models, which use transport equations to evaluate the Reynolds stress \citep{popeTurbulentFlows2000}. More recently, the use of machine learning methods has been explored for modeling the Reynolds stress \citep{bruntonMachineLearningFluid2020}. Because turbulence is not explicitly resolved by \acrshort{rans} models, the required resolution is the least out of the three simulation techniques. For this reason, \acrshort{rans} is computationally cheap but is also the least accurate.
 
-Plaatje met dns vs les vs rans
+A visual comparison between the three techniques can be found in \Autoref{fig:turbulence_model_comparison}. Following the theory, it can be seen that compared to the full-resolved \acrshort{dns} flow field, the \acrshort{les} simulation is able to reproduce most of the large-scale turbulent features. Especially at a greater distance from the entry of the main jet (at the top of the image), \acrshort{les} loses the small-scale details compared to \acrshort{dns}. The \acrshort{rans} flow field shows little instabilities at all as a consequence of the time averaging. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{../images/drawings/turbulence_model_comparison.png}
+    \caption{Visualization of the velocity distribution of a jet flow, as simulated by the three turbulence modeling techniques. From left to right: \acrfull{dns}, \acrfull{les} and \acrfull{rans}. Adapted from \citet{Rodriguez2019}.}
+    \label{fig:turbulence_model_comparison}
+\end{figure}
 \section{Towards high-resolution weather and climate models}
 Due to limitations of computational capacity, global numerical weather and climate models often use grids with low horizontal resolution in combination with the \acrshort{rans} description, meaning that small-scale phenomena, such as cloud formation, have to be parameterized, which introduces significant uncertainties in weather forecasts and climate projections \citep{slingoUncertaintyWeatherClimate2011}. At higher resolutions (in the order of 1-2 kilometers), these small-scale processes are still not fully resolved, but their influence on the resolved flow field can be captured partly \citep{scharKilometerScaleClimateModels2020}. Therefore, global weather and climate models are continuously developed and updated to support increasing resolutions. One of the problems that arise at these high resolutions is that the aforementioned parameterizations do not perform well when convective processes are partly resolved, and therefore have to be adapted to this fact \citep{wyngaardNumericalModelingTerra2004}. The range of resolutions at which this problem persists is also referred to as the \emph{terra incognita}, or the \emph{grey zone} \citep{schalkwijkWeatherForecastingUsing2015,wyngaardNumericalModelingTerra2004}. Furthermore, \citet{scharKilometerScaleClimateModels2020} identify the exploitation of modern \acrlong{gpu} technology as another key challenge towards high-resolution weather and climate modeling. \acrshort{gpu} technology will be explained more thoroughly in \Autoref{chap:gpgpu}, but for now it suffices to say that a \acrshort{gpu} is a hardware device that can accelerate specific calculations of a weather or climate model. To allow a numerical weather or climate model to make use of this specialized hardware, significant changes to the source code are needed.
 
@@ -77,9 +85,11 @@ On the other end of the resolution spectrum, the \acrshort{les} technique has be
 The \acrfull{dales} model is a large-eddy simulation model designed for high-resolution modeling of the atmosphere and its processes, like cloud formation and precipitation \citep{heusFormulationDutchAtmospheric2010,ouwerslootLargeEddySimulationComparison2017}. 
 
 \subsection{Prognostic equations}
-\acrshort{dales} uses five prognostic variables to define the state of the atmosphere: three velocity components $u$, $v$ and $w$, the liquid water potential temperature $\theta_l$ and the total water specific humidity $q_t$. 
+\acrshort{dales} uses five prognostic variables to define the state of the atmosphere: three velocity components $u$, $v$ and $w$, the liquid water potential temperature $\theta_l$ and the total water specific humidity $q_t$. The momentum equation for the three velocity components is given by: 
 
-For the formulation of the prognostic equations for the three velocity components, \acrshort{dales} uses the Boussinesq approximation, meaning that fluctuations in the density of the air are ignored except when they are coupled to gravity \citep{spiegel1960boussinesq}. This leads to the following expression: 
+%For the formulation of the prognostic equations for the three velocity components as used in \acrshort{dales}, some approximations have to be introduced. Starting from \Autoref{eq:momentum_filtered}, the viscous term (containing $\nu$) is neglected. This is justified, because the Reynolds number (\Autoref{eq:reynolds_number}) is large in atmospheric flows. 
+
+%\acrshort{dales} uses the anelastic approximation\footnote{\citet{heusFormulationDutchAtmospheric2010} state that \acrshort{dales} uses the Boussinesq approximation, but \citet{boingInfluenceSubcloudLayer2012}}. 
 
 \begin{align}
     \frac{\partial \overline{u}_i}{\partial t} &= - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} - \frac{\partial \pi}{\partial x_i} + \frac{g}{\theta_0}\overline{\theta}_v \delta_{i3} + f_i - \frac{\partial \tau_{ij}}{\partial x_j} \label{eq:momentum_conservation}
@@ -173,7 +183,7 @@ To obtain an explicit equation for the pressure $\pi$, the divergence of \autore
     \frac{\partial^2 \pi}{\partial x_i^2} = \frac{\partial}{\partial x_i} \frac{\partial \overline{u}_i^*}{\partial t}. \label{eq:poisson_equation}
 \end{equation}
 
-Despite its simplicity at first sight, \Autoref{eq:poisson_equation} is often the most costly part of a \acrshort{cfd} simulation \todo{need source?}. \acrshort{dales} offers the option to solve this equation with the \acrfull{fft} algorithm, which can offer significantly better performance compared to iterative solvers that are often used \citep{hockneyFastDirectSolution1965}. After \Autoref{eq:poisson_equation} is solved, the velocity fields are corrected according to \Autoref{eq:chorin_step2}, which concludes the projection method.
+Despite its simplicity at first sight, \Autoref{eq:poisson_equation} is often the most costly part of a \acrshort{cfd} simulation \citep{costaFFTbasedFinitedifferenceSolver2018}. \acrshort{dales} offers the option to solve this equation with the \acrfull{fft} algorithm, which can offer significantly better performance compared to iterative solvers that are often used \citep{hockneyFastDirectSolution1965}. After \Autoref{eq:poisson_equation} is solved, the velocity fields are corrected according to \Autoref{eq:chorin_step2}, which concludes the projection method.
 
 \subsection{Discretization}
 For the discretization of the governing equations, \acrshort{dales} makes use of an Arakawa C-grid \citep{arakawaComputationalDesignBasic1977}. This means that the velocity components are defined at the edges of the grid cells, while pressure, turbulence kinetic energy and scalars are defined at the centers of the grid cells. \acrshort{dales} features several numerical schemes to evaluate advective terms, ranging from a simple but less accurate second-order central difference scheme to accurate fifth and sixth-order schemes. The $\kappa$ advection scheme, as described by \citet{hundsdorferPositiveFiniteDifferenceAdvection1995}, is also available. The latter scheme ensures that the advected quantity remains positive.
@@ -187,7 +197,7 @@ For time integration of prognostic variables, \acrshort{dales} uses a third-orde
 For the \acrshort{cfl} and $d$ maximum values are prescribed, from which the maximum time step $\Delta t$ is determined.
 
 \subsection{Parallelization} \label{sec:dales_mpi}
-To speed up computations, \acrshort{dales} is parallelized using the \acrfull{mpi}. \acrshort{mpi} is a protocol and programming interface for managing data communication between processors. When multiple processors are used for running a \acrshort{dales} simulation, the computational domain is split up into sub-domains, and each sub-domain is assigned to a processor. \acrshort{mpi} is then used whenever a processor needs access to data that is located on a different sub-domain. 
+To speed up computations, \acrshort{dales} is parallelized using the \acrfull{mpi}. \acrshort{mpi} is a protocol and programming interface for managing data communication between processors. When multiple processors are used for running a \acrshort{dales} simulation, the computational domain is split up into sub-domains, and each sub-domain is assigned to a processor. \acrshort{mpi} is then used whenever a processor needs access to data that is located on a different sub-domain. The sub-domains can have various shapes, as illustrated in \Autoref{fig:dales_domain_decomposition}. The computational efficiency of each decomposition depends, among other factors, on the size and shape of the full domain and the number of processors used. Generally, decompositions along the $y$-direction forming $x$-aligned slabs are the most efficient, with $z$-aligned pencils being more efficient for simulations with a large number of processors ($\mathcal{O}(10^3)$). 
 
 \begin{figure}[H]
     \centering

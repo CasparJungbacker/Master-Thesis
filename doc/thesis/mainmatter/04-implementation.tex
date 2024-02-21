@@ -1,4 +1,4 @@
-\chapter{Implementation}
+\chapter{Implementation} \label{chap:implementation}
 In this chapter, the technical details of the implementation of \acrshort{acc} in \acrshort{dales} will be discussed. First, an explanation will be given on why \acrshort{acc} was chosen for \acrshort{dales}. Thereafter, it will be explained how \acrshort{acc} was used to offload computationally expensive parts of the code to the \acrshort{gpu}, where special attention is given to the Poisson solver. Finally, some further optimizations are covered, as well as the extension to multiple \acrshort{gpu}s.
 
 \section{OpenACC}
@@ -40,7 +40,7 @@ do i = 1, 1000
 end do
 \end{lstlisting}
 
-\section{The Poisson solver}
+\section{The Poisson solver} \label{sec:poisson_solver}
 As discussed in \autoref{sec:dales_poisson}, DALES uses a pressure correction method to ensure a divergence-free velocity field. In the current version of DALES, the Poisson equation can be solved in two ways: with Fast Fourier Transforms (FFTs) or an iterative solver. In this work, the solver based on \acrshort{fft}s has been extended to make use of \acrshort{gpu}s.
 
 The Poisson solver consists of five steps:
@@ -120,8 +120,6 @@ end do
 
 !$acc exit data copyout(a)
 \end{lstlisting}
-
-
 
 \subsection{Memory allocation}
 In DALES, most of the memory required for storing variables is allocated during the startup procedure and is deallocated only after the simulation has finished. Some subroutines, however, allocate and deallocate memory once they are called, which can be every time step. As memory allocations on the GPU are quite costly, this workflow can introduce a significant performance penalty. This was fixed by moving arrays from the subroutine scope to the module scope. The arrays are then allocated once during the startup procedure and are kept alive throughout the time loop. The implementation of this optimization is illustrated in Listing~\ref{lst:memory_allocation}. 
@@ -235,7 +233,7 @@ for the moist case, where the $\left< \cdot \right>$ operator denotes a horizont
 
 \begin{figure}
   \centering
-  \includesvg{../images/qt_thl_vs_height.svg}
+  \includesvg{../images/plots/qt_thl_vs_height.svg}
   \caption{Mean vertical profiles of the total water specific humidity $q_t$ (left) and liquid water potential temperature $\theta_l$ (right). The shading around the mean profiles indicates the horizontal standard deviation.}
   \label{fig:qt_thl_vs_height}
 \end{figure}
