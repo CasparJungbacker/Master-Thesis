@@ -61,7 +61,7 @@ def main():
     vars = ["thl", "qt", "wthlt", "wqlt"]
     latex = dict(
         thl="$\\overline{\\theta}_l$",
-        qt="$q_t$",
+        qt="$\\overline{q_t}$",
         wthlt="$w^\\prime \\theta_l^\\prime$",
         wqlt="$w^\\prime q_l^\\prime$")
  
