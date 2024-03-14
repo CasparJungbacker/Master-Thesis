@@ -1,7 +1,7 @@
 #!/bin/bash
 source ~/source_nvidia.sh
 
-HERE=~/Developer/mscthesis/benchmarks/walltime/wiske
+HERE=~/Developer/mscthesis/data/benchmarks/walltime/wiske/doubleprecision
 TMP_DIR=~/my_scratch/tmp
 
 DALES=~/my_labdata/build-NV-OpenACC-Release/src/dales4.4
@@ -19,8 +19,8 @@ do
   cp $CASE_DIR/namoptions.002 .
 
   # Run benchmark
-  mpirun -np 1 $DALES ./namoptions.002 | tee output-gpu.txt
-  cp output-gpu.txt $CASE_DIR
+  mpirun -np 1 $DALES ./namoptions.002 | tee output_gpu.txt
+  cp output_gpu.txt $CASE_DIR
 
   # Clean up
   cd $HERE

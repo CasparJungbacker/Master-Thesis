@@ -4,7 +4,7 @@ for dir in */
 do
   sbatch \
     --partition=gpu \
-    --time=00:15:00 \
+    --time=00:05:00 \
     --ntasks=1 \
     --gpus-per-task=1 \
     --output=$dir/output_gpu.txt \
