@@ -25,4 +25,5 @@ cp $LSCALE_INP $TMPDIR/lscale.inp.001
 
 cd $TMPDIR
 
-srun --mpi=pmix $DALES $NAMOPTIONS
+#srun --mpi=pmix $DALES $NAMOPTIONS
+srun $DALES $NAMOPTIONS
