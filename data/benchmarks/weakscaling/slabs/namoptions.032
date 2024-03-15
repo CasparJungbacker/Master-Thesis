@@ -15,13 +15,13 @@ nprocy = 32
 /
 
 &DOMAIN
-itot       =  4096
-jtot       =  8192
+itot       =  8192
+jtot       =  4096
 kmax       =  80
 
 
-xsize      =  409600.
-ysize      =  819200.
+ysize      =  409600.
+xsize      =  819200.
 
 xlat       =  15.
 xlon       =  0.

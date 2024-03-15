@@ -2,23 +2,104 @@
 The following have been reloaded with a version change:
   1) NVHPC/22.7 => NVHPC/22.7-CUDA-11.7.0
 
-[gcn44.local.snellius.surf.nl:3914612] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/bfrops/base/bfrop_base_unpack.c at line 692
-[gcn44.local.snellius.surf.nl:3914612] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/common/dstore/dstore_base.c at line 2225
-[gcn44.local.snellius.surf.nl:3914614] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/bfrops/base/bfrop_base_unpack.c at line 692
-[gcn44.local.snellius.surf.nl:3914614] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/common/dstore/dstore_base.c at line 2225
-[gcn44.local.snellius.surf.nl:3914614] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/bfrops/base/bfrop_base_unpack.c at line 692
-[gcn44.local.snellius.surf.nl:3914614] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/common/dstore/dstore_base.c at line 2225
-[gcn44.local.snellius.surf.nl:3914611] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/bfrops/base/bfrop_base_unpack.c at line 692
-[gcn44.local.snellius.surf.nl:3914611] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/common/dstore/dstore_base.c at line 2225
-[gcn44.local.snellius.surf.nl:3914611] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/bfrops/base/bfrop_base_unpack.c at line 692
-[gcn44.local.snellius.surf.nl:3914611] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/common/dstore/dstore_base.c at line 2225
-[gcn44.local.snellius.surf.nl:3914612] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/bfrops/base/bfrop_base_unpack.c at line 692
-[gcn44.local.snellius.surf.nl:3914612] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/common/dstore/dstore_base.c at line 2225
-[gcn44.local.snellius.surf.nl:3914613] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/bfrops/base/bfrop_base_unpack.c at line 692
-[gcn44.local.snellius.surf.nl:3914613] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/common/dstore/dstore_base.c at line 2225
-[gcn44.local.snellius.surf.nl:3914613] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/bfrops/base/bfrop_base_unpack.c at line 692
-[gcn44.local.snellius.surf.nl:3914613] PMIX ERROR: BAD-PARAM in file ../../../../../../../../../../opal/mca/pmix/pmix3x/pmix/src/mca/common/dstore/dstore_base.c at line 2225
- DALES 4.4 git: 1e8ed0-dirty
+[1710365881.290266] [gcn52:388491:0]     ucp_context.c:1849 UCX  INFO  Version 1.13.0 (loaded from /sw/arch/RHEL8/EB_production/2022/software/NVHPC/22.7-CUDA-11.7.0/Linux_x86_64/2022/comm_libs/hpcx/latest/ucx/lib/libucp.so.0)
+[1710365882.736563] [gcn52:388491:0]          parser.c:1918 UCX  INFO  UCX_* env variables: UCX_PROTO_ENABLE=y UCX_LOG_LEVEL=info UCX_PROTO_INFO=y
+[1710365882.775823] [gcn52:388491:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.775825] [gcn52:388491:0]   | 0x2f9ce80 ep_cfg[2] | tagged message by ucp_tag_send*() from host memory                                               |
+[1710365882.775826] [gcn52:388491:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.775827] [gcn52:388491:0]   |             0..8184 | eager short                                      | self/memory0                                  |
+[1710365882.775827] [gcn52:388491:0]   |         8185..11485 | eager copy-in copy-out                           | self/memory0                                  |
+[1710365882.775828] [gcn52:388491:0]   |          11486..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.775828] [gcn52:388491:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.795612] [gcn52:388491:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.795613] [gcn52:388491:0]   | 0x2f9ce80 ep_cfg[3] | tagged message by ucp_tag_send*() from host memory                                               |
+[1710365882.795614] [gcn52:388491:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.795614] [gcn52:388491:0]   |               0..92 | eager short                                      | sysv/memory                                   |
+[1710365882.795615] [gcn52:388491:0]   |            93..8248 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.795615] [gcn52:388491:0]   |         8249..13939 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.795615] [gcn52:388491:0]   |          13940..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.795616] [gcn52:388491:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.798148] [gcn52:388491:a]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.798150] [gcn52:388491:a]   | 0x2f9ce80 ep_cfg[4] | tagged message by ucp_tag_send*() from host memory                                               |
+[1710365882.798150] [gcn52:388491:a]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.798150] [gcn52:388491:a]   |               0..92 | eager short                                      | sysv/memory                                   |
+[1710365882.798151] [gcn52:388491:a]   |            93..8248 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.798151] [gcn52:388491:a]   |         8249..13939 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.798151] [gcn52:388491:a]   |          13940..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365881.302274] [gcn52:388489:0]     ucp_context.c:1849 UCX  INFO  Version 1.13.0 (loaded from /sw/arch/RHEL8/EB_production/2022/software/NVHPC/22.7-CUDA-11.7.0/Linux_x86_64/2022/comm_libs/hpcx/latest/ucx/lib/libucp.so.0)
+[1710365882.731329] [gcn52:388489:0]          parser.c:1918 UCX  INFO  UCX_* env variables: UCX_PROTO_ENABLE=y UCX_LOG_LEVEL=info UCX_PROTO_INFO=y
+[1710365882.775823] [gcn52:388489:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.775824] [gcn52:388489:0]   | 0x1f00eb0 ep_cfg[2] | tagged message by ucp_tag_send*() from host memory                                               |
+[1710365882.775825] [gcn52:388489:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.775825] [gcn52:388489:0]   |             0..8184 | eager short                                      | self/memory0                                  |
+[1710365882.775826] [gcn52:388489:0]   |         8185..11485 | eager copy-in copy-out                           | self/memory0                                  |
+[1710365882.775826] [gcn52:388489:0]   |          11486..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.775827] [gcn52:388489:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.795605] [gcn52:388489:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.795607] [gcn52:388489:0]   | 0x1f00eb0 ep_cfg[3] | tagged message by ucp_tag_send*() from host memory                                               |
+[1710365882.795607] [gcn52:388489:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.795608] [gcn52:388489:0]   |               0..92 | eager short                                      | sysv/memory                                   |
+[1710365882.795608] [gcn52:388489:0]   |            93..8248 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.795609] [gcn52:388489:0]   |         8249..13939 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.795609] [gcn52:388489:0]   |          13940..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.795609] [gcn52:388489:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.802261] [gcn52:388489:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.802263] [gcn52:388489:0]   | 0x1f00eb0 ep_cfg[3] | tagged message by ucp_tag_send*(fast-completion) from host memory                                |
+[1710365882.802264] [gcn52:388489:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.802264] [gcn52:388489:0]   |               0..92 | eager short                                      | sysv/memory                                   |
+[1710365882.802265] [gcn52:388489:0]   |            93..8248 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.802265] [gcn52:388489:0]   |         8249..32138 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.802266] [gcn52:388489:0]   |          32139..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365881.302255] [gcn52:388490:0]     ucp_context.c:1849 UCX  INFO  Version 1.13.0 (loaded from /sw/arch/RHEL8/EB_production/2022/software/NVHPC/22.7-CUDA-11.7.0/Linux_x86_64/2022/comm_libs/hpcx/latest/ucx/lib/libucp.so.0)
+[1710365882.774169] [gcn52:388490:0]          parser.c:1918 UCX  INFO  UCX_* env variables: UCX_PROTO_ENABLE=y UCX_LOG_LEVEL=info UCX_PROTO_INFO=y
+[1710365882.775827] [gcn52:388490:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.775830] [gcn52:388490:0]   | 0x3672e80 ep_cfg[2] | tagged message by ucp_tag_send*() from host memory                                               |
+[1710365882.775831] [gcn52:388490:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.775832] [gcn52:388490:0]   |             0..8184 | eager short                                      | self/memory0                                  |
+[1710365882.775832] [gcn52:388490:0]   |         8185..11485 | eager copy-in copy-out                           | self/memory0                                  |
+[1710365882.775832] [gcn52:388490:0]   |          11486..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.775833] [gcn52:388490:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.795406] [gcn52:388490:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.795408] [gcn52:388490:0]   | 0x3672e80 ep_cfg[3] | tagged message by ucp_tag_send*() from host memory                                               |
+[1710365882.795409] [gcn52:388490:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.795409] [gcn52:388490:0]   |               0..92 | eager short                                      | sysv/memory                                   |
+[1710365882.795410] [gcn52:388490:0]   |            93..8248 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.795410] [gcn52:388490:0]   |         8249..13939 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.795410] [gcn52:388490:0]   |          13940..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.795411] [gcn52:388490:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.802350] [gcn52:388490:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.802352] [gcn52:388490:0]   | 0x3672e80 ep_cfg[3] | tagged message by ucp_tag_send*(fast-completion) from host memory                                |
+[1710365882.802352] [gcn52:388490:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.802353] [gcn52:388490:0]   |               0..92 | eager short                                      | sysv/memory                                   |
+[1710365882.802353] [gcn52:388490:0]   |            93..8248 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.802353] [gcn52:388490:0]   |         8249..32138 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.802354] [gcn52:388490:0]   |          32139..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365881.302265] [gcn52:388488:0]     ucp_context.c:1849 UCX  INFO  Version 1.13.0 (loaded from /sw/arch/RHEL8/EB_production/2022/software/NVHPC/22.7-CUDA-11.7.0/Linux_x86_64/2022/comm_libs/hpcx/latest/ucx/lib/libucp.so.0)
+[1710365882.770920] [gcn52:388488:0]          parser.c:1918 UCX  INFO  UCX_* env variables: UCX_PROTO_ENABLE=y UCX_LOG_LEVEL=info UCX_PROTO_INFO=y
+[1710365882.775826] [gcn52:388488:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.775828] [gcn52:388488:0]   | 0x1fcaea0 ep_cfg[2] | tagged message by ucp_tag_send*() from host memory                                               |
+[1710365882.775828] [gcn52:388488:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.775829] [gcn52:388488:0]   |             0..8184 | eager short                                      | self/memory0                                  |
+[1710365882.775830] [gcn52:388488:0]   |         8185..11485 | eager copy-in copy-out                           | self/memory0                                  |
+[1710365882.775830] [gcn52:388488:0]   |          11486..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.775831] [gcn52:388488:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.795552] [gcn52:388488:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.795554] [gcn52:388488:0]   | 0x1fcaea0 ep_cfg[3] | tagged message by ucp_tag_send*() from host memory                                               |
+[1710365882.795554] [gcn52:388488:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.795555] [gcn52:388488:0]   |               0..92 | eager short                                      | sysv/memory                                   |
+[1710365882.795555] [gcn52:388488:0]   |            93..8248 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.795556] [gcn52:388488:0]   |         8249..13939 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.795556] [gcn52:388488:0]   |          13940..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.795556] [gcn52:388488:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.802450] [gcn52:388488:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.802451] [gcn52:388488:0]   | 0x1fcaea0 ep_cfg[3] | tagged message by ucp_tag_send*(fast-completion) from host memory                                |
+[1710365882.802452] [gcn52:388488:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.802453] [gcn52:388488:0]   |               0..92 | eager short                                      | sysv/memory                                   |
+[1710365882.802453] [gcn52:388488:0]   |            93..8248 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.802453] [gcn52:388488:0]   |         8249..32138 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.802454] [gcn52:388488:0]   |          32139..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.802454] [gcn52:388488:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+ DALES 4.4 git: 692412-dirty
  namoptions.004                                                                                                                                                                                                                                                  
  &RUN
  IEXPNR =            4,
@@ -45,7 +126,10 @@ The following have been reloaded with a version change:
  RANDU =   0.5000000000000000     ,
  NPROCX =            1,
  NPROCY =            4,
- LOUTDIRS =  F
+ LOUTDIRS =  F,
+ LTIMER =  F,
+ LDEBUG =  F,
+ LPRINT_NAMLIST =  T
  /
  &DOMAIN
  ITOT =         2048,
@@ -404,11 +488,6 @@ The following have been reloaded with a version change:
    3     40.00    100.00     80.00     40.00     73.68
    2     40.00     60.00     40.00     40.00     73.68
    1     40.00     20.00      0.00     40.00     73.68
- &TIMER
- LTIMER =  F,
- LTIMER_PRINT =  T,
- LTIMER_WRITE =  F
- /
  &NAMTESTBED
  LTESTBED =  F,
  LTB_NUDGE =  F,
@@ -1141,9 +1220,36 @@ The following have been reloaded with a version change:
   660.0 -0.10377326728460700E-03 -0.10392190864472184E-03
   620.0 -0.10407084528307742E-03 -0.10421978192143855E-03
   580.0 -0.10436901416498446E-03 -0.10451824640852480E-03
+[1710365882.798152] [gcn52:388491:a]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.802215] [gcn52:388491:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.802216] [gcn52:388491:0]   | 0x2f9ce80 ep_cfg[4] | tagged message by ucp_tag_send*(fast-completion) from host memory                                |
+[1710365882.802217] [gcn52:388491:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.802217] [gcn52:388491:0]   |               0..92 | eager short                                      | sysv/memory                                   |
+[1710365882.802217] [gcn52:388491:0]   |            93..8248 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.802218] [gcn52:388491:0]   |         8249..32138 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.802218] [gcn52:388491:0]   |          32139..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.802219] [gcn52:388491:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.802562] [gcn52:388491:0]   +---------------------+--------------------------------------------------------------------------------------------------+
+[1710365882.802562] [gcn52:388491:0]   | 0x2f9ce80 ep_cfg[3] | tagged message by ucp_tag_send*(fast-completion) from host memory                                |
+[1710365882.802563] [gcn52:388491:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+[1710365882.802563] [gcn52:388491:0]   |               0..92 | eager short                                      | sysv/memory                                   |
+[1710365882.802564] [gcn52:388491:0]   |            93..8248 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.802564] [gcn52:388491:0]   |         8249..32138 | eager copy-in copy-out                           | sysv/memory                                   |
+[1710365882.802564] [gcn52:388491:0]   |          32139..inf | (?) rendezvous zero-copy flushed write to remote | 66% on cma/memory and 34% on rc_mlx5/mlx5_0:1 |
+[1710365882.802565] [gcn52:388491:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
  WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
- WARNING: z0m and z0h not defined, set equal to z0
+[1710365909.939537] [gcn52:388491:0]   +---------------------+-----------------------------------------------------+
+[1710365909.939539] [gcn52:388491:0]   | 0x2f9ce80 ep_cfg[3] | tagged message by ucp_tag_send*() from cuda/GPU3    |
+[1710365909.939540] [gcn52:388491:0]   +---------------------+--------------------------------------------------+--+
+[1710365909.939540] [gcn52:388491:0]   |              0..inf | (?) rendezvous no data fetch                     |  |
+[1710365909.939541] [gcn52:388491:0]   +---------------------+--------------------------------------------------+--+
+[1710365909.943122] [gcn52:388491:0]   +---------------------+-----------------------------------------------------+
+[1710365909.943123] [gcn52:388491:0]   | 0x2f9ce80 ep_cfg[4] | tagged message by ucp_tag_send*() from cuda/GPU3    |
+[1710365909.943124] [gcn52:388491:0]   +---------------------+--------------------------------------------------+--+
+[1710365909.943124] [gcn52:388491:0]   |              0..inf | (?) rendezvous no data fetch                     |  |
+[1710365909.943124] [gcn52:388491:0]   +---------------------+--------------------------------------------------+--+
+[1710365910.067669] [gcn52:388491:0]   +---------------------+------------------------------------------------------------+
+[1710365910.067670] [gcn52:388491:0]   | 0x2f9ce80 ep_cfg[4] | rendezvous data fetch() into cuda/GPU3 from cuda/dev[2]    |
   540.0 -0.10466777458361664E-03 -0.10481730275870294E-03
   500.0 -0.10496712719206824E-03 -0.10511695162544465E-03
   460.0 -0.10526707264372215E-03 -0.10541719366199409E-03
@@ -1158,6 +1264,23 @@ The following have been reloaded with a version change:
   100.0 -0.10799336753216094E-03 -0.10814617252987158E-03
    60.0 -0.10829927738381651E-03 -0.10845238223776699E-03
    20.0 -0.10845238223776699E-03 -0.10845238223776699E-03
+[1710365910.424925] [gcn52:388488:0]   +---------------------+-----------------------------------------------------+
+[1710365910.424927] [gcn52:388488:0]   | 0x1fcaea0 ep_cfg[3] | tagged message by ucp_tag_send*() from cuda/GPU0    |
+[1710365910.424927] [gcn52:388488:0]   +---------------------+--------------------------------------------------+--+
+[1710365910.424928] [gcn52:388488:0]   |              0..inf | (?) rendezvous no data fetch                     |  |
+[1710365910.424928] [gcn52:388488:0]   +---------------------+--------------------------------------------------+--+
+[1710365910.428431] [gcn52:388488:0]   +---------------------+------------------------------------------------------------+
+[1710365910.428433] [gcn52:388488:0]   | 0x1fcaea0 ep_cfg[3] | rendezvous data fetch() into cuda/GPU0 from cuda/dev[3]    |
+[1710365910.428433] [gcn52:388488:0]   +---------------------+--------------------------------------------+---------------+
+[1710365910.428434] [gcn52:388488:0]   |                   0 | no data fetch                              |               |
+[1710365910.428434] [gcn52:388488:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365910.428435] [gcn52:388488:0]   +---------------------+--------------------------------------------+---------------+
+[1710365911.848608] [gcn52:388488:0]   +---------------------+------------------------------------------------------------+
+[1710365911.848610] [gcn52:388488:0]   | 0x1fcaea0 ep_cfg[3] | rendezvous data fetch() into cuda/GPU0 from cuda/dev[1]    |
+[1710365911.848611] [gcn52:388488:0]   +---------------------+--------------------------------------------+---------------+
+[1710365911.848611] [gcn52:388488:0]   |                   0 | no data fetch                              |               |
+[1710365911.848611] [gcn52:388488:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365911.848612] [gcn52:388488:0]   +---------------------+--------------------------------------------+---------------+
   height u_geo   v_geo    subs     
     dqtdx      dqtdy        dqtdtls     thl_rad 
  3180.0   -4.3    0.0  0.0000E+00  0.0000E+00  0.0000E+00  0.0000E+00  0.0000E+00
@@ -2072,527 +2195,593 @@ The following have been reloaded with a version change:
  LCAPE =  F,
  DTAV =    60.00000000000000     
  /
+[1710365920.767419] [gcn52:388488:0]   +---------------------+------------------------------------------------------------+
+[1710365920.767421] [gcn52:388488:0]   | 0x1fcaea0 ep_cfg[3] | rendezvous data fetch() into cuda/GPU0 from cuda/dev[2]    |
+[1710365920.767422] [gcn52:388488:0]   +---------------------+--------------------------------------------+---------------+
+[1710365920.767422] [gcn52:388488:0]   |                   0 | no data fetch                              |               |
+[1710365920.767422] [gcn52:388488:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365920.767423] [gcn52:388488:0]   +---------------------+--------------------------------------------+---------------+
  =================================================================
-Time of Day: 103123.983    Time of Simulation:      1.00    dt:  1.000000000
+Time of Day: 223847.789    Time of Simulation:      1.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.72E-02  5.78E-05  2.30E-04   39  3.72E-02   80
 Cell Peclet number:  5.39E-03    1
-divmax, divtot =    9.85E-18  -2.37E-11       dt limited by initial step   
+divmax, divtot =    1.00E-17   2.28E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103125.757    Time of Simulation:      2.00    dt:  1.000000000
+Time of Day: 223848.643    Time of Simulation:      2.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.72E-02  7.47E-05  3.01E-04   62  3.72E-02   80
 Cell Peclet number:  5.38E-03    1
-divmax, divtot =    9.72E-18   9.83E-11       dt limited by initial step   
+divmax, divtot =    1.00E-17   4.68E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103127.540    Time of Simulation:      3.00    dt:  1.000000000
+Time of Day: 223849.492    Time of Simulation:      3.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.72E-02  9.14E-05  3.74E-04   64  3.72E-02   80
 Cell Peclet number:  5.38E-03    1
-divmax, divtot =    9.67E-18   6.50E-12       dt limited by initial step   
+divmax, divtot =    9.73E-18  -2.01E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103129.304    Time of Simulation:      4.00    dt:  1.000000000
+Time of Day: 223850.341    Time of Simulation:      4.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.72E-02  1.08E-04  4.48E-04   65  3.72E-02   80
 Cell Peclet number:  5.38E-03    1
-divmax, divtot =    9.87E-18  -6.59E-11       dt limited by initial step   
+divmax, divtot =    9.86E-18   5.19E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103131.089    Time of Simulation:      5.00    dt:  1.000000000
+Time of Day: 223851.191    Time of Simulation:      5.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  1.24E-04  5.23E-04   65  3.73E-02   80
 Cell Peclet number:  5.37E-03    1
-divmax, divtot =    9.79E-18  -1.04E-11       dt limited by initial step   
+divmax, divtot =    9.80E-18  -9.53E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103132.869    Time of Simulation:      6.00    dt:  1.000000000
+Time of Day: 223852.040    Time of Simulation:      6.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  1.39E-04  5.98E-04   65  3.73E-02   80
 Cell Peclet number:  5.37E-03    1
-divmax, divtot =    9.74E-18  -5.75E-11       dt limited by initial step   
+divmax, divtot =    9.49E-18   1.17E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103134.646    Time of Simulation:      7.00    dt:  1.000000000
+Time of Day: 223852.890    Time of Simulation:      7.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  1.55E-04  6.74E-04   65  3.73E-02   80
 Cell Peclet number:  5.37E-03    1
-divmax, divtot =    9.56E-18  -1.33E-10       dt limited by initial step   
+divmax, divtot =    9.58E-18   4.22E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103136.432    Time of Simulation:      8.00    dt:  1.000000000
+Time of Day: 223853.739    Time of Simulation:      8.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  1.70E-04  7.51E-04   65  3.73E-02   80
 Cell Peclet number:  5.36E-03    1
-divmax, divtot =    9.55E-18  -8.87E-11       dt limited by initial step   
+divmax, divtot =    9.68E-18  -8.29E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103138.205    Time of Simulation:      9.00    dt:  1.000000000
+Time of Day: 223854.590    Time of Simulation:      9.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  1.85E-04  8.28E-04   65  3.73E-02   80
 Cell Peclet number:  5.36E-03    1
-divmax, divtot =    9.49E-18  -9.04E-11       dt limited by initial step   
+divmax, divtot =    9.58E-18  -2.97E-12       dt limited by initial step   
  =================================================================
-Time of Day: 103139.978    Time of Simulation:     10.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.73E-02  1.99E-04  9.06E-04   65  3.73E-02   80
-Cell Peclet number:  5.35E-03    1
-divmax, divtot =    9.81E-18  -1.16E-10       dt limited by initial step   
+Time of Day: 223855.440    Time of Simulation:     10.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.73E-02  1.99E-04  9.06E-04   64  3.73E-02   80
+Cell Peclet number:  5.36E-03    1
+divmax, divtot =    9.86E-18  -3.70E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103141.754    Time of Simulation:     11.00    dt:  1.000000000
+Time of Day: 223856.290    Time of Simulation:     11.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.73E-02  2.16E-04  9.84E-04   64  3.73E-02   80
 Cell Peclet number:  5.35E-03    1
-divmax, divtot =    9.64E-18   1.37E-10       dt limited by initial step   
+divmax, divtot =    9.72E-18   3.25E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103143.531    Time of Simulation:     12.00    dt:  1.000000000
+Time of Day: 223857.140    Time of Simulation:     12.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  2.33E-04  1.06E-03   64  3.74E-02   80
 Cell Peclet number:  5.35E-03    1
-divmax, divtot =    9.83E-18   2.75E-10       dt limited by initial step   
+divmax, divtot =    9.79E-18  -7.89E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103145.293    Time of Simulation:     13.00    dt:  1.000000000
+Time of Day: 223857.990    Time of Simulation:     13.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  2.49E-04  1.14E-03   64  3.74E-02   80
-Cell Peclet number:  5.34E-03    1
-divmax, divtot =    9.74E-18   5.26E-11       dt limited by initial step   
+Cell Peclet number:  5.35E-03    1
+divmax, divtot =    9.70E-18  -1.07E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103147.078    Time of Simulation:     14.00    dt:  1.000000000
+Time of Day: 223858.839    Time of Simulation:     14.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  2.66E-04  1.22E-03   64  3.74E-02   80
 Cell Peclet number:  5.34E-03    1
-divmax, divtot =    9.50E-18  -6.51E-11       dt limited by initial step   
+divmax, divtot =    9.51E-18   1.74E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103148.863    Time of Simulation:     15.00    dt:  1.000000000
+Time of Day: 223859.689    Time of Simulation:     15.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  2.82E-04  1.30E-03   64  3.74E-02   80
-Cell Peclet number:  5.33E-03    1
-divmax, divtot =    9.80E-18  -1.23E-10       dt limited by initial step   
+Cell Peclet number:  5.34E-03    1
+divmax, divtot =    9.72E-18  -9.66E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103150.647    Time of Simulation:     16.00    dt:  1.000000000
+Time of Day: 223900.538    Time of Simulation:     16.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  2.99E-04  1.38E-03   61  3.74E-02   80
 Cell Peclet number:  5.33E-03    1
-divmax, divtot =    9.63E-18   1.50E-10       dt limited by initial step   
+divmax, divtot =    9.69E-18  -2.19E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103152.420    Time of Simulation:     17.00    dt:  1.000000000
+Time of Day: 223901.387    Time of Simulation:     17.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  3.17E-04  1.46E-03   61  3.74E-02   80
-Cell Peclet number:  5.32E-03    1
-divmax, divtot =    9.69E-18  -7.37E-11       dt limited by initial step   
+Cell Peclet number:  5.33E-03    1
+divmax, divtot =    9.76E-18   1.97E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103154.202    Time of Simulation:     18.00    dt:  1.000000000
+Time of Day: 223902.237    Time of Simulation:     18.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.74E-02  3.34E-04  1.54E-03   61  3.75E-02   80
 Cell Peclet number:  5.32E-03    1
-divmax, divtot =    1.01E-17  -1.92E-10       dt limited by initial step   
+divmax, divtot =    9.60E-18   6.72E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103155.984    Time of Simulation:     19.00    dt:  1.000000000
+Time of Day: 223903.086    Time of Simulation:     19.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  3.52E-04  1.62E-03   61  3.75E-02   80
-Cell Peclet number:  5.31E-03    1
-divmax, divtot =    9.47E-18  -1.43E-11       dt limited by initial step   
+Cell Peclet number:  5.32E-03    1
+divmax, divtot =    9.73E-18   7.66E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103157.766    Time of Simulation:     20.00    dt:  1.000000000
+Time of Day: 223903.936    Time of Simulation:     20.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  3.70E-04  1.70E-03   61  3.75E-02   80
 Cell Peclet number:  5.31E-03    1
-divmax, divtot =    9.49E-18  -1.10E-11       dt limited by initial step   
+divmax, divtot =    9.52E-18   1.42E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103159.531    Time of Simulation:     21.00    dt:  1.000000000
+Time of Day: 223904.785    Time of Simulation:     21.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  3.87E-04  1.78E-03   61  3.75E-02   80
-Cell Peclet number:  5.30E-03    1
-divmax, divtot =    9.81E-18  -1.63E-10       dt limited by initial step   
+Cell Peclet number:  5.31E-03    1
+divmax, divtot =    9.60E-18   2.71E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103201.301    Time of Simulation:     22.00    dt:  1.000000000
+Time of Day: 223905.635    Time of Simulation:     22.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  4.05E-04  1.86E-03   61  3.75E-02   80
-Cell Peclet number:  5.30E-03    1
-divmax, divtot =    9.53E-18   1.94E-10       dt limited by initial step   
+Cell Peclet number:  5.31E-03    1
+divmax, divtot =    9.79E-18  -9.54E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103203.078    Time of Simulation:     23.00    dt:  1.000000000
+Time of Day: 223906.485    Time of Simulation:     23.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.75E-02  4.22E-04  1.94E-03   61  3.75E-02   80
-Cell Peclet number:  5.29E-03    1
-divmax, divtot =    1.01E-17  -1.96E-10       dt limited by initial step   
+Cell Peclet number:  5.30E-03    1
+divmax, divtot =    9.89E-18   1.23E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103204.863    Time of Simulation:     24.00    dt:  1.000000000
+Time of Day: 223907.335    Time of Simulation:     24.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  4.39E-04  2.02E-03   61  3.76E-02   80
-Cell Peclet number:  5.29E-03    1
-divmax, divtot =    9.57E-18   4.17E-10       dt limited by initial step   
+Cell Peclet number:  5.30E-03    1
+divmax, divtot =    9.81E-18   2.09E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103206.662    Time of Simulation:     25.00    dt:  1.000000000
+Time of Day: 223908.187    Time of Simulation:     25.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  4.55E-04  2.10E-03   61  3.76E-02   80
-Cell Peclet number:  5.28E-03    1
-divmax, divtot =    9.91E-18   1.84E-10       dt limited by initial step   
+Cell Peclet number:  5.29E-03    1
+divmax, divtot =    9.79E-18   3.10E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103208.442    Time of Simulation:     26.00    dt:  1.000000000
+Time of Day: 223909.037    Time of Simulation:     26.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  4.72E-04  2.18E-03   61  3.76E-02   80
-Cell Peclet number:  5.28E-03    1
-divmax, divtot =    9.57E-18  -3.25E-10       dt limited by initial step   
+Cell Peclet number:  5.29E-03    1
+divmax, divtot =    9.72E-18  -9.07E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103210.212    Time of Simulation:     27.00    dt:  1.000000000
+Time of Day: 223909.888    Time of Simulation:     27.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  4.88E-04  2.26E-03   61  3.76E-02   80
-Cell Peclet number:  5.27E-03    1
-divmax, divtot =    9.52E-18  -4.26E-10       dt limited by initial step   
+Cell Peclet number:  5.28E-03    1
+divmax, divtot =    9.78E-18  -1.56E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103211.989    Time of Simulation:     28.00    dt:  1.000000000
+Time of Day: 223910.738    Time of Simulation:     28.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  5.05E-04  2.33E-03   61  3.76E-02   80
-Cell Peclet number:  5.27E-03    1
-divmax, divtot =    9.61E-18  -9.39E-11       dt limited by initial step   
+Cell Peclet number:  5.28E-03    1
+divmax, divtot =    1.05E-17   5.41E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103213.773    Time of Simulation:     29.00    dt:  1.000000000
+Time of Day: 223911.588    Time of Simulation:     29.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  5.24E-04  2.41E-03   61  3.76E-02   80
-Cell Peclet number:  5.26E-03    1
-divmax, divtot =    9.82E-18   3.01E-10       dt limited by initial step   
+Cell Peclet number:  5.27E-03    1
+divmax, divtot =    9.86E-18  -4.16E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103215.548    Time of Simulation:     30.00    dt:  1.000000000
+Time of Day: 223912.437    Time of Simulation:     30.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.76E-02  5.42E-04  2.49E-03   61  3.77E-02   80
-Cell Peclet number:  5.26E-03    1
-divmax, divtot =    9.47E-18   1.34E-10       dt limited by initial step   
+Cell Peclet number:  5.27E-03    1
+divmax, divtot =    9.69E-18  -4.12E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103217.332    Time of Simulation:     31.00    dt:  1.000000000
+Time of Day: 223913.287    Time of Simulation:     31.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.77E-02  5.59E-04  2.57E-03   61  3.77E-02   80
-Cell Peclet number:  5.25E-03    1
-divmax, divtot =    9.62E-18   3.63E-11       dt limited by initial step   
+Cell Peclet number:  5.26E-03    1
+divmax, divtot =    9.52E-18  -5.87E-12       dt limited by initial step   
  =================================================================
-Time of Day: 103219.118    Time of Simulation:     32.00    dt:  1.000000000
+Time of Day: 223914.136    Time of Simulation:     32.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.77E-02  5.77E-04  2.64E-03   61  3.77E-02   80
-Cell Peclet number:  5.24E-03    1
-divmax, divtot =    1.02E-17   1.89E-10       dt limited by initial step   
+Cell Peclet number:  5.26E-03    1
+divmax, divtot =    9.75E-18  -1.61E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103220.885    Time of Simulation:     33.00    dt:  1.000000000
+Time of Day: 223914.986    Time of Simulation:     33.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.77E-02  5.94E-04  2.72E-03   61  3.77E-02   80
-Cell Peclet number:  5.24E-03    1
-divmax, divtot =    9.73E-18  -7.27E-11       dt limited by initial step   
+Cell Peclet number:  5.25E-03    1
+divmax, divtot =    9.93E-18   1.77E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103222.662    Time of Simulation:     34.00    dt:  1.000000000
+Time of Day: 223915.836    Time of Simulation:     34.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.77E-02  6.10E-04  2.79E-03   61  3.77E-02   80
-Cell Peclet number:  5.23E-03    1
-divmax, divtot =    9.56E-18   4.49E-10       dt limited by initial step   
+Cell Peclet number:  5.25E-03    1
+divmax, divtot =    9.68E-18  -6.20E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103224.444    Time of Simulation:     35.00    dt:  1.000000000
+Time of Day: 223916.685    Time of Simulation:     35.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.77E-02  6.26E-04  2.87E-03   61  3.78E-02   80
-Cell Peclet number:  5.23E-03    1
-divmax, divtot =    9.81E-18   1.20E-10       dt limited by initial step   
+Cell Peclet number:  5.24E-03    1
+divmax, divtot =    9.68E-18   1.06E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103226.227    Time of Simulation:     36.00    dt:  1.000000000
+Time of Day: 223917.538    Time of Simulation:     36.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.78E-02  6.42E-04  2.94E-03   61  3.78E-02   80
-Cell Peclet number:  5.22E-03    1
-divmax, divtot =    9.46E-18   1.41E-10       dt limited by initial step   
+Cell Peclet number:  5.24E-03    1
+divmax, divtot =    9.68E-18  -8.58E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103227.996    Time of Simulation:     37.00    dt:  1.000000000
+Time of Day: 223918.387    Time of Simulation:     37.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.78E-02  6.57E-04  3.01E-03   61  3.78E-02   80
-Cell Peclet number:  5.22E-03    1
-divmax, divtot =    9.61E-18   7.03E-10       dt limited by initial step   
+Cell Peclet number:  5.23E-03    1
+divmax, divtot =    9.72E-18   3.25E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103229.781    Time of Simulation:     38.00    dt:  1.000000000
+Time of Day: 223919.238    Time of Simulation:     38.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.78E-02  6.72E-04  3.09E-03   61  3.78E-02   80
-Cell Peclet number:  5.21E-03    1
-divmax, divtot =    9.70E-18  -3.73E-10       dt limited by initial step   
+Cell Peclet number:  5.22E-03    1
+divmax, divtot =    9.66E-18  -7.77E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103231.565    Time of Simulation:     39.00    dt:  1.000000000
+Time of Day: 223920.088    Time of Simulation:     39.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.78E-02  6.85E-04  3.16E-03   61  3.78E-02   80
-Cell Peclet number:  5.21E-03    1
-divmax, divtot =    9.83E-18  -1.73E-11       dt limited by initial step   
+Cell Peclet number:  5.22E-03    1
+divmax, divtot =    9.79E-18   1.59E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103233.345    Time of Simulation:     40.00    dt:  1.000000000
+Time of Day: 223920.938    Time of Simulation:     40.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.78E-02  6.99E-04  3.23E-03   61  3.79E-02   80
-Cell Peclet number:  5.20E-03    1
-divmax, divtot =    9.64E-18  -1.53E-10       dt limited by initial step   
+Cell Peclet number:  5.21E-03    1
+divmax, divtot =    9.57E-18   4.13E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103235.121    Time of Simulation:     41.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.79E-02  7.11E-04  3.29E-03   61  3.79E-02   80
-Cell Peclet number:  5.19E-03    1
-divmax, divtot =    9.72E-18  -1.74E-10       dt limited by initial step   
+Time of Day: 223921.788    Time of Simulation:     41.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.79E-02  7.11E-04  3.30E-03   61  3.79E-02   80
+Cell Peclet number:  5.21E-03    1
+divmax, divtot =    9.60E-18   8.87E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103236.882    Time of Simulation:     42.00    dt:  1.000000000
+Time of Day: 223922.638    Time of Simulation:     42.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.79E-02  7.23E-04  3.36E-03   61  3.79E-02   80
-Cell Peclet number:  5.19E-03    1
-divmax, divtot =    9.62E-18  -5.94E-10       dt limited by initial step   
+Cell Peclet number:  5.20E-03    1
+divmax, divtot =    9.62E-18   6.01E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103238.655    Time of Simulation:     43.00    dt:  1.000000000
+Time of Day: 223923.487    Time of Simulation:     43.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.79E-02  7.34E-04  3.43E-03   61  3.79E-02   80
-Cell Peclet number:  5.18E-03    1
-divmax, divtot =    9.81E-18   3.31E-11       dt limited by initial step   
+Cell Peclet number:  5.20E-03    1
+divmax, divtot =    9.53E-18   4.93E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103240.432    Time of Simulation:     44.00    dt:  1.000000000
+Time of Day: 223924.336    Time of Simulation:     44.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.79E-02  7.45E-04  3.50E-03   61  3.79E-02   80
-Cell Peclet number:  5.18E-03    1
-divmax, divtot =    9.48E-18  -7.79E-10       dt limited by initial step   
+Cell Peclet number:  5.19E-03    1
+divmax, divtot =    9.75E-18   4.71E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103242.199    Time of Simulation:     45.00    dt:  1.000000000
+Time of Day: 223925.185    Time of Simulation:     45.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.79E-02  7.54E-04  3.56E-03   61  3.79E-02   80
+Cell Peclet number:  5.19E-03    1
+divmax, divtot =    9.93E-18   8.26E-11       dt limited by initial step   
+ =================================================================
+Time of Day: 223926.035    Time of Simulation:     46.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.79E-02  7.65E-04  3.63E-03   64  3.80E-02   80
+Cell Peclet number:  5.18E-03    1
+divmax, divtot =    9.50E-18   6.64E-10       dt limited by initial step   
+ =================================================================
+Time of Day: 223926.886    Time of Simulation:     47.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.79E-02  7.81E-04  3.72E-03   64  3.80E-02   80
+Cell Peclet number:  5.18E-03    1
+divmax, divtot =    9.64E-18  -9.22E-11       dt limited by initial step   
+ =================================================================
+Time of Day: 223927.736    Time of Simulation:     48.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.80E-02  7.97E-04  3.81E-03   64  3.80E-02   80
 Cell Peclet number:  5.17E-03    1
-divmax, divtot =    9.98E-18  -5.23E-10       dt limited by initial step   
+divmax, divtot =    9.79E-18   8.85E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103243.983    Time of Simulation:     46.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.79E-02  7.66E-04  3.63E-03   64  3.80E-02   80
-Cell Peclet number:  5.17E-03    1
-divmax, divtot =    9.55E-18   5.86E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103245.760    Time of Simulation:     47.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.79E-02  7.82E-04  3.72E-03   64  3.80E-02   80
+Time of Day: 223928.586    Time of Simulation:     49.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.80E-02  8.13E-04  3.89E-03   64  3.80E-02   80
 Cell Peclet number:  5.16E-03    1
-divmax, divtot =    9.82E-18  -7.38E-11       dt limited by initial step   
+divmax, divtot =    9.68E-18  -1.44E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103247.545    Time of Simulation:     48.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.80E-02  7.98E-04  3.80E-03   64  3.80E-02   80
+Time of Day: 223929.436    Time of Simulation:     50.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.80E-02  8.29E-04  3.98E-03   64  3.80E-02   80
 Cell Peclet number:  5.16E-03    1
-divmax, divtot =    9.87E-18   4.00E-11       dt limited by initial step   
+divmax, divtot =    9.83E-18  -9.03E-12       dt limited by initial step   
  =================================================================
-Time of Day: 103249.311    Time of Simulation:     49.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.80E-02  8.14E-04  3.89E-03   64  3.80E-02   80
-Cell Peclet number:  5.15E-03    1
-divmax, divtot =    9.86E-18  -8.05E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103251.094    Time of Simulation:     50.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.80E-02  8.30E-04  3.98E-03   64  3.80E-02   80
-Cell Peclet number:  5.14E-03    1
-divmax, divtot =    9.75E-18   2.87E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103252.878    Time of Simulation:     51.00    dt:  1.000000000
+Time of Day: 223930.285    Time of Simulation:     51.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  8.46E-04  4.07E-03   64  3.80E-02   80
-Cell Peclet number:  5.14E-03    1
-divmax, divtot =    9.64E-18  -5.14E-11       dt limited by initial step   
+Cell Peclet number:  5.15E-03    1
+divmax, divtot =    9.96E-18  -1.15E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103254.655    Time of Simulation:     52.00    dt:  1.000000000
+Time of Day: 223931.138    Time of Simulation:     52.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  8.62E-04  4.15E-03   64  3.80E-02   80
-Cell Peclet number:  5.13E-03    1
-divmax, divtot =    9.87E-18   1.16E-10       dt limited by initial step   
+Cell Peclet number:  5.15E-03    1
+divmax, divtot =    9.54E-18   2.09E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103256.437    Time of Simulation:     53.00    dt:  1.000000000
+Time of Day: 223931.988    Time of Simulation:     53.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  8.79E-04  4.24E-03   64  3.80E-02   80
-Cell Peclet number:  5.13E-03    1
-divmax, divtot =    9.50E-18  -1.10E-10       dt limited by initial step   
+Cell Peclet number:  5.14E-03    1
+divmax, divtot =    9.53E-18  -3.91E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103258.219    Time of Simulation:     54.00    dt:  1.000000000
+Time of Day: 223932.838    Time of Simulation:     54.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  8.95E-04  4.32E-03   64  3.80E-02   80
-Cell Peclet number:  5.12E-03    1
-divmax, divtot =    9.74E-18   2.53E-10       dt limited by initial step   
+Cell Peclet number:  5.14E-03    1
+divmax, divtot =    9.94E-18   4.76E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103259.993    Time of Simulation:     55.00    dt:  1.000000000
+Time of Day: 223933.687    Time of Simulation:     55.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  9.11E-04  4.40E-03   64  3.80E-02   80
+Cell Peclet number:  5.13E-03    1
+divmax, divtot =    9.63E-18   7.35E-11       dt limited by initial step   
+ =================================================================
+Time of Day: 223934.536    Time of Simulation:     56.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.80E-02  9.27E-04  4.49E-03   64  3.80E-02   80
+Cell Peclet number:  5.13E-03    1
+divmax, divtot =    9.76E-18  -6.34E-11       dt limited by initial step   
+ =================================================================
+Time of Day: 223935.386    Time of Simulation:     57.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.80E-02  9.41E-04  4.57E-03   64  3.80E-02   80
 Cell Peclet number:  5.12E-03    1
-divmax, divtot =    9.81E-18   8.65E-10       dt limited by initial step   
+divmax, divtot =    9.77E-18   1.08E-09       dt limited by initial step   
  =================================================================
-Time of Day: 103301.778    Time of Simulation:     56.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.80E-02  9.27E-04  4.48E-03   64  3.80E-02   80
+Time of Day: 223936.235    Time of Simulation:     58.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.80E-02  9.55E-04  4.65E-03   64  3.80E-02   80
+Cell Peclet number:  5.12E-03    1
+divmax, divtot =    9.92E-18  -8.17E-13       dt limited by initial step   
+ =================================================================
+Time of Day: 223937.085    Time of Simulation:     59.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.80E-02  9.69E-04  4.72E-03   64  3.80E-02   80
 Cell Peclet number:  5.11E-03    1
-divmax, divtot =    9.72E-18  -4.68E-10       dt limited by initial step   
+divmax, divtot =    9.61E-18   8.57E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103303.548    Time of Simulation:     57.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.80E-02  9.41E-04  4.56E-03   64  3.80E-02   80
-Cell Peclet number:  5.11E-03    1
-divmax, divtot =    9.82E-18   9.88E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103305.296    Time of Simulation:     58.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.80E-02  9.55E-04  4.64E-03   64  3.80E-02   80
+Time of Day: 223937.934    Time of Simulation:     60.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.80E-02  9.83E-04  4.80E-03   64  3.81E-02   80
 Cell Peclet number:  5.10E-03    1
-divmax, divtot =    9.75E-18  -1.62E-10       dt limited by initial step   
+divmax, divtot =    9.92E-18  -2.26E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103307.078    Time of Simulation:     59.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.80E-02  9.70E-04  4.72E-03   64  3.80E-02   80
+Time of Day: 223938.784    Time of Simulation:     61.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.80E-02  9.97E-04  4.88E-03   64  3.81E-02   80
 Cell Peclet number:  5.10E-03    1
-divmax, divtot =    9.53E-18   5.29E-10       dt limited by initial step   
+divmax, divtot =    1.00E-17   2.21E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103308.826    Time of Simulation:     60.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.80E-02  9.84E-04  4.80E-03   64  3.81E-02   80
-Cell Peclet number:  5.09E-03    1
-divmax, divtot =    9.69E-18   6.14E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103310.609    Time of Simulation:     61.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.80E-02  9.98E-04  4.87E-03   64  3.81E-02   80
-Cell Peclet number:  5.08E-03    1
-divmax, divtot =    9.96E-18   2.68E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103312.381    Time of Simulation:     62.00    dt:  1.000000000
+Time of Day: 223939.634    Time of Simulation:     62.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  1.01E-03  4.95E-03   64  3.81E-02   80
-Cell Peclet number:  5.08E-03    1
-divmax, divtot =    9.64E-18  -2.91E-10       dt limited by initial step   
+Cell Peclet number:  5.09E-03    1
+divmax, divtot =    1.01E-17   3.25E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103314.164    Time of Simulation:     63.00    dt:  1.000000000
+Time of Day: 223940.484    Time of Simulation:     63.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.80E-02  1.03E-03  5.02E-03   64  3.81E-02   80
+Cell Peclet number:  5.09E-03    1
+divmax, divtot =    9.74E-18   6.03E-10       dt limited by initial step   
+ =================================================================
+Time of Day: 223941.334    Time of Simulation:     64.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.80E-02  1.04E-03  5.10E-03   64  3.81E-02   80
+Cell Peclet number:  5.08E-03    1
+divmax, divtot =    9.86E-18   5.07E-11       dt limited by initial step   
+ =================================================================
+Time of Day: 223942.181    Time of Simulation:     65.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.81E-02  1.06E-03  5.17E-03   64  3.81E-02   80
+Cell Peclet number:  5.08E-03    1
+divmax, divtot =    9.75E-18   3.26E-10       dt limited by initial step   
+ =================================================================
+Time of Day: 223943.027    Time of Simulation:     66.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.81E-02  1.07E-03  5.24E-03   60  3.81E-02   80
 Cell Peclet number:  5.07E-03    1
-divmax, divtot =    9.90E-18   1.68E-10       dt limited by initial step   
+divmax, divtot =    9.69E-18   4.20E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103315.946    Time of Simulation:     64.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.80E-02  1.04E-03  5.09E-03   64  3.81E-02   80
+Time of Day: 223943.874    Time of Simulation:     67.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.81E-02  1.08E-03  5.31E-03   60  3.82E-02   80
 Cell Peclet number:  5.07E-03    1
-divmax, divtot =    9.71E-18  -8.48E-10       dt limited by initial step   
+divmax, divtot =    9.77E-18   8.50E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103317.716    Time of Simulation:     65.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.81E-02  1.06E-03  5.16E-03   64  3.81E-02   80
+Time of Day: 223944.723    Time of Simulation:     68.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.81E-02  1.10E-03  5.39E-03   60  3.82E-02   80
 Cell Peclet number:  5.06E-03    1
-divmax, divtot =    9.59E-18   8.94E-10       dt limited by initial step   
+divmax, divtot =    9.68E-18  -7.80E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103319.489    Time of Simulation:     66.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.81E-02  1.07E-03  5.23E-03   60  3.81E-02   80
-Cell Peclet number:  5.06E-03    1
-divmax, divtot =    9.79E-18  -8.74E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103321.266    Time of Simulation:     67.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.81E-02  1.09E-03  5.31E-03   60  3.82E-02   80
-Cell Peclet number:  5.05E-03    1
-divmax, divtot =    1.03E-17   5.50E-12       dt limited by initial step   
- =================================================================
-Time of Day: 103323.051    Time of Simulation:     68.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.81E-02  1.10E-03  5.38E-03   60  3.82E-02   80
-Cell Peclet number:  5.05E-03    1
-divmax, divtot =    9.77E-18   3.15E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103324.825    Time of Simulation:     69.00    dt:  1.000000000
+Time of Day: 223945.571    Time of Simulation:     69.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.81E-02  1.11E-03  5.46E-03   60  3.82E-02   80
+Cell Peclet number:  5.05E-03    1
+divmax, divtot =    9.99E-18  -2.76E-10       dt limited by initial step   
+ =================================================================
+Time of Day: 223946.418    Time of Simulation:     70.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.81E-02  1.13E-03  5.54E-03   60  3.82E-02   80
+Cell Peclet number:  5.05E-03    1
+divmax, divtot =    9.92E-18   3.31E-11       dt limited by initial step   
+ =================================================================
+Time of Day: 223947.264    Time of Simulation:     71.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.81E-02  1.14E-03  5.61E-03   60  3.82E-02   80
 Cell Peclet number:  5.04E-03    1
-divmax, divtot =    1.00E-17  -3.21E-10       dt limited by initial step   
+divmax, divtot =    1.03E-17  -6.52E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103326.611    Time of Simulation:     70.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.81E-02  1.13E-03  5.53E-03   60  3.82E-02   80
+Time of Day: 223948.113    Time of Simulation:     72.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.81E-02  1.15E-03  5.68E-03   60  3.82E-02   80
 Cell Peclet number:  5.04E-03    1
-divmax, divtot =    9.73E-18  -9.48E-11       dt limited by initial step   
+divmax, divtot =    9.94E-18  -3.88E-11       dt limited by initial step   
  =================================================================
-Time of Day: 103328.386    Time of Simulation:     71.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.81E-02  1.14E-03  5.60E-03   60  3.82E-02   80
+Time of Day: 223948.959    Time of Simulation:     73.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.81E-02  1.17E-03  5.75E-03   60  3.82E-02   80
 Cell Peclet number:  5.03E-03    1
-divmax, divtot =    9.88E-18  -9.66E-11       dt limited by initial step   
+divmax, divtot =    9.72E-18   1.49E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103330.170    Time of Simulation:     72.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.81E-02  1.16E-03  5.67E-03   60  3.82E-02   80
-Cell Peclet number:  5.03E-03    1
-divmax, divtot =    1.02E-17  -1.25E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103331.951    Time of Simulation:     73.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.81E-02  1.17E-03  5.74E-03   60  3.82E-02   80
-Cell Peclet number:  5.02E-03    1
-divmax, divtot =    9.88E-18   4.76E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103333.734    Time of Simulation:     74.00    dt:  1.000000000
+Time of Day: 223949.806    Time of Simulation:     74.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.81E-02  1.18E-03  5.81E-03   60  3.82E-02   80
+Cell Peclet number:  5.03E-03    1
+divmax, divtot =    9.67E-18   1.49E-10       dt limited by initial step   
+ =================================================================
+Time of Day: 223950.653    Time of Simulation:     75.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.81E-02  1.19E-03  5.88E-03   60  3.83E-02   80
 Cell Peclet number:  5.02E-03    1
-divmax, divtot =    9.66E-18  -1.13E-10       dt limited by initial step   
+divmax, divtot =    9.71E-18   2.43E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103335.545    Time of Simulation:     75.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.81E-02  1.19E-03  5.87E-03   60  3.83E-02   80
+Time of Day: 223951.500    Time of Simulation:     76.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.82E-02  1.20E-03  5.94E-03   60  3.83E-02   80
+Cell Peclet number:  5.02E-03    1
+divmax, divtot =    9.90E-18   1.86E-11       dt limited by initial step   
+ =================================================================
+Time of Day: 223952.347    Time of Simulation:     77.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.82E-02  1.22E-03  6.01E-03   60  3.83E-02   80
 Cell Peclet number:  5.01E-03    1
-divmax, divtot =    9.96E-18  -6.87E-10       dt limited by initial step   
+divmax, divtot =    9.84E-18  -8.34E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103337.329    Time of Simulation:     76.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.82E-02  1.21E-03  5.94E-03   60  3.83E-02   80
+Time of Day: 223953.194    Time of Simulation:     78.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.82E-02  1.23E-03  6.07E-03   60  3.83E-02   80
 Cell Peclet number:  5.01E-03    1
-divmax, divtot =    1.01E-17   6.43E-10       dt limited by initial step   
+divmax, divtot =    1.03E-17  -5.50E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103339.111    Time of Simulation:     77.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.82E-02  1.22E-03  6.00E-03   60  3.83E-02   80
+Time of Day: 223954.040    Time of Simulation:     79.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.82E-02  1.25E-03  6.13E-03   60  3.83E-02   80
 Cell Peclet number:  5.00E-03    1
-divmax, divtot =    1.06E-17  -7.82E-10       dt limited by initial step   
+divmax, divtot =    9.61E-18   1.16E-09       dt limited by initial step   
  =================================================================
-Time of Day: 103340.897    Time of Simulation:     78.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.82E-02  1.23E-03  6.06E-03   60  3.83E-02   80
+Time of Day: 223954.889    Time of Simulation:     80.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.82E-02  1.26E-03  6.18E-03   60  3.83E-02   80
 Cell Peclet number:  5.00E-03    1
-divmax, divtot =    9.65E-18  -1.69E-10       dt limited by initial step   
+divmax, divtot =    1.05E-17   6.49E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103342.680    Time of Simulation:     79.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.82E-02  1.25E-03  6.12E-03   60  3.83E-02   80
+Time of Day: 223955.737    Time of Simulation:     81.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.82E-02  1.28E-03  6.24E-03   60  3.83E-02   80
 Cell Peclet number:  4.99E-03    1
-divmax, divtot =    1.01E-17   1.34E-10       dt limited by initial step   
+divmax, divtot =    9.75E-18   1.14E-09       dt limited by initial step   
  =================================================================
-Time of Day: 103344.467    Time of Simulation:     80.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.82E-02  1.27E-03  6.17E-03   60  3.83E-02   80
+Time of Day: 223956.583    Time of Simulation:     82.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.82E-02  1.30E-03  6.29E-03   60  3.83E-02   80
 Cell Peclet number:  4.99E-03    1
-divmax, divtot =    9.78E-18   3.01E-10       dt limited by initial step   
+divmax, divtot =    9.80E-18  -1.09E-09       dt limited by initial step   
  =================================================================
-Time of Day: 103346.246    Time of Simulation:     81.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.82E-02  1.28E-03  6.23E-03   60  3.83E-02   80
-Cell Peclet number:  4.98E-03    1
-divmax, divtot =    9.71E-18   1.07E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103348.031    Time of Simulation:     82.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.82E-02  1.30E-03  6.28E-03   60  3.83E-02   80
-Cell Peclet number:  4.98E-03    1
-divmax, divtot =    9.93E-18   9.82E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103349.773    Time of Simulation:     83.00    dt:  1.000000000
+Time of Day: 223957.433    Time of Simulation:     83.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.82E-02  1.31E-03  6.34E-03   60  3.83E-02   80
+Cell Peclet number:  4.98E-03    1
+divmax, divtot =    9.67E-18   1.66E-10       dt limited by initial step   
+ =================================================================
+Time of Day: 223958.279    Time of Simulation:     84.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.83E-02  1.32E-03  6.40E-03   60  3.83E-02   80
+Cell Peclet number:  4.98E-03    1
+divmax, divtot =    9.59E-18  -6.62E-11       dt limited by initial step   
+ =================================================================
+Time of Day: 223959.127    Time of Simulation:     85.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.83E-02  1.34E-03  6.44E-03   60  3.83E-02   80
 Cell Peclet number:  4.97E-03    1
-divmax, divtot =    9.66E-18   9.47E-10       dt limited by initial step   
+divmax, divtot =    9.88E-18  -2.48E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103351.558    Time of Simulation:     84.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.83E-02  1.33E-03  6.39E-03   60  3.83E-02   80
+Time of Day: 223959.973    Time of Simulation:     86.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.83E-02  1.35E-03  6.49E-03   56  3.84E-02   80
 Cell Peclet number:  4.97E-03    1
-divmax, divtot =    1.02E-17   2.10E-10       dt limited by initial step   
+divmax, divtot =    1.00E-17   6.68E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103353.342    Time of Simulation:     85.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.83E-02  1.34E-03  6.43E-03   60  3.83E-02   80
+Time of Day: 224000.819    Time of Simulation:     87.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.83E-02  1.36E-03  6.55E-03   56  3.84E-02   80
 Cell Peclet number:  4.96E-03    1
-divmax, divtot =    1.01E-17   2.43E-10       dt limited by initial step   
+divmax, divtot =    9.72E-18   5.17E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103355.130    Time of Simulation:     86.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.83E-02  1.35E-03  6.48E-03   60  3.84E-02   80
+Time of Day: 224001.666    Time of Simulation:     88.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.83E-02  1.37E-03  6.61E-03   56  3.84E-02   80
 Cell Peclet number:  4.96E-03    1
-divmax, divtot =    9.80E-18   2.51E-10       dt limited by initial step   
+divmax, divtot =    9.90E-18   1.18E-09       dt limited by initial step   
  =================================================================
-Time of Day: 103356.910    Time of Simulation:     87.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.83E-02  1.37E-03  6.53E-03   56  3.84E-02   80
+Time of Day: 224002.513    Time of Simulation:     89.00    dt:  1.000000000
+[1710365882.802354] [gcn52:388490:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+ WARNING: z0m and z0h not defined, set equal to z0
+[1710365910.065228] [gcn52:388490:0]   +---------------------+-----------------------------------------------------+
+[1710365910.065230] [gcn52:388490:0]   | 0x3672e80 ep_cfg[3] | tagged message by ucp_tag_send*() from cuda/GPU2    |
+[1710365910.065231] [gcn52:388490:0]   +---------------------+--------------------------------------------------+--+
+[1710365910.065232] [gcn52:388490:0]   |              0..inf | (?) rendezvous no data fetch                     |  |
+[1710365910.065232] [gcn52:388490:0]   +---------------------+--------------------------------------------------+--+
+[1710365910.069027] [gcn52:388490:0]   +---------------------+------------------------------------------------------------+
+[1710365910.069028] [gcn52:388490:0]   | 0x3672e80 ep_cfg[3] | rendezvous data fetch() into cuda/GPU2 from cuda/dev[3]    |
+[1710365910.069029] [gcn52:388490:0]   +---------------------+--------------------------------------------+---------------+
+[1710365910.069030] [gcn52:388490:0]   |                   0 | no data fetch                              |               |
+[1710365910.069030] [gcn52:388490:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365910.069031] [gcn52:388490:0]   +---------------------+--------------------------------------------+---------------+
+[1710365911.847724] [gcn52:388490:0]   +---------------------+------------------------------------------------------------+
+[1710365911.847726] [gcn52:388490:0]   | 0x3672e80 ep_cfg[3] | rendezvous data fetch() into cuda/GPU2 from cuda/dev[1]    |
+[1710365911.847727] [gcn52:388490:0]   +---------------------+--------------------------------------------+---------------+
+[1710365911.847727] [gcn52:388490:0]   |                   0 | no data fetch                              |               |
+[1710365911.847727] [gcn52:388490:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365911.847728] [gcn52:388490:0]   +---------------------+--------------------------------------------+---------------+
+[1710365920.768761] [gcn52:388490:0]   +---------------------+------------------------------------------------------------+
+[1710365920.768763] [gcn52:388490:0]   | 0x3672e80 ep_cfg[3] | rendezvous data fetch() into cuda/GPU2 from cuda/dev[0]    |
+[1710365920.768764] [gcn52:388490:0]   +---------------------+--------------------------------------------+---------------+
+[1710365920.768764] [gcn52:388490:0]   |                   0 | no data fetch                              |               |
+[1710365920.768765] [gcn52:388490:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365920.768765] [gcn52:388490:0]   +---------------------+--------------------------------------------+---------------+
+[1710365882.802266] [gcn52:388489:0]   +---------------------+--------------------------------------------------+-----------------------------------------------+
+ WARNING: z0m and z0h not defined, set equal to z0
+[1710365911.845106] [gcn52:388489:0]   +---------------------+-----------------------------------------------------+
+[1710365911.845110] [gcn52:388489:0]   | 0x1f00eb0 ep_cfg[3] | tagged message by ucp_tag_send*() from cuda/GPU1    |
+[1710365911.845111] [gcn52:388489:0]   +---------------------+--------------------------------------------------+--+
+[1710365911.845111] [gcn52:388489:0]   |              0..inf | (?) rendezvous no data fetch                     |  |
+[1710365911.845112] [gcn52:388489:0]   +---------------------+--------------------------------------------------+--+
+[1710365911.849498] [gcn52:388489:0]   +---------------------+------------------------------------------------------------+
+[1710365911.849500] [gcn52:388489:0]   | 0x1f00eb0 ep_cfg[3] | rendezvous data fetch() into cuda/GPU1 from cuda/dev[2]    |
+[1710365911.849500] [gcn52:388489:0]   +---------------------+--------------------------------------------+---------------+
+[1710365911.849501] [gcn52:388489:0]   |                   0 | no data fetch                              |               |
+[1710365911.849501] [gcn52:388489:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365911.849502] [gcn52:388489:0]   +---------------------+--------------------------------------------+---------------+
+[1710365911.851358] [gcn52:388489:0]   +---------------------+------------------------------------------------------------+
+[1710365911.851359] [gcn52:388489:0]   | 0x1f00eb0 ep_cfg[3] | rendezvous data fetch() into cuda/GPU1 from cuda/dev[0]    |
+[1710365911.851360] [gcn52:388489:0]   +---------------------+--------------------------------------------+---------------+
+[1710365911.851360] [gcn52:388489:0]   |                   0 | no data fetch                              |               |
+[1710365911.851361] [gcn52:388489:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365911.851361] [gcn52:388489:0]   +---------------------+--------------------------------------------+---------------+
+[1710365920.765841] [gcn52:388489:0]   +---------------------+------------------------------------------------------------+
+[1710365920.765843] [gcn52:388489:0]   | 0x1f00eb0 ep_cfg[3] | rendezvous data fetch() into cuda/GPU1 from cuda/dev[3]    |
+[1710365920.765843] [gcn52:388489:0]   +---------------------+--------------------------------------------+---------------+
+[1710365920.765844] [gcn52:388489:0]   |                   0 | no data fetch                              |               |
+[1710365920.765845] [gcn52:388489:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365920.765845] [gcn52:388489:0]   +---------------------+--------------------------------------------+---------------+
+Courant numbers (x,y,z,tot):  3.84E-02  1.38E-03  6.66E-03   56  3.84E-02   80
 Cell Peclet number:  4.95E-03    1
-divmax, divtot =    1.01E-17  -2.30E-10       dt limited by initial step   
+divmax, divtot =    9.95E-18  -1.76E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103358.683    Time of Simulation:     88.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.83E-02  1.38E-03  6.59E-03   56  3.84E-02   80
+Time of Day: 224003.360    Time of Simulation:     90.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.84E-02  1.40E-03  6.72E-03   56  3.84E-02   80
 Cell Peclet number:  4.95E-03    1
-divmax, divtot =    9.80E-18  -7.04E-10       dt limited by initial step   
+divmax, divtot =    9.70E-18   5.94E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103400.465    Time of Simulation:     89.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.84E-02  1.39E-03  6.65E-03   64  3.84E-02   80
+Time of Day: 224004.207    Time of Simulation:     91.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.84E-02  1.40E-03  6.79E-03   63  3.85E-02   80
+Cell Peclet number:  4.95E-03    1
+divmax, divtot =    9.82E-18  -5.41E-10       dt limited by initial step   
+ =================================================================
+Time of Day: 224005.058    Time of Simulation:     92.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.84E-02  1.41E-03  6.86E-03   63  3.85E-02   80
 Cell Peclet number:  4.94E-03    1
-divmax, divtot =    9.74E-18   4.92E-10       dt limited by initial step   
+divmax, divtot =    1.00E-17  -9.94E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103402.235    Time of Simulation:     90.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.84E-02  1.40E-03  6.72E-03   63  3.84E-02   80
+Time of Day: 224005.905    Time of Simulation:     93.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.84E-02  1.42E-03  6.93E-03   62  3.85E-02   80
 Cell Peclet number:  4.94E-03    1
-divmax, divtot =    9.57E-18   4.31E-10       dt limited by initial step   
+divmax, divtot =    9.92E-18   6.06E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103404.021    Time of Simulation:     91.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.84E-02  1.41E-03  6.79E-03   63  3.85E-02   80
+Time of Day: 224006.751    Time of Simulation:     94.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.84E-02  1.43E-03  7.00E-03   62  3.85E-02   80
 Cell Peclet number:  4.93E-03    1
-divmax, divtot =    9.90E-18   3.75E-10       dt limited by initial step   
+divmax, divtot =    9.74E-18  -1.17E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103405.807    Time of Simulation:     92.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.84E-02  1.42E-03  6.86E-03   63  3.85E-02   80
-Cell Peclet number:  4.93E-03    1
-divmax, divtot =    9.79E-18   6.86E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103407.591    Time of Simulation:     93.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.84E-02  1.43E-03  6.93E-03   62  3.85E-02   80
-Cell Peclet number:  4.93E-03    1
-divmax, divtot =    9.85E-18  -3.85E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103409.373    Time of Simulation:     94.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.84E-02  1.43E-03  7.01E-03   62  3.85E-02   80
-Cell Peclet number:  4.92E-03    1
-divmax, divtot =    9.91E-18   4.08E-11       dt limited by initial step   
- =================================================================
-Time of Day: 103411.132    Time of Simulation:     95.00    dt:  1.000000000
+Time of Day: 224007.600    Time of Simulation:     95.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.84E-02  1.44E-03  7.07E-03   62  3.85E-02   80
+Cell Peclet number:  4.93E-03    1
+divmax, divtot =    1.01E-17   7.31E-10       dt limited by initial step   
+ =================================================================
+Time of Day: 224008.447    Time of Simulation:     96.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.84E-02  1.45E-03  7.13E-03   62  3.85E-02   80
 Cell Peclet number:  4.92E-03    1
-divmax, divtot =    9.83E-18  -3.22E-10       dt limited by initial step   
+divmax, divtot =    9.85E-18   5.55E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103412.918    Time of Simulation:     96.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.84E-02  1.45E-03  7.14E-03   62  3.85E-02   80
+Time of Day: 224009.293    Time of Simulation:     97.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.85E-02  1.46E-03  7.20E-03   62  3.85E-02   80
+Cell Peclet number:  4.92E-03    1
+divmax, divtot =    9.74E-18   9.35E-10       dt limited by initial step   
+ =================================================================
+Time of Day: 224010.140    Time of Simulation:     98.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.85E-02  1.47E-03  7.26E-03   62  3.85E-02   80
 Cell Peclet number:  4.91E-03    1
-divmax, divtot =    1.01E-17   5.95E-10       dt limited by initial step   
+divmax, divtot =    9.69E-18   7.81E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103414.705    Time of Simulation:     97.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.85E-02  1.46E-03  7.21E-03   62  3.85E-02   80
+Time of Day: 224010.987    Time of Simulation:     99.00    dt:  1.000000000
+Courant numbers (x,y,z,tot):  3.85E-02  1.48E-03  7.32E-03   62  3.86E-02   80
 Cell Peclet number:  4.91E-03    1
-divmax, divtot =    1.02E-17   1.41E-10       dt limited by initial step   
+divmax, divtot =    9.94E-18   6.40E-10       dt limited by initial step   
  =================================================================
-Time of Day: 103416.487    Time of Simulation:     98.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.85E-02  1.47E-03  7.27E-03   62  3.85E-02   80
-Cell Peclet number:  4.90E-03    1
-divmax, divtot =    1.01E-17  -2.86E-10       dt limited by initial step   
- =================================================================
-Time of Day: 103418.265    Time of Simulation:     99.00    dt:  1.000000000
-Courant numbers (x,y,z,tot):  3.85E-02  1.48E-03  7.33E-03   62  3.86E-02   80
-Cell Peclet number:  4.90E-03    1
-divmax, divtot =    9.92E-18  -6.73E-11       dt limited by initial step   
- =================================================================
-Time of Day: 103420.038    Time of Simulation:    100.00    dt:  1.000000000
+Time of Day: 224011.833    Time of Simulation:    100.00    dt:  1.000000000
 Courant numbers (x,y,z,tot):  3.85E-02  1.49E-03  7.38E-03   61  3.86E-02   80
-Cell Peclet number:  4.89E-03    1
+Cell Peclet number:  4.90E-03    1
+divmax, divtot =    1.01E-17   1.33E-10       dt limited by initial step   
  Num time steps:           321
- Time loop wall time:    191.4754938760000     
- Num time steps:           321
- Time loop wall time:    191.4962890440000     
- Num time steps:           321
- Time loop wall time:    191.6238514040000     
-divmax, divtot =    9.84E-18   3.89E-10       dt limited by initial step   
- Num time steps:           321
- Time loop wall time:    191.6786606720000     
- TOTAL wall time =     223.5079793010000     
+ Time loop wall time:    91.55648512500001     
+ TOTAL wall time =     126.1932452660000     
+[1710365910.067671] [gcn52:388491:0]   +---------------------+--------------------------------------------+---------------+
+[1710365910.067681] [gcn52:388491:0]   |                   0 | no data fetch                              |               |
+[1710365910.067681] [gcn52:388491:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365910.067681] [gcn52:388491:0]   +---------------------+--------------------------------------------+---------------+
+[1710365910.427519] [gcn52:388491:0]   +---------------------+------------------------------------------------------------+
+[1710365910.427521] [gcn52:388491:0]   | 0x2f9ce80 ep_cfg[3] | rendezvous data fetch() into cuda/GPU3 from cuda/dev[0]    |
+[1710365910.427521] [gcn52:388491:0]   +---------------------+--------------------------------------------+---------------+
+[1710365910.427522] [gcn52:388491:0]   |                   0 | no data fetch                              |               |
+[1710365910.427522] [gcn52:388491:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365910.427522] [gcn52:388491:0]   +---------------------+--------------------------------------------+---------------+
+[1710365920.698942] [gcn52:388491:0]   +---------------------+------------------------------------------------------------+
+[1710365920.698944] [gcn52:388491:0]   | 0x2f9ce80 ep_cfg[3] | rendezvous data fetch() into cuda/GPU3 from cuda/dev[1]    |
+[1710365920.698944] [gcn52:388491:0]   +---------------------+--------------------------------------------+---------------+
+[1710365920.698945] [gcn52:388491:0]   |                   0 | no data fetch                              |               |
+[1710365920.698946] [gcn52:388491:0]   |              1..inf | zero-copy read from remote                 | cuda_ipc/cuda |
+[1710365920.698946] [gcn52:388491:0]   +---------------------+--------------------------------------------+---------------+
 
 JOB STATISTICS
 ==============
-Job ID: 4710071
+Job ID: 5531631
 Cluster: snellius
 User/Group: cjungbacker/cjungbacker
 State: RUNNING
 Nodes: 1
 Cores per node: 72
 CPU Utilized: 00:00:00
-CPU Efficiency: 0.00% of 04:43:12 core-walltime
-Job Wall-clock time: 00:03:56
+CPU Efficiency: 0.00% of 02:50:24 core-walltime
+Job Wall-clock time: 00:02:22
 Memory Utilized: 0.00 MB (estimated maximum)
 Memory Efficiency: 0.00% of 480.00 GB (480.00 GB/node)
 WARNING: Efficiency statistics may be misleading for RUNNING jobs.
