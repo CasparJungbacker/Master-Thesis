@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in 01 02 04 08 16
+for i in 01 02 04 08 16 32 64
 do
   let NODES=${i#0}/4
   if [[ ${NODES} -eq 0 ]]; then let NODES+=1; fi
@@ -8,14 +8,11 @@ do
 
   sbatch \
     --partition=gpu \
-    --time=00:15:00 \
-    --cpus-per-task=1 \
+    --time=00:10:00 \
     --ntasks=$i \
-    --ntasks-per-node=$TASKS \
-    --gpus-per-node=$TASKS \
-    --nodes=$NODES \
     --gpus=$i \
-    --gpus-per-task=1 \
+    --nodes=$NODES \
+    --gpu-bind=none \
     --export=EXPNR="0$i" \
     --output=output_${i}.txt \
     submit.sh

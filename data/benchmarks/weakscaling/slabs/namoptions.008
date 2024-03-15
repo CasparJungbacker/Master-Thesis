@@ -12,16 +12,17 @@ randqt     =  2.5e-5
 nsv        =  0
 nprocx = 1
 nprocy = 8
+ltimer=.false.
 /
 
 &DOMAIN
-itot       =  2048
-jtot       =  4096
+itot       =  4096
+jtot       =  2048
 kmax       =  80
 
 
-xsize      =  204800.
-ysize      =  409600.
+ysize      =  204800.
+xsize      =  409600.
 
 xlat       =  15.
 xlon       =  0.

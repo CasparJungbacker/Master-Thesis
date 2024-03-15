@@ -14,6 +14,10 @@ hpcx_load
 
 export OMPI_MCA_coll_hcoll_enable=0
 
+export UCX_LOG_LEVEL=info
+export UCX_PROTO_ENABLE=y
+export UCX_PROTO_INFO=y
+
 export DALES=/home/cjungbacker/dales/build/gpu/dp/src/dales4.4
 export PROF_INP=/home/cjungbacker/dales/cases/bomex/prof.inp.001
 export LSCALE_INP=/home/cjungbacker/dales/cases/bomex/lscale.inp.001
@@ -25,4 +29,7 @@ cp $LSCALE_INP $TMPDIR/lscale.inp.$EXPNR
 
 cd $TMPDIR
 
-srun --mpi=pmix $DALES $NAMOPTIONS
+#nsys profile -o profile --force-overwrite true srun --mpi=pmix $DALES $NAMOPTIONS
+#srun --mpi=pmix nsys profile -o prof_${SLURM_PROCID} $DALES $NAMOPTIONS
+#cp prof_${SLURM_PROCID}.nsys-rep ~
+srun $DALES $NAMOPTIONS
