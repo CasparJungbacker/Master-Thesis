@@ -1,9 +1,10 @@
 #!/bin/bash
-#SBATCH --time=00:10:00
+#SBATCH --time=00:05:00
 #SBATCH --partition=gpu
 #SBATCH --ntasks=4
 #SBATCH --nodes=1
-#SBATCH --gpus-per-task=1
+#SBATCH --gpus=4
+#SBATCH --gpu-bind=none
 #SBATCH --output=output.txt
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=c.a.a.jungbacker@student.tudelft.nl
@@ -33,4 +34,4 @@ cp $LSCALE_INP $TMPDIR/lscale.inp.001
 
 cd $TMPDIR
 
-srun --mpi=pmix $DALES $NAMOPTIONS
+srun $DALES $NAMOPTIONS
