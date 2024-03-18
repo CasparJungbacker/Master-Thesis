@@ -1,37 +1,47 @@
 \chapter{Implementation} \label{chap:implementation}
-In this chapter, the technical details of the implementation of \acrshort{acc} in \acrshort{dales} will be discussed. First, an explanation will be given on why \acrshort{acc} was chosen for \acrshort{dales}. Thereafter, it will be explained how \acrshort{acc} was used to offload computationally expensive parts of the code to the \acrshort{gpu}, where special attention is given to the Poisson solver. Finally, some further optimizations are covered, as well as the extension to multiple \acrshort{gpu}s.
+In this chapter, the technical details of the implementation of \acrshort{acc} in \acrshort{dales} are discussed. First, an explanation is given on why \acrshort{acc} was chosen for \acrshort{dales}. Thereafter, it is explained how \acrshort{acc} was used to offload computationally expensive parts of the code to the \acrshort{gpu}, where special attention is given to the Poisson solver. Finally, some further optimizations are covered, as well as the extension to multiple \acrshort{gpu}s.
 
 \section{OpenACC}
-As discussed in \autoref{sec:programming_gpus}, there are numerous programming models available to make use of accelerators (\acrshort{gpu}s). For this work, the directive-based approach with \acrshort{acc} was chosen. This choice was based on several observations. For once, \acrshort{dales} is already very rich in features and has an extensive code base. Therefore, a single-source solution is preferable to keep the code base manageable. Second, \acrshort{dales} is constantly being updated and extended by developers with various backgrounds, ranging from students to researchers. Often, these developers do not possess intimate knowledge of \acrshort{gpu} architecture and \acrshort{gpu} programming. Hence, \acrshort{acc} is a good choice because it removes the need for low-level optimization of device kernels. Finally, \acrshort{dales} deployed on various computer systems, ranging from modest desktop workstations to supercomputers like Snellius and Fugaku \citep{janssonCloudBotanyShallow2023}. In this regard, \acrshort{acc} is a good choice because it can be compiled for a variety of computing devices.
+As discussed in \autoref{sec:programming_gpus}, there are numerous programming models available for targetting accelerators (\acrshort{gpu}s). For this work, the directive-based approach with \acrshort{acc} was chosen. This choice was based on several observations. For once, \acrshort{dales} features a wide palette of physical schemes for the simulation of processes related to clouds, precipitation, land surface, buildings, et cetera. Consequently, the sheer volume of the \acrshort{dales} source code is also quite large. Because it can be added to the existing code, the usage of \acrshort{acc} prevents the code base from growing even more. Second, \acrshort{dales} is constantly being updated and extended by developers with various backgrounds, ranging from students to researchers. Often, these developers do not possess intimate knowledge of \acrshort{gpu} architecture and \acrshort{gpu} programming. In this regard, \acrshort{acc} is a good choice because it removes the need for low-level optimization of kernels. Finally, \acrshort{dales} deployed on various computer systems, ranging from modest desktop workstations to supercomputers like Snellius and Fugaku \citep{janssonCloudBotanyShallow2023}. In this regard, \acrshort{acc} is a good choice because it can be compiled for a variety of computing devices.
+
+To compile \acrshort{acc} code, one has to use a compatible compiler. Throughout this work, the \texttt{nvfortran} compiler has been used. This compiler is included in the NVIDIA HPC SDK, a collection of compilers and libraries for the development of \acrshort{gpu} applications. 
 
 \section{Offloading loops}
-The first step towards a GPU port of DALES was to offload computationally expensive parts of the code. These parts are generally made up of (nested) loops that perform some calculation on all grid points. This offloading was done by adding \emph{compute constructs} to the code. A compute construct instructs the compiler that the code it contains should be compiled for the GPU. OpenACC features three compute constructs: \texttt{kernels}, \texttt{parallel} and \texttt{serial}, which will be discussed in the following sections. 
+The first step towards a GPU port of DALES was to offload computationally expensive parts of the code. These parts generally consist of (nested) loops that perform some calculation local to each grid point. This offloading was done by adding \emph{compute constructs} to the code. In \acrshort{acc} terms, a compute construct instructs the compiler that the annotated code should be compiled for the selected device. Here, the term \emph{device} refers to the accelerator. Following this terminology, the \acrshort{cpu} is referred to as the \emph{host} OpenACC features three compute constructs: \texttt{kernels}, \texttt{parallel}, which will be discussed in the following sections. 
 
 \subsection{The \texttt{kernels} construct}
-When a loop or structured block is annotated with a \texttt{kernels} construct, the compiler is given the freedom to parallelize the code by itself. To do so, the compiler first has to determine if the annotated code can be parallelized \emph{at all}. This means that the generated device kernels are guaranteed to produce correct results, but it may also lead to unnecessary serial execution of parallelizable code because the compiler made a conservative decision.
+When a loop or structured block is annotated with a \texttt{kernels} construct, the compiler is given the freedom to parallelize the code by itself. To do so, the compiler first has to determine if the annotated code can be parallelized \emph{at all}. This means that the generated device kernels are guaranteed to produce correct results, but it may also lead to unnecessary serial execution of parallelizable code because the compiler has to make a conservative decision.
 
-In this work, the \texttt{kernels} construct was mainly used to offload sections that contained Fortran array syntax. Array syntax is a special syntax that allows for compact notation of operations on (multi-dimensional) arrays. For example, instead of constructing a (nested) loop to add two arrays to each other, one can simply write \texttt{C = A + B}. The \texttt{kernels} construct can be used to offload these sections of code. An example of a section of Fortran array syntax that is offloaded with the \texttt{kernels} construct can be found in \autoref{lst:acc_kernels}.
+In this work, the \texttt{kernels} construct was mainly used to offload sections that contained Fortran array syntax. Array syntax is a special syntax that allows for compact notation of operations on (multi-dimensional) arrays. For example, instead of constructing a (nested) loop to add two arrays to each other, one can simply write \texttt{C = A + B}. The \texttt{kernels} construct can be used to efficiently offload these sections of code. An example of a section of Fortran array syntax that is offloaded with the \texttt{kernels} construct can be found in \autoref{lst:acc_kernels}.
 
 \begin{lstlisting}[
   language=Fortran,
-  caption={Fortran array syntax offloaded using the \acrshort{acc} \texttt{kernels} construct. Here, arrays \texttt{A} and \texttt{B} are added and the result is stored in array \texttt{C}. Note that the three arrays can have any rank, as long as the rank is the same between arrays.},
+  caption={Fortran array syntax offloaded using the \acrshort{acc} \texttt{kernels} construct. This snippet comes from the module \texttt{tstep} of \acrshort{dales} and resets the arrays for the prognostic variables between time steps.},
   label={lst:acc_kernels}
   ]
 !$acc kernels
-C = A + B
+up = 0.
+vp = 0.
+wp = 0.
+thlp = 0.
+qtp = 0.
+svp = 0.
+e12p = 0.
 !$acc end kernels
 \end{lstlisting}
 
 \subsection{The \texttt{parallel} construct}
 Similar to the \texttt{kernels} construct, the \texttt{parallel} construct also lets the compiler generate parallel device code. The difference between the two is that the \texttt{parallel} construct lets the programmer decide how a section of code should be parallelized, while the \texttt{kernels} construct transfers this responsibility to the compiler. 
 
-By default, code that is annotated with a \texttt{parallel} construct will be executed by all available threads on the device redundantly. Therefore, by itself, the \texttt{parallel} is not useful. To distribute loop iterations over the available device threads, the \texttt{loop} clause can be added to a \texttt{parallel} construct. An example of the usage of the \texttt{parallel loop} construct can be found in \autoref{lst:acc_parallel_loop}. In this example, the loop contains 1000 iterations. When the program encounters this loop, 1000 threads will be spawned on the device. Each thread will get a private copy of the loop index \texttt{i} and will do the calculation for this value of \texttt{i}. 
+By default, code that is annotated with a \texttt{parallel} construct will be executed by all available cores on the device redundantly. In other words, all cores will execute all loop iterations at the same time. It should be clear that this will not result in any speedup, since the parallelism offered by the accelerator is not being exploited. Therefore, by itself, the \texttt{parallel} is not useful. To distribute loop iterations over the available device threads, the \texttt{loop} directive can be added to a \texttt{parallel} construct. An example of the usage of the \texttt{parallel loop} construct can be found in \autoref{lst:acc_parallel_loop}. In this example, the loop contains 1000 iterations. When the program encounters this loop, 1000 threads will be spawned on the device. Each core will get a private copy of the loop index \texttt{i} and will do the calculation for this value of \texttt{i}. 
 
-It should be noted that for a loop to be parallelizable, all iterations should be independent from one another. Contrary to the \texttt{kernels} construct, the compiler will not check for such dependencies if the \texttt{parallel loop} construct is used. Dependencies between loop iterations can lead to incorrect results or performance bottlenecks if one does not take appropriate action. 
+In \acrshort{dales}, loops are often nested. These nested loops can be offloaded by nesting \texttt{loop} directives. This is demonstrated in the left pane of \Autoref{lst:acc_parallel_loop_nested}. Again, when the outermost loop is encountered, 1000 threads will be generated. Then, each thread will generate 1000 more threads for the next loop. This procedure is repeated until the innermost loop is reached. Another option is to add a \texttt{collapse} clause to a \texttt{parallel loop} directive. The \texttt{collapse} clause will combine all nested loops into one large loop. This approach is often more efficient than nesting \texttt{loop} directives as all threads can be generated at once, and was therefore 
+
+It should be noted that for a loop to be parallelizable, all iterations should be independent of one another. In contrast to the \texttt{kernels} construct, the compiler will not check for such dependencies if the \texttt{parallel loop} construct is used. Dependencies between loop iterations can lead to incorrect results or performance bottlenecks if one does not take appropriate action. 
 
 \begin{lstlisting}[
     language=Fortran,
-    caption={Example of a loop that is parallelized using the \texttt{parallel loop} constuct.},
+    caption={Example of a simple loop that is parallelized using the \texttt{parallel loop} constuct.},
     label={lst:acc_parallel_loop}
 ]
 !$acc parallel loop
@@ -39,6 +49,46 @@ do i = 1, 1000
   a(i) = b(i) + 2
 end do
 \end{lstlisting}
+
+\begin{figure}[H]
+  \centering
+  \captionof{lstlisting}{Two ways to offload nested loops: in the left pane by nesting \texttt{loop} directives, and in the right pane by using the \texttt{collapse} clause. This snippet comes from the \texttt{tstep} module of \acrshort{dales} and integrates the velocity field $u$ in time.}
+  \label{lst:acc_parallel_loop_nested}
+  \begin{adjustbox}{valign=t, minipage=0.48\linewidth}
+    \centering
+    \begin{tabular}{c}
+      \begin{lstlisting}[language=Fortran]
+!$acc parallel loop
+do k = 1, k1
+  !$acc loop
+  do j = 2, j1
+    !$acc loop
+    do i = 2, i1
+      u0(i,j,k) = um(i,j,k) + rk3coeff * up(i,j,k)
+    end do
+  end do
+end do
+      \end{lstlisting}
+    \end{tabular}
+  \end{adjustbox}
+  \hfill
+  \begin{adjustbox}{valign=t, minipage=0.48\linewidth}
+    \centering
+    \begin{tabular}{c}
+      \begin{lstlisting}[language=Fortran]
+!$acc parallel loop collapse(3)
+do k = 1, k1
+  do j = 2, j1
+    do i = 2, i1
+      u0(i,j,k) = um(i,j,k) + rk3coeff * up(i,j,k)
+    end do
+  end do
+end do
+      \end{lstlisting}
+    \end{tabular}
+  \end{adjustbox}
+\end{figure}
+
 
 \section{The Poisson solver} \label{sec:poisson_solver}
 As discussed in \autoref{sec:dales_poisson}, DALES uses a pressure correction method to ensure a divergence-free velocity field. In the current version of DALES, the Poisson equation can be solved in two ways: with Fast Fourier Transforms (FFTs) or an iterative solver. In this work, the solver based on \acrshort{fft}s has been extended to make use of \acrshort{gpu}s.
@@ -50,15 +100,15 @@ The Poisson solver consists of five steps:
   \item Perform a 2D FFT at every vertical level;
   \item Solve a tridiagonal system;
   \item Perform a 2D inverse FFT at every vertical level;
-  \item Correct the velocity fields with the calculated pressure gradients to make them divergence-free.
+  \item Correct the velocity field with the gradient of the calculated pressure to make them divergence-free.
 \end{enumerate}
 
-Steps (1), (3) and (5) mainly consist of nested loops that have been parallelized using the \texttt{parallel loop} and \texttt{kernels} constructs. In DALES version 4.4, the \acrshort{fft}s of steps (2) and (4) can be evaluated either by using the FFTPACK library \citep{swarztrauberVectorizingFFTs1982}, which is included with the source code of DALES, or the more recent \acrfull{fftw} library \citep{frigoFFTWAdaptiveSoftware1998a}. Neither one of these libraries can utilize \acrshort{gpu}s, therefore a new library had to be implemented. Currently, there are multiple \acrshort{fft} libraries available that support execution on \acrshort{gpu}s. Nvidia offers cuFFT, which is designed for Nvidia GPUs \citep{nvidiaCuFFT}. cuFFT is written in C++/CUDA, but Fortran bindings are included. rocFFT is a similar library developed by AMD, for AMD \acrshort{gpu}s \citep{amdRocFFT2023}. Additionally, AMD offers the hipFFT library \citep{amdHipFFT2023}. hipFFT functions as a wrapper library around cuFFT and rocFFT, allowing for execution on both Nvidia GPUs and AMD GPUs. Another promising new library is VkFFT, developed by \citet{tolmachevVkFFTAPerformantCrossPlatform2023}. VkFFT supports multiple backends allowing for execution on all major vendors of data center GPUs (Nvidia, AMD, Intel). In addition, VkFFT supports discrete cosine transforms, which are useful for simulations with Dirichlet or Neumann boundary conditions \footnote{\acrshort{dales} version 4.4 does not support Dirichlet or Neumann boundary conditions. However, work is currently being done to include these in an updated version of \acrshort{dales} (see \citet{liquilungOpenBoundaryConditions2023})} \citep{schumannFastFourierTransforms1988}. For this work, the cuFFT library was chosen because of the availability of Fortran bindings and its tight integration within the NVIDIA HPC SDK.
+Steps (1), (3) and (5) mainly consist of nested loops that have been parallelized using the \texttt{parallel loop} and \texttt{kernels} constructs. In DALES version 4.4, the \acrshort{fft}s of steps (2) and (4) can be evaluated either by using the FFTPACK library \citep{swarztrauberVectorizingFFTs1982}, which is included with the source code of DALES, or the more recent \acrfull{fftw} library \citep{frigoFFTWAdaptiveSoftware1998a}. Neither one of these libraries can utilize \acrshort{gpu}s. Therefore, \acrshort{dales} has to be coupled to a new \acrshort{fft} library. Currently, there are multiple \acrshort{fft} libraries available that support execution on \acrshort{gpu}s. Nvidia offers cuFFT, which is designed for Nvidia GPUs \citep{nvidiaCuFFT}. cuFFT is written in C++/CUDA, but Fortran bindings are included. rocFFT is a similar library developed by AMD, for AMD \acrshort{gpu}s \citep{amdRocFFT2023}. Additionally, AMD offers the hipFFT library \citep{amdHipFFT2023}. hipFFT functions as a wrapper library around cuFFT and rocFFT, allowing for execution on both Nvidia GPUs and AMD GPUs. Another promising new library is VkFFT, developed by \citet{tolmachevVkFFTAPerformantCrossPlatform2023}. VkFFT supports multiple backends allowing for execution on all major vendors of data center GPUs (Nvidia, AMD, Intel). In addition, VkFFT supports discrete cosine transforms, which are useful for simulations with Dirichlet or Neumann boundary conditions \footnote{\acrshort{dales} version 4.4 does not support Dirichlet or Neumann boundary conditions. However, work is currently being done to include these in an updated version of \acrshort{dales} (see \citet{liquilungOpenBoundaryConditions2023})} \citep{schumannFastFourierTransforms1988}. For this work, the cuFFT library was chosen because of the availability of Fortran bindings and its tight integration within the NVIDIA HPC SDK.
 
-The evaluation of 2D Fourier transforms in a pencil decomposition is a non-trivial task. In this setting, each sub-domain has access to the full vertical direction, but only parts of the horizontal direction (see \autoref{fig:dales_domain_decomposition}). To be able to evaluate a Fourier transform in the horizontal direction, the sub-domains have to be transposed such that a whole horizontal direction is contained. This transposition is further complicated by the fact that communication between processes (\acrshort{gpu}s) needs to take place. The complete forward \acrshort{fft} algorithm is as follows:
+The evaluation of 2D Fourier transforms in a pencil decomposition is a non-trivial task. In this setting, each sub-domain has access to the full vertical direction, but only parts of the horizontal direction (see \autoref{fig:dales_domain_decomposition}). To be able to evaluate a Fourier transform in a horizontal direction, the sub-domains have to be transposed such that each device has full access to that direction. This transposition is further complicated by the fact that communication between processes (\acrshort{gpu}s) needs to take place. The complete forward \acrshort{fft} algorithm is as follows:
 
 \begin{enumerate}
-  \item The domain is transposed from $z$-algined to $x$-aligned;
+  \item The domain is transposed from $z$-aligned to $x$-aligned;
   \item 1D Fourier transforms are evaluated in the $x$-direction;
   \item The domain is transposed from $x$-aligned to $y$-aligned;
   \item 1D Fourier transforms are evaluated in the $y$-direction;
@@ -77,9 +127,9 @@ After the final transposition, a tridiagonal system is solved for the Fourier co
 \section{Optimizations}
 
 \subsection{Optimizing data locality}
-In most computers, the host and device both have their own memory space. Therefore, if the device has to perform calculations on some data, this data has to be copied from the host memory to the device memory. With OpenACC, the programmer has the option to leave data management to the compiler or to manage it themselves explicitly. In most cases, letting the compiler decide when to move data will be detrimental to the performance of an application.
+In most computing systems, the host and device both have their own memory space. Therefore, if the device has to perform calculations on some data, this data has to be copied from the host memory to the device memory. With OpenACC, the programmer has the option to leave data management to the compiler or to manage it themselves explicitly. In most cases, letting the compiler decide when to move data will be detrimental to the performance of an application.
 
-Data movement by the compiler will be illustrated with \autoref{lst:two_loops_no_data_construct} as an example. Upon reaching the first loop, the array \texttt{a} is not present in device memory yet. Hence, the compiler adds an instruction right before the loop to copy array \texttt{a} from host to device memory. When the copy has finished, the loop is executed on the device. After the loop is done executing, \texttt{a} is copied back to the host again and the device memory is freed. Next, the program reaches the second loop. Once again, the compiler adds instructions to copy \texttt{a} to the device before the loop and copy it back to the host after the loop. One may notice that there is no need to perform any data movement in between these loops; data can be copied to the device before the start of the first loop, and only has to be copied back to the host after the second loop has finished executing. Since data transfers are a major bottleneck in device computing, optimizing the transfers manually is an essential task to improve performance. 
+Data movement by the compiler will be illustrated with \autoref{lst:two_loops_no_data_construct} as an example. Upon reaching the first loop, the array \texttt{a} is not present in device memory yet. Hence, the compiler adds an instruction right before the loop to copy array \texttt{a} from host to device memory. When the copy has finished, the loop is executed on the device. After the loop is done executing, \texttt{a} is copied back to the host again and the device memory is freed. Next, the program reaches the second loop. Once again, the compiler adds instructions to copy \texttt{a} to the device before the loop and copy it back to the host after the loop. One may notice that there is no need to perform any data movement between these loops; data can be copied to the device before the start of the first loop, and only has to be copied back to the host after the second loop has finished executing. Since data transfers are a major bottleneck in device computing, optimizing the transfers manually is an essential task to improve performance. 
 
 OpenACC offers multiple directives to manage data transfers manually. The \texttt{enter data} directive has been used the most in DALES. This directive can be used with a \texttt{create} clause, which takes a list of variables as input and allocates device memory for these variables, or a \texttt{copyin} clause, which does the same but additionally initializes the device copies of the variables with the values that are in host memory. Data that is moved by the \texttt{enter data} directive stays on the device until the program has finished executing, or an \texttt{exit data} directive is encountered. The latter deallocates device memory after (optionally) copying the data back to the host. This method of data management is applied to the algorithm of \autoref{lst:two_loops_no_data_construct} in \autoref{lst:two_loops_with_data_construct}. In this example, array \texttt{a} is allocated before the first loop. Between the two loops, no data movement is done. After the second loop is done, \texttt{a} is copied back to the host memory and the device memory that was occupied is made available again.
 
@@ -106,7 +156,7 @@ end do
   caption={Example algorithm with explicit data management by including \texttt{enter data} and \texttt{exit data} directives.},
   label={lst:two_loops_with_data_construct}
 ]
-!$acc enter data create(a)
+!$acc enter data copyin(a)
 
 !$acc parallel loop default(present)
 do i = 1, i1
@@ -140,9 +190,9 @@ contains
     implicit none
     real, allocatable :: profile(:)
     allocate(profile(kmax))
-    !$acc enter data copyin(kmax)
+    !$acc enter data copyin(profile)
     ! Perform calculation on profile
-    !$acc exit data copyout(kmax)
+    !$acc exit data copyout(profile)
   end subroutine 
 end module
       \end{lstlisting}
@@ -161,7 +211,7 @@ contains
   subroutine init_profile
     implicit none
     allocate(profile(kmax))
-    !$acc enter data copyin(kmax)
+    !$acc enter data copyin(profile)
   end subroutine
 
   subroutine calculate_profile
@@ -171,7 +221,7 @@ contains
 
   subroutine exit_profile
     implicit none
-    !$acc exit data copyout(kmax)
+    !$acc exit data copyout(profile)
     deallocate(profile)
   end subroutine
 end module
@@ -180,73 +230,47 @@ end module
   \end{adjustbox}
 \end{figure}
 
-\subsection{Minimizing the impact of branch divergence}
-Accelerators like \acrshort{gpu}s function most efficiently when all threads execute in a \acrshort{simd} manner. That is, when all threads execute the same instruction, but on a different data element. There are some cases where the program does not follow this \acrshort{simd} model, obstructing the optimal use of \acrshort{gpu} resources. A well-known example of such a case is the if-statement that is nested in a loop. If the loop iterations are distributed over \acrshort{gpu} threads, threads may take different execution paths depending on the condition that is tested by the if-statement. This phenomenon is called \emph{branch divergence} \citep{hanReducingBranchDivergence2011}. Branch divergence can harm performance because each thread must execute all branches of the if-statement, regardless of which branch is applicable. 
+%\subsection{Minimizing the impact of branch divergence}
+%Accelerators like \acrshort{gpu}s function most efficiently when all threads execute in a \acrshort{simd} manner. That is, when all threads execute the same instruction, but on a different data element. There are some cases where the program does not follow this \acrshort{simd} model, obstructing the optimal use of \acrshort{gpu} resources. A well-known example of such a case is the if-statement that is nested in a loop. If the loop iterations are distributed over \acrshort{gpu} threads, threads may take different execution paths depending on the condition that is tested by the if-statement. This phenomenon is called \emph{branch divergence} \citep{hanReducingBranchDivergence2011}. Branch divergence can harm performance because each thread must execute all branches of the if-statement, regardless of which branch is applicable. 
 
-In \acrshort{dales}, branch divergence is usually the result of physics. One of these cases is the buoyancy-induced subfilter-scale \acrshort{tke} production. Its approximation is as follows:
+%In numerous modules in \acrshort{dales}, if-statements are introduced for optimization reasons. 
 
-\begin{equation}
-  \frac{g}{\theta_0}R_{w,\theta_v} = \frac{g}{\theta_0} \left( A R_{w,\theta_l} + B R_{w,q_t} \right). \label{eq:sfs_tke_buoyancy_approximation}
-\end{equation}
+\section{Asynchronous kernels}
+OpenACC allows for asynchronous execution of device kernels. This means that when the host sends a task to the device, it does not wait until the device has finished executing this task. The host is allowed to continue running the program while the device is busy processing. New tasks can even be sent to the device while it is still occupied with the previous task. This is possible because the device manages tasks through \emph{queues}. When the host sends a task to the device, the task is put in a queue. The device then executes the enqueued tasks in order. Additionally, tasks can be executed concurrently by placing them in different queues.
 
-In \autoref{eq:sfs_tke_buoyancy_approximation}, the expression for coefficients $A$ and $B$ depends on the thermodynamic state of a grid point. If a grid point does not contain cloud liquid water (i.e., $q_c=0$) the following formulation is used:
+Asynchronous kernel execution can significantly benefit performance. This performance increase can especially be noticed for relatively small kernels that, for example, only iterate over one or two dimensions. In these cases, the cost of sending the kernel to the device can be relatively high compared to the actual cost of executing the kernel. Most of the offloaded loops in DALES have been made asynchronous by adding an \texttt{async} clause to the \texttt{parallel loop} or \texttt{kernels} directives. The usage of the \texttt{async} clause is demonstrated in \Autoref{lst:async_kernels}. Here, the calculations for \texttt{thvf} and \texttt{thv0} are fully independent and are therefore put in two different queues (indicated by the argument provided to the \texttt{async} clause). The expression for \texttt{rhof} depends on \texttt{thvf} and is therefore put in the same queue as the latter. Once this section of code is reached during execution, all loops are sent to the device without waiting for each to complete before sending the next one. At line 21 in \Autoref{lst:async_kernels}, a \texttt{wait} directive is encountered, where the program will wait until the tasks in all queues have been executed.
 
-\begin{equation}
-  \begin{split}
-    A &= A_{\text{dry}} = 1 + \frac{R_v}{R_d}\overline{q}_t, \\
-    B &= B_{\text{dry}} = \left( \frac{R_v}{R_d} - 1 \right) \theta_0.
-  \end{split}
-  \label{eq:dry_coefficients}
-\end{equation}
+\begin{lstlisting}[
+  language=Fortran,
+  caption={Example of the usage of the \texttt{async} clause in the thermodynamics module of \acrshort{dales}.},
+  label={lst:async_kernels}
+]
+!$acc parallel loop default(present) async(1)
+do k = 1, k1
+  thvf(k) = thvf(k) / ijtot
+end do
 
-If the grid point does contain cloud liquid water (i.e., $q_c>0$) however, the following formulation is used: 
+!$acc parallel loop collapse(3) default(present) async(2)
+do k = 1, k1
+  do j = 2, j1
+    do i = 2, i1 
+      thv0(i,j,k) = (thl0(i,j,k) + rlv * ql0(i,j,k) / (cp * exnf(k))) &
+                    * (1 + (rv / rd - 1) * qt0(i,j,k) - rv / rd * ql0(i,j,k))
+    end do
+  end do
+end do
 
-\begin{equation}
-  \begin{split}
-    A &= A_{\text{moist}} = \left( 1 - \overline{q}_t + \overline{q}_s \frac{R_v}{R_d} \left( 1 + \frac{L}{R_v T} \right) \right) \left(1 + \frac{L^2 \overline{q}_s}{c_{pd} R_v T^2} \right)^{-1}, \\
-    B &= B_{\text{moist}} = A_{\text{moist}} \frac{L}{c_{pd}} - \theta_0.
-  \end{split}
-  \label{eq:wet_coefficients}
-\end{equation}
+!$acc parallel loop default(present) async(1)
+do k = 1, k1
+  rhof(k) = presf(k) / (rd * thvf(k) * exnf(k))
+end do
 
-One may notice that the determination of the correct expressions naturally leads to an if-statement in a loop that iterates over all grid points, which can ultimately cause branch divergence. Branch divergence is very algorithm-specific, meaning that there is no general optimization that can be applied to all cases. For \autoref{eq:sfs_tke_buoyancy_approximation}, however, the cost of branch divergence can be reduced significantly by calculating $A$ and $B$ based on horizontally-averaged values of $\overline{q}_t$, $\overline{q}_s$, $\overline{\theta}_0$ and $T$. This way, \Autoref{eq:dry_coefficients,eq:wet_coefficients} change into:
-
-\begin{equation}
-  \begin{split}
-    A_{\text{dry}} &= 1 + \frac{R_v}{R_d}\left< \overline{q}_t \right>, \\
-    B_{\text{dry}} &= \left( \frac{R_v}{R_d} - 1 \right) \left< \theta_0 \right>,
-  \end{split}
-  \label{eq:dry_coefficients_averaged}
-\end{equation}
-
-for the dry case, and
-
-\begin{equation}
-  \begin{split}
-    A_{\text{moist}} &= \left( 1 - \left< \overline{q}_t \right> + \left< \overline{q}_s \right> \frac{R_v}{R_d} \left( 1 + \frac{L}{R_v \left< T \right>} \right) \right) \left(1 + \frac{L^2 \left< \overline{q}_s \right>}{c_{pd} R_v \left< T \right>^2} \right)^{-1}, \\
-    B_{\text{moist}} &= A_{\text{moist}} \frac{L}{c_{pd}} - \left< \theta_0 \right>,
-  \end{split}
-  \label{eq:wet_coefficients_averaged}
-\end{equation}
-
-for the moist case, where the $\left< \cdot \right>$ operator denotes a horizontally averaged value. This simplification is justified because the horizontal variability of $\overline{q}_t$, $\overline{q}_s$, $\overline{\theta}_0$ and $T$ is insignificant compared to the vertical variability, as can be seen in \Autoref{fig:qt_thl_vs_height}. With this optimization, the calculation of $A$ and $B$ is done in a 1D loop instead of a 3D loop. The remaining if-statement that locally checks which coefficient to use can be replaced by the Fortran \texttt{merge} intrinsic,  
-
-\begin{figure}
-  \centering
-  \includesvg{../images/plots/qt_thl_vs_height.svg}
-  \caption{Mean vertical profiles of the total water specific humidity $q_t$ (left) and liquid water potential temperature $\theta_l$ (right). The shading around the mean profiles indicates the horizontal standard deviation.}
-  \label{fig:qt_thl_vs_height}
-\end{figure}
-
-\subsection{Asynchronous kernels}
-OpenACC allows for asynchronous execution of device kernels. This means that when the host sends a task to the device, it does not wait until the device has finished executing this task. The host is allowed to continue running the program while the device is busy processing. New tasks can even be sent to the device while it is still occupied with the previous task. This is possible because the device manages tasks through \emph{queues}. When the host sends a task to the device, it is put in a queue. The device then executes the enqueued tasks in order. Tasks can be executed in parallel by placing them in different queues.
-
-Asynchronous kernel execution can significantly benefit performance. This performance increase can especially be noticed for relatively small kernels that, for example, only iterate over one or two dimensions. In these cases, the cost of sending the kernel to the device can be relatively high compared to the actual cost of executing the kernel. Most of the offloaded loops in DALES have been made asynchronous by adding an \texttt{async} clause to the \texttt{parallel loop} or \texttt{kernels} directives. 
-
+!$acc wait
+\end{lstlisting}
 \section{Extension to multiple GPUs}
 With OpenACC, it is possible to utilize multiple \acrshort{gpu}s \citep{farberParallelProgrammingOpenACC2017}. However, OpenACC can only make use of devices that live on the same node. In practice, this means that one is limited to using only a few \acrshort{gpu}s (for example, the Snellius supercomputer has 4 \acrshort{gpu}s per node \citep{surfSnelliusHardwareFile}). Another option is to adapt the current \acrshort{mpi} parallelization described in \autoref{sec:dales_mpi}, which was done in this work. In this approach, the computational domain is still decomposed and distributed across \acrshort{cpu}s (possibly on multiple nodes), but each process has access to a GPU to offload computations. 
 
-As mentioned before, data transfers from \acrshort{gpu} to \acrshort{cpu} are expensive. To circumvent the need for \acrshort{cpu}-\acrshort{gpu} data transfers when doing \acrshort{mpi} communications, special implementations of the \acrshort{mpi} standard have been developed, often referred to as \acrshort{gpu}-aware \acrshort{mpi} \citep{potluriEfficientInternodeMPI2013}. As the name suggests, a \acrshort{gpu}-aware \acrshort{mpi} implementation can handle data that is located in \acrshort{gpu} memory. When a call to the \acrshort{mpi} library is made, the \acrshort{gpu}-aware \acrshort{mpi} backend checks if the provided data is located in \acrshort{cpu} or \acrshort{gpu} memory. If the data is indeed located in \acrshort{gpu} memory, the backend will make sure that data is transferred directly from \acrshort{gpu} to \acrshort{gpu} and does not go through the \acrshort{cpu} first. 
+As mentioned before, data transfers from \acrshort{gpu} to \acrshort{cpu} are expensive. To circumvent the need for \acrshort{cpu}-\acrshort{gpu} data transfers when doing \acrshort{mpi} communications, special implementations of the \acrshort{mpi} standard have been developed, often referred to as \acrshort{gpu}-aware \acrshort{mpi} \citep{potluriEfficientInternodeMPI2013}. As the name suggests, a \acrshort{gpu}-aware \acrshort{mpi} implementation can handle data that is located in \acrshort{gpu} memory. When a call to the \acrshort{mpi} library is made, the \acrshort{gpu}-aware \acrshort{mpi} backend checks if the provided data is located in \acrshort{cpu} or \acrshort{gpu} memory. If the data is indeed located in \acrshort{gpu} memory, the \acrshort{mpi} backend will make sure that data is transferred directly from \acrshort{gpu} to \acrshort{gpu} and does not go through the \acrshort{cpu} first.
 
 To make the location of the data in \acrshort{gpu} memory available to the \acrshort{mpi} backend, the \acrshort{acc} \texttt{host\_data} directive can be used in combination with the \texttt{use\_device} clause. This is illustrated in \autoref{lst:mpi_device_pointer}. In this example, the reference to \texttt{array} in the \texttt{MPI\_Allreduce} call will point to device memory.
 
