@@ -1,0 +1,58 @@
+\chapter{Compiling and Running \acrshort{dales} on \acrshortpl{gpu}}
+
+\section{Setting up the NVIDIA HPC SDK}
+
+First, an \acrshort{acc} compatible compiler is needed. As discussed, the NVIDIA HPC SDK was used in this work. The HPC SDK is bundled with the \texttt{nvfortran} compiler, the cuFFT library required for the Poisson solver and a \acrshort{gpu}-aware \acrshort{mpi} library. In In this work, version 23.3 was used, which can be installed as follows:
+
+\begin{lstlisting}[language=bash]
+$ wget https://developer.download.nvidia.com/hpc-sdk/23.3/nvhpc_2023_233_Linux_x86_64_cuda_multi.tar.gz
+$ tar xpzf nvhpc_2023_233_Linux_x86_64_cuda_multi.tar.gz
+$ nvhpc_2023_233_Linux_x86_64_cuda_multi/install
+\end{lstlisting}
+
+This will install the SDK under the directory \texttt{/opt/nvidia/hpc\_sdk}. The compilers and other libraries can be added to the \texttt{PATH} with the following script:
+
+\begin{lstlisting}[language=bash]
+#!/bin/bash
+YEAR=2023
+NVHPC_INSTALL_DIR=/opt/nvidia/hpc_sdk
+NVARCH=`uname -s`_`uname -m`; export NVARCH
+NVCOMPILERS=$NVHPC_INSTALL_DIR; export NVCOMPILERS
+MANPATH=$MANPATH:$NVCOMPILERS/$NVARCH/$YEAR/compilers/man; export MANPATH
+PATH=$NVCOMPILERS/$NVARCH/$YEAR/compilers/bin:$PATH; export PATH
+export PATH=$NVCOMPILERS/$NVARCH/$YEAR/comm_libs/mpi/bin:$PATH
+export MANPATH=$MANPATH:$NVCOMPILERS/$NVARCH/$YEAR/comm_libs/mpi/man
+export PATH=$NVCOMPILERS/$NVARCH/$YEAR/profilers/Nsight_Systems/bin:$PATH
+export LD_LIBRARY_PATH=$NVHPC_INSTALL_DIR/$NVARCH/$YEAR/compilers/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$NVHPC_INSTALL_DIR/$NVARCH/$YEAR/comm_libs/mpi/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$NVHPC_INSTALL_DIR/$NVARCH/$YEAR/math_libs/lib64:$LD_LIBRARY_PATH
+\end{lstlisting}
+
+\section{Obtaining the \acrshort{dales} source code}
+The most up-to-date version of the \acrshort{acc} version of \acrshort{dales} can be found on GitHub (\url{https://github.com/dalesteam/dales}) under the branch \texttt{OpenACC}. Downloading is easily done through a Git Clone:
+
+\begin{lstlisting}[language=bash]
+$ git clone -b OpenACC https://github.com/dalesteam/dales.git
+\end{lstlisting}
+
+For building \acrshort{dales}, NetCDF-Fortran and CMake are required, in addition to the NVIDIA compilers and libraries. Assuming that all requirements are met, \acrshort{dales} can be built as follows:
+
+\begin{lstlisting}[language=bash, numbers=none]
+$ mkdir dales/build
+$ cd dales/build
+$ export SYST=NV-OpenACC
+$ cmake ..
+$ make -j
+\end{lstlisting}
+
+\section{Running \acrshort{dales} on the \acrshort{gpu}}
+The input files for the \acrshort{bomex} case as used in this thesis are included in the \acrshort{dales} source code and can be found under \texttt{/cases/bomex}. To run the case on the \acrshort{gpu}, two modifications to \texttt{namoptions.001} are needed: 1) under the section \texttt{\&PHYSICS}, add the line \texttt{lfast\_thermo=.true.} and 2) under the section \texttt{\&SOLVER}, add the line \texttt{solver\_id=200}.
+
+Finally, \acrshort{dales} can be run using \texttt{mpirun}:
+
+\begin{lstlisting}[language=bash, numbers=none]
+$ cd <path to dales>/cases/bomex/
+$ mpirun -np N <path to dales>/build/src/dales4.4 namoptions.001
+\end{lstlisting}
+
+where \texttt{N} is the number of \acrshortpl{gpu} available on the system.
