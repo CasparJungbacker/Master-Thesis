@@ -85,23 +85,37 @@ On the other end of the resolution spectrum, the \acrshort{les} technique has be
 The \acrfull{dales} model is a large-eddy simulation model designed for high-resolution modeling of the atmosphere and its processes, like cloud formation and precipitation \citep{heusFormulationDutchAtmospheric2010,ouwerslootLargeEddySimulationComparison2017}. 
 
 \subsection{Prognostic equations}
-\acrshort{dales} uses five prognostic variables to define the state of the atmosphere: three velocity components $u$, $v$ and $w$, the liquid water potential temperature $\theta_l$ and the total water specific humidity $q_t$. The momentum equation for the three velocity components follows from \Autoref{eq:momentum_filtered}. In atmospheric flows, the Reynolds number (\Autoref{eq:reynolds_number}) is large. Therefore, the viscous term (second term in the right-hand side) of \Autoref{eq:reynolds_number}. can be safely neglected. Next, a buoyancy term is introduced, relating the generation of momentum to temperature and humidity:
+\acrshort{dales} uses five prognostic variables to define the state of the atmosphere: three velocity components $u$, $v$ and $w$, the liquid water potential temperature $\theta_l$ and the total water specific humidity $q_t$. The general form of \Autoref{eq:ns_momentum} for the atmosphere is given by \citep{stullIntroductionBoundaryLayer1988}:
 
 \begin{equation}
-    f_{\text{buoy}} = g \frac{\overline{\theta_v} - \theta_{v,0}}{\theta_{v,0}} \delta_{i3},
+    \frac{\partial u_i}{\partial t} + u_j \frac{\partial u_i}{\partial x_j} = - \frac{1}{\rho} \frac{\partial p}{\partial x_i} - g \delta_{i3} + f_i. \label{eq:momentum_atmos}
 \end{equation}
 
-where $\theta_v$ is the liquid water virtual potential temperature, which is a function of temperature and humidity. $\theta_{v,0}$ denotes the base state of $\theta_v$ and is prescribed. $\delta$ is the Kronecker delta. Finally, the momentum equation as solved in \acrshort{dales} is given by:
+Compared to \Autoref{eq:ns_momentum}, \Autoref{eq:momentum_atmos} lacks the viscous term and introduces the gravity $g$. In atmospheric flows, the Reynolds number (\Autoref{eq:reynolds_number}) is large, which is why the viscous term can be safely neglected. \acrshort{dales} makes use of the \emph{anelastic approximation}, meaning that density differences are neglected except for the vertical direction \citep{boingInteractionDeepConvective2014}. To this end, a time-independent base density profile $\rho_0$ is introduced, which only varies in the vertical direction. \Autoref{eq:momentum_atmos} then can be written as:
 
-%For the formulation of the prognostic equations for the three velocity components as used in \acrshort{dales}, some approximations have to be introduced. Starting from \Autoref{eq:momentum_filtered}, the viscous term (containing $\nu$) is neglected. This is justified, because the Reynolds number (\Autoref{eq:reynolds_number}) is large in atmospheric flows. 
+\begin{equation}
+    \frac{\partial u_i}{\partial t} + \frac{1}{\rho_0} \frac{\partial \rho_0 u_i u_j}{\partial x_j} = - \frac{1}{\rho} \frac{\partial p}{\partial x_i} - g \delta_{i3} + f_i. \label{eq:momentum_atmos_rho0}
+\end{equation}
 
-%\acrshort{dales} uses the anelastic approximation\footnote{\citet{heusFormulationDutchAtmospheric2010} state that \acrshort{dales} uses the Boussinesq approximation, but \citet{boingInfluenceSubcloudLayer2012}}. 
+The pressure gradient $\partial p / \partial x_i / \rho$ can be expressed as a function of the virtual potential temperature \citep{boingInteractionDeepConvective2014}:
+
+\begin{equation}
+    \frac{1}{\rho} \frac{\partial p}{\partial x_i} \approx - g \delta_{i3} - g \delta_{i3} \frac{\theta_v - \theta_{v,e}}{\theta_{v,e}} + \frac{\partial}{\partial x_i} \frac{p^\prime}{\rho_e}, \label{eq:pressure_grad}
+\end{equation}
+
+in which the subscript $e$ denotes an environmental state that only varies in the vertical direction and in time. $p^\prime$ is the pressure fluctuation from the environmental pressure $p_e$. In turn, $\theta_v$ can be evaluated from the prognostic variables:
+
+\begin{equation}
+    \theta_v = \left( \theta_l + \frac{L_v}{c_{pd} \Pi_e} q_c \right) \left( 1 - \left( 1 - \frac{R_v}{R_d} q_t \right) - \frac{R_v}{R_d} q_c \right), \label{eq:theta_v} 
+\end{equation}
+
+where $L_v$, $c_pd$, $R_v$ and $R_d$ are constants (their meaning and values are omitted here for brevity but can be found in e.g. \citet{stullIntroductionBoundaryLayer1988}), $\Pi_e = (p_e/p_0)^{R_d/c_{pd}}$ in which $p_0=10^5$ is a reference pressure and $q_c$ is the cloud condensate, which can be diagnosed. After combining \Autoref{eq:momentum_atmos_rho0,eq:pressure_grad} and applying the \acrshort{les} filtering operation, we arrive at the governing momentum equation of \acrshort{dales}:
 
 \begin{align}
-    \frac{\partial \overline{u}_i}{\partial t} &= - \frac{\partial \overline{u}_i \overline{u}_j}{\partial x_j} - \frac{\partial \pi}{\partial x_i} + g \frac{\overline{\theta_v} - \theta_{v,0}}{\theta_{v,0}} \delta_{i3} + f_i - \frac{\partial \tau_{ij}}{\partial x_j} \label{eq:momentum_conservation}
+    \frac{\partial \overline{u}_i}{\partial t} &= - \frac{1}{\rho_0} \frac{\partial \rho_0 \overline{u}_i \overline{u}_j}{\partial x_j} - \frac{\partial \pi}{\partial x_i} + g \delta_{i3} \frac{\overline{\theta_v} - \theta_{v,e}}{\theta_{v,e}} + f_i - \frac{\partial \tau_{ij}}{\partial x_j} \label{eq:momentum_conservation}
 \end{align}
 
-where $u_i$ is a velocity component, $\pi$ denotes the modified pressure given by $\pi = p^\prime/\rho_0 + 2e/3$, where $p^\prime$ is the pressure fluctuation from the prescribed base state, $\rho_0$ is the density and $e$ is the turbulence kinetic energy. Furthermore, $\theta$ is the virtual potential temperature, $f_i$ contains the body forces (e.g., the Coriolis force) and $\tau_{ij}$ is the subfilter-scale stress tensor. Similarly, the prognostic equation for a scalar $\varphi$, where $\varphi \in \{\theta_l, q_t\}$, is given by:
+where $\pi$ denotes the modified pressure given by $\pi = p^\prime/\rho_e + 2e/3$, where $p^\prime$ is the pressure fluctuation from the prescribed base state and $e$ is the turbulence kinetic energy. Furthermore, $\theta$ is the virtual potential temperature, $f_i$ contains the body forces (e.g., the Coriolis force) and $\tau_{ij}$ is the subfilter-scale stress tensor. Similarly, the prognostic equation for a scalar $\varphi$, where $\varphi \in \{\theta_l, q_t\}$, is given by:
 
 \begin{equation}
     \frac{\partial \overline{\varphi}}{\partial t} = - \frac{\partial \overline{u}_j \overline{\varphi}}{\partial x_j} - \frac{\partial R_{u_j,\varphi}}{\partial x_j} + S_\varphi,
