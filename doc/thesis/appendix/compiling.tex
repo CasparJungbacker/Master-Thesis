@@ -4,7 +4,7 @@
 
 First, an \acrshort{acc} compatible compiler is needed. As discussed, the NVIDIA HPC SDK was used in this work. The HPC SDK is bundled with the \texttt{nvfortran} compiler, the cuFFT library required for the Poisson solver and a \acrshort{gpu}-aware \acrshort{mpi} library. In In this work, version 23.3 was used, which can be installed as follows:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, numbers=none]
 $ wget https://developer.download.nvidia.com/hpc-sdk/23.3/nvhpc_2023_233_Linux_x86_64_cuda_multi.tar.gz
 $ tar xpzf nvhpc_2023_233_Linux_x86_64_cuda_multi.tar.gz
 $ nvhpc_2023_233_Linux_x86_64_cuda_multi/install
@@ -31,7 +31,7 @@ export LD_LIBRARY_PATH=$NVHPC_INSTALL_DIR/$NVARCH/$YEAR/math_libs/lib64:$LD_LIBR
 \section{Obtaining the \acrshort{dales} source code}
 The most up-to-date version of the \acrshort{acc} version of \acrshort{dales} can be found on GitHub (\url{https://github.com/dalesteam/dales}) under the branch \texttt{OpenACC}. Downloading is easily done through a Git Clone:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, numbers=none]
 $ git clone -b OpenACC https://github.com/dalesteam/dales.git
 \end{lstlisting}
 
